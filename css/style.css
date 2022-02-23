@@ -351,16 +351,16 @@ input {
 label.error {
   display: block;
   position: absolute;
-  top: 0px;
-  right: 0; }
-  label.error:after {
-    /* font-family: 'Material-Design-Iconic-Font'; */
+  color: #f63726;
+  top: 4px;
+  right: 10px; }
+  /* label.error:after {
     position: absolute;
     content: '\f135';
     right: 20px;
     top: 50px;
     font-size: 13px;
-    color: #f63726; }
+    color: #f63726; } */
 
 input.error {
   border: 1px solid #f63726; }

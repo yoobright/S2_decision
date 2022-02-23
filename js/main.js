@@ -1,11 +1,8 @@
 (function($) {
-
-
-
     var form = $("#signup-form");
     form.validate({
         errorPlacement: function errorPlacement(error, element) {
-            element.before(error);
+            element.after(error);
         },
         rules: {
             email: {
@@ -61,7 +58,7 @@
     });
 
     jQuery.extend(jQuery.validator.messages, {
-        required: "",
+        required: "输入不能为空",
         remote: "",
         email: "",
         url: "",
