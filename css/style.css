@@ -545,3 +545,33 @@ input.error {
     height: 61px; } }
 
 /*# sourceMappingURL=style.css.map */
+
+input[type="radio"] {
+  width: unset;
+  display: inline;
+  height: unset;
+}
+
+label[type="radio"] {
+  display: inline;
+  height: 36px;
+  box-sizing: border-box;
+  padding: 0 5px;
+  color: #222;
+  /* font-weight: bold; */
+  font-size: 16px;
+}
+
+
+select {
+  width: 100%;
+  display: block;
+  border: 1px solid #ebebeb;
+  height: 36px;
+  box-sizing: border-box;
+  padding: 0 20px;
+  color: #222;
+  /* font-weight: bold; */
+  font-size: 16px;
+  /* font-family: 'Roboto Slab';  */
+}

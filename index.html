@@ -1,132 +1,355 @@
 <!DOCTYPE html>
 <html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-		<meta name="author" content="colorlib.com">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="author" content="colorlib.com" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
     <title>Demo</title>
 
     <!-- Font Icon -->
     <!-- <link rel="stylesheet" href="fonts/material-icon/css/material-design-iconic-font.min.css"> -->
-    <link rel="stylesheet" href="vendor/nouislider/nouislider.min.css">
+    <link rel="stylesheet" href="vendor/nouislider/nouislider.min.css" />
 
     <!-- Main css -->
-    <link rel="stylesheet" href="css/style.css">
-</head>
+    <link rel="stylesheet" href="css/style.css" />
+  </head>
 
-<body>
-
+  <body>
     <div class="main">
+      <div class="container">
+        <form method="POST" id="signup-form" class="signup-form" action="#">
+          <div>
+            <h3>第一步</h3>
+            <fieldset>
+              <h2>基本信息</h2>
+              <p class="desc"><span style="color: crimson">*</span>代表必填</p>
+              <div
+                class="fieldset-content"
+                style="
+                  max-height: 400px;
+                  overflow-y: scroll;
+                  padding-left: 30px;
+                  padding-right: 30px;
+                "
+              >
+                <div class="form-group">
+                  <label class="form-label"
+                    >姓名<span style="color: crimson">*</span></label
+                  >
+                  <input
+                    type="text"
+                    name="user_name"
+                    id="user_name"
+                    class="required"
+                  />
+                  <span class="text-input"></span>
+                </div>
 
-        <div class="container">
-            <form method="POST" id="signup-form" class="signup-form" action="#">
-                <div>
-                    <h3>第一步</h3>
-                    <fieldset>
-                        <h2>基本信息</h2>
-                        <p class="desc"></p>
-                        <div class="fieldset-content" style="max-height:400px;overflow-y:scroll; padding-left: 30px; padding-right: 30px;">
+                <div class="form-group">
+                  <label for="user_id" class="form-label">ID</label>
+                  <input type="text" name="user_id" id="user_id" />
+                  <span class="text-input"></span>
+                </div>
+                <div class="form-group">
+                  <label for="user_gender" class="form-label"
+                    >性别<span style="color: crimson">*</span></label
+                  >
+                  <input
+                    type="radio"
+                    name="user_gender"
+                    id="user_gender"
+                    value="1"
+                    class="required"
+                  />
+                  <label type="radio">男</label>
+                  <input
+                    type="radio"
+                    name="user_gender"
+                    id="user_gender"
+                    value="2"
+                    class="required"
+                  />
+                  <label type="radio">女</label>
+                  <!-- <input
+                    type="text"
+                    name="user_gender"
+                    id="user_gender"
+                    class="required"
+                  /> -->
+                  <span class="text-input"></span>
+                </div>
+                <div class="form-group">
+                  <label for="user_age" class="form-label"
+                    >年龄<span style="color: crimson">*</span> （岁）</label
+                  >
+                  <input
+                    type="number"
+                    name="user_age"
+                    id="user_age"
+                    class="required"
+                    min="0"
+                    max="100"
+                  />
+                  <span class="text-input"></span>
+                </div>
+                <div class="form-group">
+                  <label for="user_height" class="form-label">身高（cm）</label>
+                  <input
+                    type="number"
+                    name="user_height"
+                    id="user_height"
+                    min="1"
+                    max="300"
+                  />
+                  <span class="text-input"></span>
+                </div>
+                <div class="form-group">
+                  <label for="user_weight" class="form-label">体重（kg）</label>
+                  <input
+                    type="number"
+                    name="user_weight"
+                    id="user_weight"
+                    min="1"
+                    max="1000"
+                  />
+                  <span class="text-input"></span>
+                </div>
+                <div class="form-group">
+                  <label for="user_job" class="form-label">职业</label>
+                  <input type="text" name="user_job" id="user_job" />
+                  <span class="text-input"></span>
+                </div>
+                <div class="form-group">
+                  <label for="user_edu" class="form-label"
+                    >受教育程度<span style="color: crimson">*</span></label
+                  >
+                  <select name="user_edu" id="user_edu" class="required">
+                    <option
+                      value=""
+                      style="color: gray"
+                      selected
+                      disabled
+                      hidden
+                    ></option>
+                    <option value="1">小学及以下</option>
+                    <option value="2">初中</option>
+                    <option value="3">高中</option>
+                    <option value="4">专科/高职</option>
+                    <option value="5">本科</option>
+                    <option value="6">硕士</option>
+                    <option value="7">博士</option>
+                  </select>
+                  <span class="text-input"></span>
+                </div>
+                <div class="form-group">
+                  <label for="user_special" class="form-label"
+                    >特殊人群<span style="color: crimson">*</span></label
+                  >
+                  <select
+                    name="user_special"
+                    id="user_special"
+                    class="required"
+                  >
+                    <option
+                      value=""
+                      style="color: gray"
+                      selected
+                      disabled
+                      hidden
+                    ></option>
+                    <option value="1">老年人(65岁及以上)</option>
+                    <option value="2">儿童(14岁及以下)</option>
+                    <option value="3">孕妇</option>
+                    <option value="4">哺乳期妇女</option>
+                    <option value="5">其他</option>
+                  </select>
+                  <span class="text-input"></span>
+                </div>
+                <div class="form-group">
+                  <label for="user_tel" class="form-label">联系电话</label>
+                  <input type="number" name="user_tel" id="user_tel" />
+                  <span class="text-input"></span>
+                </div>
+                <div class="form-group">
+                  <label for="user_tumor" class="form-label"
+                    >原发肿瘤诊断<span style="color: crimson">*</span></label
+                  >
+                  <input
+                    type="text"
+                    name="user_tumor"
+                    id="user_tumor"
+                    class="required"
+                  />
+                  <span class="text-input"></span>
+                </div>
+                <div class="form-group">
+                  <label for="user_tumor_metastasis" class="form-label"
+                    >肿瘤转移情况</label
+                  >
+                  <input
+                    type="text"
+                    name="user_tumor_metastasis"
+                    id="user_tumor_metastasis"
+                  />
+                  <span class="text-input"></span>
+                </div>
+                <div class="form-group">
+                  <label for="user_tumor_treatment" class="form-label"
+                    >肿瘤治疗方式</label
+                  >
+                  <select name="user_tumor_treatment" id="user_tumor_treatment">
+                    <option
+                      value=""
+                      style="color: gray"
+                      selected
+                      disabled
+                      hidden
+                    ></option>
+                    <option value="1">外科切除</option>
+                    <option value="2">放射治疗</option>
+                    <option value="3">中医药治疗</option>
+                    <option value="4">免疫治疗</option>
+                    <option value="5">靶向治疗</option>
+                    <option value="6">介入治疗</option>
+                  </select>
+                  <span class="text-input"></span>
+                </div>
 
-                            <div class="form-group">
-                                <label class="form-label">姓名<span style="color: crimson;">*</span></label>
-                                <input type="text" name="user_name" id="user_name" class="required"/>
-                                <span class="text-input"></span>
-                            </div>
-
-                            <div class="form-group">
-                                <label for="user_id" class="form-label">ID</label>
-                                <input type="text" name="user_id" id="user_id" />
-                                <span class="text-input"></span>
-                            </div>
-                            <div class="form-group">
-                                <label for="user_gender" class="form-label">性别<span style="color: crimson;">*</span></label>
-                                <input type="text" name="user_gender" id="user_gender" class="required"/>
-                                <span class="text-input"></span>
-                            </div>
-                            <div class="form-group">
-                                <label for="user_age" class="form-label">年龄<span style="color: crimson;">*</span></label>
-                                <input type="text" name="user_age" id="user_age" class="required"/>
-                                <span class="text-input"></span>
-                            </div>
-                            <div class="form-group">
-                                <label for="user_height" class="form-label">身高</label>
-                                <input type="text" name="user_height" id="user_height" />
-                                <span class="text-input"></span>
-                            </div>
-                            <div class="form-group">
-                                <label for="user_weight" class="form-label">体重</label>
-                                <input type="text" name="user_weight" id="user_weight" />
-                                <span class="text-input"></span>
-                            </div>
-                            <div class="form-group">
-                                <label for="user_job" class="form-label">职业</label>
-                                <input type="text" name="user_job" id="user_job" />
-                                <span class="text-input"></span>
-                            </div>
-                            <div class="form-group">
-                                <label for="user_edu" class="form-label">受教育程度<span style="color: crimson;">*</span></label>
-                                <input type="text" name="user_edu" id="user_edu" class="required"/>
-                                <span class="text-input"></span>
-                            </div>
-                            <div class="form-group">
-                                <label for="user_special" class="form-label">特殊人群<span style="color: crimson;">*</span></label>
-                                <input type="text" name="user_special" id="user_special" class="required"/>
-                                <span class="text-input"></span>
-                            </div>
-                            <div class="form-group">
-                                <label for="user_tel" class="form-label">联系电话</label>
-                                <input type="text" name="user_tel" id="user_tel" />
-                                <span class="text-input"></span>
-                            </div>
-                            <div class="form-group">
-                                <label for="user_tumor" class="form-label">原发肿瘤诊断<span style="color: crimson;">*</span></label>
-                                <input type="text" name="user_tumor" id="user_tumor" class="required"/>
-                                <span class="text-input"></span>
-                            </div>
-                            <div class="form-group">
-                                <label for="user_tumor_metastasis" class="form-label">肿瘤转移情况</label>
-                                <input type="text" name="user_tumor_metastasis" id="user_tumor_metastasis" />
-                                <span class="text-input"></span>
-                            </div>
-                            <div class="form-group">
-                                <label for="user_tumor_treatment" class="form-label">肿瘤治疗方式</label>
-                                <input type="text" name="user_tumor_treatment" id="user_tumor_treatment" />
-                                <span class="text-input"></span>
-                            </div>
-                            
-                            <div class="form-group">
-                                <label for="user_illness" class="form-label">基础疾病</label>
-                                <input type="text" name="user_illness" id="user_illness" />
-                                <span class="text-input"></span>
-                            </div>
-                            <div class="form-group">
-                                <label for="user_liver_function" class="form-label">肝功能<span style="color: crimson;">*</span></label>
-                                <input type="text" name="user_liver_function" id="user_liver_function" class="required"/>
-                                <span class="text-input"></span>
-                            </div>
-                            <div class="form-group">
-                                <label for="user_kidney_function" class="form-label">肾功能<span style="color: crimson;">*</span></label>
-                                <input type="text" name="user_kidney_function" id="user_kidney_function" class="required"/>
-                                <span class="text-input"></span>
-                            </div>
-                            <div class="form-group">
-                                <label for="user_cardiac_function" class="form-label">心功能<span style="color: crimson;">*</span></label>
-                                <input type="text" name="user_cardiac_function" id="user_cardiac_function" class="required"/>
-                                <span class="text-input"></span>
-                            </div>
-                            <div class="form-group">
-                                <label for="user_allergy" class="form-label">过敏史<span style="color: crimson;">*</span></label>
-                                <input type="text" name="user_allergy" id="user_allergy" class="required"/>
-                                <span class="text-input"></span>
-                            </div>
-                            <div class="form-group">
-                                <label for="user_physical" class="form-label">身体状况<span style="color: crimson;">*</span></label>
-                                <input type="text" name="user_physical" id="user_physical" class="required"/>
-                                <span class="text-input"></span>
-                            </div>
-                            <!-- <div class="form-group">
+                <div class="form-group">
+                  <label for="user_illness" class="form-label">基础疾病</label>
+                  <select name="user_illness" id="user_illness">
+                    <option
+                      value=""
+                      style="color: gray"
+                      selected
+                      disabled
+                      hidden
+                    ></option>
+                    <option value="1">糖尿病</option>
+                    <option value="2">高血压</option>
+                    <option value="3">心脑血管疾病</option>
+                    <option value="4">呼吸系统疾病</option>
+                  </select>
+                  <span class="text-input"></span>
+                </div>
+                <div class="form-group">
+                  <label for="user_liver_function" class="form-label"
+                    >肝功能<span style="color: crimson">*</span></label
+                  >
+                  <select
+                    name="user_liver_function"
+                    id="user_liver_function"
+                    class="required"
+                  >
+                    <option
+                      value=""
+                      style="color: gray"
+                      selected
+                      disabled
+                      hidden
+                    ></option>
+                    <option value="1">正常</option>
+                    <option value="2">不全</option>
+                    <option value="3">严重不全</option>
+                  </select>
+                  <span class="text-input"></span>
+                </div>
+                <div class="form-group">
+                  <label for="user_kidney_function" class="form-label"
+                    >肾功能<span style="color: crimson">*</span></label
+                  >
+                  <select
+                    name="user_kidney_function"
+                    id="user_kidney_function"
+                    class="required"
+                  >
+                    <option
+                      value=""
+                      style="color: gray"
+                      selected
+                      disabled
+                      hidden
+                    ></option>
+                    <option value="1">正常</option>
+                    <option value="2">不全</option>
+                    <option value="3">严重不全</option>
+                  </select>
+                  <span class="text-input"></span>
+                </div>
+                <div class="form-group">
+                  <label for="user_cardiac_function" class="form-label"
+                    >心功能<span style="color: crimson">*</span></label
+                  >
+                  <select
+                    name="user_kidney_function"
+                    id="user_kidney_function"
+                    class="required"
+                  >
+                    <option
+                      value=""
+                      style="color: gray"
+                      selected
+                      disabled
+                      hidden
+                    ></option>
+                    <option value="1">正常</option>
+                    <option value="2">Ⅰ级</option>
+                    <option value="3">Ⅱ级</option>
+                    <option value="4">Ⅲ级</option>
+                    <option value="5">Ⅳ级</option>
+                  </select>
+                  <span class="text-input"></span>
+                </div>
+                <div class="form-group">
+                  <label for="user_allergy" class="form-label"
+                    >过敏史<span style="color: crimson">*</span>
+                    （药物/食物）</label
+                  >
+                  <input
+                    type="text"
+                    name="user_allergy"
+                    id="user_allergy"
+                    class="required"
+                  />
+                  <span class="text-input"></span>
+                </div>
+                <div class="form-group">
+                  <label for="user_physical" class="form-label"
+                    >身体状况<span style="color: crimson">*</span>
+                    （PS评分）</label
+                  >
+                  <select
+                    name="user_physical"
+                    id="user_physical"
+                    class="required"
+                  >
+                    <option
+                      value=""
+                      style="color: gray"
+                      selected
+                      disabled
+                      hidden
+                    ></option>
+                    <option value="1">
+                      0分：活动能力完全正常，与起病前活动能力无任何差异
+                    </option>
+                    <option value="2">
+                      1分：能自由走动及从事轻体力活动，包括一般家务或办公室工作，但不能从事较重的体力活动
+                    </option>
+                    <option value="3">
+                      3分：生活仅能部分自理，日间一半以上时间卧床或坐轮椅
+                    </option>
+                    <option value="4">
+                        4分：卧床不起，生活不能自理
+                    </option>
+                    <option value="5">
+                        5分：死亡
+                    </option>
+                  </select>
+                  <span class="text-input"></span>
+                </div>
+                <!-- <div class="form-group">
                                 <label for="phone" class="form-label">Phone</label>
                                 <input type="text" name="phone" id="phone" />
                             </div>
@@ -175,16 +398,16 @@
                                 <label for="ssn" class="form-label">SSN</label>
                                 <input type="text" name="ssn" id="ssn" />
                             </div> -->
-                        </div>
-                    </fieldset>
+              </div>
+            </fieldset>
 
-                    <h3>第二步</h3>
-                    <fieldset>
-                        <h2>XXXXXXXXXXX</h2>
-                    </fieldset>
-                </div>
-            </form>
-        </div>
+            <h3>第二步</h3>
+            <fieldset>
+              <h2>XXXXXXXXXXX</h2>
+            </fieldset>
+          </div>
+        </form>
+      </div>
     </div>
 
     <!-- JS -->
@@ -196,6 +419,5 @@
     <script src="vendor/nouislider/nouislider.min.js"></script>
     <script src="vendor/wnumb/wNumb.js"></script>
     <script src="js/main.js"></script>
-</body>
-
+  </body>
 </html>
