@@ -562,6 +562,22 @@ label[type="radio"] {
   font-size: 16px;
 }
 
+input[type="checkbox"] {
+  width: unset;
+  display: inline;
+  height: unset;
+}
+
+label[type="checkbox"] {
+  display: inline;
+  height: 36px;
+  box-sizing: border-box;
+  padding: 0 5px;
+  color: #222;
+  /* font-weight: bold; */
+  font-size: 16px;
+}
+
 
 select {
   width: 100%;
