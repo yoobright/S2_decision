@@ -21,7 +21,8 @@
         <form method="POST" id="signup-form" class="signup-form" action="#">
           <div>
             <h3>第一步</h3>
-            <fieldset disabled="disabled">
+            <!-- <fieldset disabled="disabled"> -->
+            <fieldset>
               <h2>基本信息</h2>
               <p class="desc"><span style="color: crimson">*</span>代表必填</p>
               <div
@@ -412,33 +413,10 @@
               >
                 <div class="form-group">
                   <label for="user_pain_reason" class="form-label"
-                    >疼痛原因<span style="color: crimson">*</span></label
+                    >疼痛原因<span style="color: crimson">*</span>
+                    （多选）</label
                   >
-                  <input
-                    type="checkbox"
-                    name="user_pain_reason"
-                    id="user_pain_reason"
-                    value="1"
-                    class="required"
-                  />
-                  <label type="checkbox">肿瘤</label>
-                  <input
-                    type="checkbox"
-                    name="user_pain_reason"
-                    id="user_pain_reason"
-                    value="2"
-                    class="required"
-                  />
-                  <label type="checkbox">肿瘤治疗</label>
-                  <input
-                    type="checkbox"
-                    name="user_pain_reason"
-                    id="user_pain_reason"
-                    value="3"
-                    class="required"
-                  />
-                  <label type="checkbox">非肿瘤相关性</label>
-                  <span class="text-input"></span>
+                  <div class="chceckbox-div"></div>
                 </div>
                 <div class="form-group">
                   <label for="user_pain_part" class="form-label"
@@ -446,36 +424,58 @@
                   >
                 </div>
                 <div class="form-group">
-                    <label for="user_pain_character" class="form-label"
-                      >疼痛性质<span style="color: crimson">*</span></label
-                    >
+                  <label for="user_pain_character" class="form-label"
+                    >疼痛性质<span style="color: crimson">*</span>
+                    （多选）</label
+                  >
+                  <div class="chceckbox-div"></div>
                 </div>
                 <div class="form-group">
-                    <label for="user_pain_level" class="form-label"
-                      >疼痛强度<span style="color: crimson">*</span></label
-                    >
+                  <label for="user_pain_level" class="form-label"
+                    >疼痛强度<span style="color: crimson">*</span></label
+                  >
                 </div>
                 <div class="form-group">
-                    <label for="user_pain_aggr_factor" class="form-label"
-                      >疼痛加重因素<span style="color: crimson">*</span></label
-                    >
+                  <label for="user_pain_aggr_factor" class="form-label"
+                    >疼痛加重因素<span style="color: crimson">*</span>
+                    （多选）</label
+                  >
+                  <div class="chceckbox-div"></div>
                 </div>
                 <div class="form-group">
-                    <label for="user_pain_reli_factor" class="form-label"
-                      >疼痛缓解因素<span style="color: crimson">*</span></label
-                    >
+                  <label for="user_pain_reli_factor" class="form-label"
+                    >疼痛缓解因素<span style="color: crimson">*</span>
+                    （多选）</label
+                  >
+                  <div class="chceckbox-div"></div>
                 </div>
                 <div class="form-group">
-                    <label for="user_pain_breakout_type" class="form-label"
-                      >疼痛爆发类型<span style="color: crimson">*</span></label
-                    >
+                  <label for="user_pain_breakout_type" class="form-label"
+                    >疼痛爆发类型<span style="color: crimson">*</span></label
+                  >
+                  <div class="radio-div"></div>
                 </div>
                 <div class="form-group">
-                    <label for="user_pain_breakout_freq" class="form-label"
-                      >疼痛爆发频率<span style="color: crimson">*</span></label
-                    >
+                  <label for="user_pain_breakout_freq" class="form-label"
+                    >疼痛爆发频率<span style="color: crimson">*</span></label
+                  >
+                  <div class="radio-div"></div>
                 </div>
               </div>
+            </fieldset>
+            <h3>第三步</h3>
+            <fieldset>
+              <h2>既往用药情况</h2>
+              <p class="desc"><span style="color: crimson">*</span>代表必填</p>
+              <div
+                class="fieldset-content"
+                style="
+                  max-height: 400px;
+                  overflow-y: scroll;
+                  padding-left: 30px;
+                  padding-right: 30px;
+                "
+              ></div>
             </fieldset>
           </div>
         </form>
