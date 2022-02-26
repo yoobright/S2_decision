@@ -407,6 +407,7 @@
                 style="
                   max-height: 400px;
                   overflow-y: scroll;
+                  overflow-x: auto;
                   padding-left: 30px;
                   padding-right: 30px;
                 "
@@ -434,6 +435,16 @@
                   <label for="user_pain_level" class="form-label"
                     >疼痛强度<span style="color: crimson">*</span></label
                   >
+                <!-- </div style="height: 200px;"> -->
+                  <!-- <div id="pain_leval_slider"></div> -->
+                <!-- </div> -->
+                <div style="height: 40px;"></div>
+                <div style="height: 50px; margin-left: 20px; margin-right: 20px;">
+                  <div id="pain_leval_slider"></div>
+                </div>
+
+                  <object type="image/svg+xml" data="images/pain_level.svg"  width="640">       
+                  </object>
                 </div>
                 <div class="form-group">
                   <label for="user_pain_aggr_factor" class="form-label"
@@ -484,12 +495,13 @@
 
     <!-- JS -->
     <script src="vendor/jquery/jquery.min.js"></script>
+    <!-- <script src="vendor/jquery/jquery-ui.min.js"></script> -->
     <script src="vendor/jquery-validation/dist/jquery.validate.min.js"></script>
     <script src="vendor/jquery-validation/dist/additional-methods.min.js"></script>
     <script src="vendor/jquery-steps/jquery.steps.min.js"></script>
     <script src="vendor/minimalist-picker/dobpicker.js"></script>
     <script src="vendor/nouislider/nouislider.min.js"></script>
-    <script src="vendor/wnumb/wNumb.js"></script>
+    <!-- <script src="vendor/wnumb/wNumb.js"></script> -->
     <script src="js/main.js"></script>
   </body>
 </html>

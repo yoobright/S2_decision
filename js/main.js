@@ -236,37 +236,46 @@ addRadio(userPainBreakoutFreqTag, userPainBreakoutFreqList, "required");
     minimumAge: 0,
     maximumAge: 120,
   });
-  var marginSlider = document.getElementById("slider-margin");
+
+  // $("#pain_leval_slider").slider();
+  var marginSlider = document.getElementById("pain_leval_slider");
+  console.log(marginSlider)
   if (marginSlider != undefined) {
     noUiSlider.create(marginSlider, {
-      start: [1100],
-      step: 100,
+      start: [0],
+      step: 1,
       connect: [true, false],
       tooltips: [true],
       range: {
-        min: 100,
-        max: 2000,
+        min: 1,
+        max: 10,
       },
       pips: {
         mode: "values",
-        values: [100, 2000],
-        density: 4,
+        values: [1, 10],
+        // density: 7,
       },
-      format: wNumb({
-        decimals: 0,
-        thousand: "",
-        prefix: "$ ",
-      }),
+      format: {
+        from: function(value) {
+                return parseInt(value);
+            },
+        to: function(value) {
+                return parseInt(value);
+            }
+        }
     });
-    var marginMin = document.getElementById("value-lower"),
-      marginMax = document.getElementById("value-upper");
+    // var marginMin = document.getElementById("value-lower"),
+    //   marginMax = document.getElementById("value-upper");
 
-    marginSlider.noUiSlider.on("update", function (values, handle) {
-      if (handle) {
-        marginMax.innerHTML = values[handle];
-      } else {
-        marginMin.innerHTML = values[handle];
-      }
-    });
+    // marginSlider.noUiSlider.on("update", function (values, handle) {
+    //   if (handle) {
+    //     marginMax.innerHTML = values[handle];
+    //   } else {
+    //     marginMin.innerHTML = values[handle];
+    //   }
+    // });
   }
 })(jQuery);
+
+
+
