@@ -600,6 +600,6 @@ select {
   background: #007bff;
 }
 .noUi-horizontal .noUi-handle, .noUi-vertical .noUi-handle {
-  background: #007bff;
+  background: white;
 }
 

@@ -266,14 +266,29 @@ addRadio(userPainBreakoutFreqTag, userPainBreakoutFreqList, "required");
     });
     // var marginMin = document.getElementById("value-lower"),
     //   marginMax = document.getElementById("value-upper");
+    var change_color_list = [
+      "#edccae",
+      "#e6b287",
+      "#e6b287",
+      "#e6b287",
+      "#b35d21",
+      "#b35d21",
+      "#b35d21",
+      "#b35d21",
+      "#773e14",
+      "#773e14",
+      "#773e14",
+    ]
 
-    // marginSlider.noUiSlider.on("update", function (values, handle) {
-    //   if (handle) {
-    //     marginMax.innerHTML = values[handle];
-    //   } else {
-    //     marginMin.innerHTML = values[handle];
-    //   }
-    // });
+    marginSlider.noUiSlider.on("update", function (values, handle) {
+      console.log(values)
+      $("#pain_leval_slider .noUi-connect").css("background", change_color_list[values[0]])
+      // if (handle) {
+      //   console.log(values)
+      //   // var color = change_color_list[values]
+      //   // $(".noUi-connect").css("propertyname", )
+      // }
+    });
   }
 })(jQuery);
 
