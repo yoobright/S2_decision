@@ -603,3 +603,37 @@ select {
   background: white;
 }
 
+div.fieldset-content {
+  padding-left: 30px;
+  padding-right: 30px;
+}
+
+@media screen and (max-width: 768px) {
+  #pain-level-image {
+    width: 400px;
+  }
+}
+
+@media screen and (max-width: 480px) {
+  #pain-level-image {
+    width: 300px;
+  }
+
+  div.fieldset-content {
+    padding-left: 14px;
+    padding-right: 14px;
+  }
+
+  fieldset {
+    padding-left: 8px;
+    padding-right: 8px;
+  }
+
+  label[type="checkbox"] {
+    padding: 0 0px;
+  }
+
+  label[type="radio"] {
+    padding: 0 0px;
+  }
+}

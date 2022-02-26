@@ -22,7 +22,7 @@
           <div>
             <h3>第一步</h3>
             <!-- <fieldset disabled="disabled"> -->
-            <fieldset>
+              <fieldset>
               <h2>基本信息</h2>
               <p class="desc"><span style="color: crimson">*</span>代表必填</p>
               <div
@@ -30,8 +30,6 @@
                 style="
                   max-height: 400px;
                   overflow-y: scroll;
-                  padding-left: 30px;
-                  padding-right: 30px;
                 "
               >
                 <div class="form-group">
@@ -332,11 +330,14 @@
                       disabled
                       hidden
                     ></option>
-                    <option value="1">
+                    <option value="0">
                       0分：活动能力完全正常，与起病前活动能力无任何差异
                     </option>
-                    <option value="2">
+                    <option value="1">
                       1分：能自由走动及从事轻体力活动，包括一般家务或办公室工作，但不能从事较重的体力活动
+                    </option>
+                    <option value="2">
+                      2分：能自由走动及生活自理，但已丧失工作能力，日间不少于一半日间时间可以起床活动
                     </option>
                     <option value="3">
                       3分：生活仅能部分自理，日间一半以上时间卧床或坐轮椅
@@ -407,9 +408,6 @@
                 style="
                   max-height: 400px;
                   overflow-y: scroll;
-                  overflow-x: auto;
-                  padding-left: 30px;
-                  padding-right: 30px;
                 "
               >
                 <div class="form-group">
@@ -435,17 +433,18 @@
                   <label for="user_pain_level" class="form-label"
                     >疼痛强度<span style="color: crimson">*</span></label
                   >
-                <!-- </div style="height: 200px;"> -->
+                  <!-- </div style="height: 200px;"> -->
                   <!-- <div id="pain_leval_slider"></div> -->
-                <!-- </div> -->
-                <div style="height: 40px;"></div>
-                <div style="height: 50px; margin-left: 20px; margin-right: 20px;">
-                  <div id="pain_leval_slider"></div>
+                  <!-- </div> -->
+                  <div style="height: 40px"></div>
+                  <div
+                    style="height: 60px; margin-left: 20px; margin-right: 20px; max-width: 600px;"
+                  >
+                    <div id="pain_leval_slider"></div>
+                  </div>
                 </div>
-
-                  <object type="image/svg+xml" data="images/pain_level.svg"  width="640">       
-                  </object>
-                </div>
+                <object id="pain-level-image" type="image/svg+xml" data="images/pain_level.svg" width="640px">       
+                </object>
                 <div class="form-group">
                   <label for="user_pain_aggr_factor" class="form-label"
                     >疼痛加重因素<span style="color: crimson">*</span>
@@ -483,8 +482,6 @@
                 style="
                   max-height: 400px;
                   overflow-y: scroll;
-                  padding-left: 30px;
-                  padding-right: 30px;
                 "
               ></div>
             </fieldset>

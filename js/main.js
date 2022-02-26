@@ -247,13 +247,13 @@ addRadio(userPainBreakoutFreqTag, userPainBreakoutFreqList, "required");
       connect: [true, false],
       tooltips: [true],
       range: {
-        min: 1,
+        min: 0,
         max: 10,
       },
       pips: {
-        mode: "values",
-        values: [1, 10],
-        // density: 7,
+        mode: 'steps',
+        stepped: true,
+        density: 10
       },
       format: {
         from: function(value) {
@@ -281,7 +281,7 @@ addRadio(userPainBreakoutFreqTag, userPainBreakoutFreqList, "required");
     ]
 
     marginSlider.noUiSlider.on("update", function (values, handle) {
-      console.log(values)
+      // console.log(values)
       $("#pain_leval_slider .noUi-connect").css("background", change_color_list[values[0]])
       // if (handle) {
       //   console.log(values)
