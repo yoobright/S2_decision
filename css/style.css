@@ -616,8 +616,10 @@ div.fieldset-content {
 
 @media screen and (max-width: 480px) {
   #pain-level-image {
-    width: 300px;
+    width: calc(100% - 8px);
+    max-width: 100%;
   }
+
 
   div.fieldset-content {
     padding-left: 14px;
@@ -636,4 +638,12 @@ div.fieldset-content {
   label[type="radio"] {
     padding: 0 0px;
   }
+
+  div.container {
+    margin: 0, 10px;
+  }
+
+  .container {
+    width: calc(100% - 20px);
+    max-width: 100%; }
 }
