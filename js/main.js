@@ -281,8 +281,41 @@ addRadio(userPainBreakoutFreqTag, userPainBreakoutFreqList, "required");
     ]
 
     marginSlider.noUiSlider.on("update", function (values, handle) {
-      // console.log(values)
-      $("#pain_leval_slider .noUi-connect").css("background", change_color_list[values[0]])
+      console.log(values);
+      var value = values[0];
+      $("#pain_leval_slider .noUi-connect").css("background", change_color_list[value]);
+
+      var painDoc = document.getElementById("pain-level-image").contentDocument;
+      if (painDoc != null) {
+        console.log(painDoc);
+        var painDocSelect= d3.select(painDoc);
+        var painG = painDocSelect.selectAll("g").filter(function(){
+          return d3.select(this).attr('id').startsWith('pain');
+        });
+        painG.selectAll("text").style("font-weight", "normal");
+        
+        var prefixList = [
+          "#pain-desc-level",
+          "#pain-label-level"
+        ]
+        for (i = 0; i < prefixList.length; i++) { 
+          changeID = prefixList[i] + value;
+          changeG = painDocSelect.select(changeID);
+          changeG.selectAll("text").style("font-weight", "bold");
+          // console.log(changeG.select("text"));
+        }
+        
+        // flag
+        var painFlag = painDocSelect.selectAll("g").filter(function(){
+          return d3.select(this).attr('id').startsWith('pain-flag');
+        });
+        console.log(painFlag);
+        painFlag.selectAll("path").style("stroke-width", 0.25);
+        var changeFlag = painDocSelect.select("#pain-flag-level" + value);
+        console.log(changeFlag);
+        changeFlag.selectAll("path").style("stroke-width", 2);
+      }
+      
       // if (handle) {
       //   console.log(values)
       //   // var color = change_color_list[values]

@@ -9,19 +9,20 @@
 	.st2{font-family:'AdobeSongStd-Light-GBpc-EUC-H';}
 	.st3{font-size:18px;}
 	
-		.st4{fill-rule:evenodd;clip-rule:evenodd;fill:#F7CBAC;stroke:#C7C8C8;stroke-width:0.25;stroke-linecap:square;stroke-miterlimit:3;}
+		.st4{fill-rule:evenodd;clip-rule:evenodd;fill:#F7CBAC;stroke:#F7CBAC;stroke-width:0.25;stroke-linecap:butt;stroke-miterlimit:3;}
 	
-		.st5{fill-rule:evenodd;clip-rule:evenodd;fill:#F4B183;stroke:#C7C8C8;stroke-width:0.25;stroke-linecap:square;stroke-miterlimit:3;}
+		.st5{fill-rule:evenodd;clip-rule:evenodd;fill:#F4B183;stroke:#F4B183;stroke-width:0.25;stroke-linecap:butt;stroke-miterlimit:3;}
 	
-		.st6{fill-rule:evenodd;clip-rule:evenodd;fill:#C55A11;stroke:#C7C8C8;stroke-width:0.25;stroke-linecap:square;stroke-miterlimit:3;}
+		.st6{fill-rule:evenodd;clip-rule:evenodd;fill:#C55A11;stroke:#C55A11;stroke-width:0.25;stroke-linecap:butt;stroke-miterlimit:3;}
 	
-		.st7{fill-rule:evenodd;clip-rule:evenodd;fill:#833C0B;stroke:#C7C8C8;stroke-width:0.25;stroke-linecap:square;stroke-miterlimit:3;}
+		.st7{fill-rule:evenodd;clip-rule:evenodd;fill:#833C0B;stroke:#833C0B;stroke-width:0.25;stroke-linecap:butt;stroke-miterlimit:3;}
 	.st8{fill:none;stroke:#C8C8C8;stroke-linecap:square;stroke-miterlimit:3;}
 	.st9{font-size:13.9999px;}
 	.st10{fill:none;}
 	.st11{font-family:'ArialMT';}
 	.st12{font-size:16px;}
 	.st13{fill:none;stroke:#C7C8C8;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:3;}
+    /* .st-bold{font-weight="bold"; } */
 </style>
 <g id="group4-1" transform="translate(68.1554 -20.8346)">
 	<g id="group5-2">
@@ -30,9 +31,6 @@
 	<g id="group7-7" transform="translate(0 -376.423)">
 		<text id="shape7-12" transform="matrix(1 0 0 1 -53 428.7346)" class="st1 st2 st3">疼痛等级</text>
 	</g>
-</g>
-<g id="shape41-17" transform="translate(296.608 -366.834)">
-	<path class="st4" d="M-59,439.6v0.1h51.1l0,0l0,0l6-6.9l-6-6.9l0,0l0,0H-59v0.1l5.9,6.7L-59,439.6z"/>
 </g>
 <g id="shape59-19" transform="translate(243.175 -357.034)">
 	<path class="st4" d="M-54.3,422.2v-14.1H-59v31.6h4.7v-14.1l12.3-1.7L-54.3,422.2L-54.3,422.2z"/>
@@ -79,132 +77,135 @@
 	<text transform="matrix(0 -1 -1 0 46.2255 533.4)" class="st2 st9">疼</text>
 	<text transform="matrix(0 -1 -1 0 28.0536 533.4)" class="st2 st9">痛</text>
 </g>
-<g id="shape68-53" transform="translate(259.61 -363.173)">
+<g id="pain-label-level0" transform="translate(259.61 -363.173)">
 	<path class="st10" d="M-59,420.1h21.8v19.7H-59V420.1z"/>
 	<text transform="matrix(1 0 0 1 -52.08 434.7047)" class="st11 st12">0</text>
 </g>
-<g id="shape70-56" transform="translate(259.61 -331.207)">
+<g id="pain-label-level1" transform="translate(259.61 -331.207)">
 	<path class="st10" d="M-59,420.1h21.8v19.7H-59V420.1z"/>
 	<text transform="matrix(1 0 0 1 -52.08 434.7047)" class="st11 st12">1</text>
 </g>
-<g id="shape71-59" transform="translate(259.61 -299.241)">
+<g id="pain-label-level2" transform="translate(259.61 -299.241)">
 	<path class="st10" d="M-59,420.1h21.8v19.7H-59V420.1z"/>
 	<text transform="matrix(1 0 0 1 -52.08 434.7047)" class="st11 st12">2</text>
 </g>
-<g id="shape72-62" transform="translate(259.61 -267.275)">
+<g id="pain-label-level3" transform="translate(259.61 -267.275)">
 	<path class="st10" d="M-59,420.1h21.8v19.7H-59V420.1z"/>
 	<text transform="matrix(1 0 0 1 -52.08 434.7047)" class="st11 st12">3</text>
 </g>
-<g id="shape73-65" transform="translate(259.61 -235.309)">
+<g id="pain-label-level4" transform="translate(259.61 -235.309)">
 	<path class="st10" d="M-59,420.1h21.8v19.7H-59V420.1z"/>
 	<text transform="matrix(1 0 0 1 -52.08 434.7047)" class="st11 st12">4</text>
 </g>
-<g id="shape74-68" transform="translate(259.61 -203.342)">
+<g id="pain-label-level5" transform="translate(259.61 -203.342)">
 	<path class="st10" d="M-59,420.1h21.8v19.7H-59V420.1z"/>
 	<text transform="matrix(1 0 0 1 -52.08 434.7047)" class="st11 st12">5</text>
 </g>
-<g id="shape75-71" transform="translate(259.61 -171.376)">
+<g id="pain-label-level6" transform="translate(259.61 -171.376)">
 	<path class="st10" d="M-59,420.1h21.8v19.7H-59V420.1z"/>
 	<text transform="matrix(1 0 0 1 -52.08 434.7047)" class="st11 st12">6</text>
 </g>
-<g id="shape76-74" transform="translate(259.61 -139.41)">
+<g id="pain-label-level7" transform="translate(259.61 -139.41)">
 	<path class="st10" d="M-59,420.1h21.8v19.7H-59V420.1z"/>
 	<text transform="matrix(1 0 0 1 -52.08 434.7047)" class="st11 st12">7</text>
 </g>
-<g id="shape79-77" transform="translate(259.61 -107.444)">
+<g id="pain-label-level8" transform="translate(259.61 -107.444)">
 	<path class="st10" d="M-59,420.1h21.8v19.7H-59V420.1z"/>
 	<text transform="matrix(1 0 0 1 -52.08 434.7047)" class="st11 st12">8</text>
 </g>
-<g id="shape83-80" transform="translate(259.61 -75.4779)">
+<g id="pain-label-level9" transform="translate(259.61 -75.4779)">
 	<path class="st10" d="M-59,420.1h21.8v19.7H-59V420.1z"/>
 	<text transform="matrix(1 0 0 1 -52.08 434.7047)" class="st11 st12">9</text>
 </g>
-<g id="shape87-83" transform="translate(259.61 -43.5118)">
+<g id="pain-label-level10" transform="translate(259.61 -43.5118)">
 	<path class="st10" d="M-59,420.1h24.4v19.7H-59V420.1z"/>
 	<text transform="matrix(1 0 0 1 -54.81 434.7047)" class="st11 st12">1</text>
 	<text transform="matrix(1 0 0 1 -45.9116 434.7047)" class="st11 st12">0</text>
 </g>
-<g id="shape88-87" transform="translate(379.238 -363.169)">
+<g id="pain-flag-level0" transform="translate(296.608 -366.834)">
+	<path class="st4" d="M-59,439.6v0.1h51.1l0,0l0,0l6-6.9l-6-6.9l0,0l0,0H-59v0.1l5.9,6.7L-59,439.6z"/>
+</g>
+<g id="pain-flag-level1" transform="translate(296.608 -334.865)">
+	<path class="st5" d="M-59,439.6v0.1h51.1l0,0l0,0l6-6.9l-6-6.9l0,0l0,0H-59v0.1l5.9,6.7L-59,439.6z"/>
+</g>
+<g id="pain-flag-level2" transform="translate(296.608 -302.895)">
+	<path class="st5" d="M-59,439.6v0.1h51.1l0,0l0,0l6-6.9l-6-6.9l0,0l0,0H-59v0.1l5.9,6.7L-59,439.6z"/>
+</g>
+<g id="pain-flag-level3" transform="translate(296.608 -270.926)">
+	<path class="st5" d="M-59,439.6v0.1h51.1l0,0l0,0l6-6.9l-6-6.9l0,0l0,0H-59v0.1l5.9,6.7L-59,439.6z"/>
+</g>
+<g id="pain-flag-level4" transform="translate(296.608 -238.956)">
+	<path class="st6" d="M-59,439.6v0.1h51.1l0,0l0,0l6-6.9l-6-6.9l0,0l0,0H-59v0.1l5.9,6.7L-59,439.6z"/>
+</g>
+<g id="pain-flag-level5" transform="translate(296.608 -206.987)">
+	<path class="st6" d="M-59,439.6v0.1h51.1l0,0l0,0l6-6.9l-6-6.9l0,0l0,0H-59v0.1l5.9,6.7L-59,439.6z"/>
+</g>
+<g id="pain-flag-level6" transform="translate(297.958 -175.018)">
+	<path class="st6" d="M-59,439.6v0.1h51.1l0,0l0,0l6-6.9l-6-6.9l0,0l0,0H-59v0.1l5.9,6.7L-59,439.6z"/>
+</g>
+<g id="pain-flag-level7" transform="translate(297.958 -143.048)">
+	<path class="st6" d="M-59,439.6v0.1h51.1l0,0l0,0l6-6.9l-6-6.9l0,0l0,0H-59v0.1l5.9,6.7L-59,439.6z"/>
+</g>
+<g id="pain-flag-level8" transform="translate(297.958 -111.079)">
+	<path class="st7" d="M-59,439.6v0.1h51.1l0,0l0,0l6-6.9l-6-6.9l0,0l0,0H-59v0.1l5.9,6.7L-59,439.6z"/>
+</g>
+<g id="pain-flag-level9" transform="translate(297.958 -79.1094)">
+	<path class="st7" d="M-59,439.6v0.1h51.1l0,0l0,0l6-6.9l-6-6.9l0,0l0,0H-59v0.1l5.9,6.7L-59,439.6z"/>
+</g>
+<g id="pain-flag-level10" transform="translate(297.958 -47.14)">
+	<path class="st7" d="M-59,439.6v0.1h51.1l0,0l0,0l6-6.9l-6-6.9l0,0l0,0H-59v0.1l5.9,6.7L-59,439.6z"/>
+</g>
+<g id="pain-desc-level0" transform="translate(379.238 -363.169)">
 	<path class="st13" d="M-56.2,419.5h37.6c1.6,0,2.8,1.3,2.8,2.8v14.5c0,1.6-1.3,2.8-2.8,2.8h-37.6c-1.6,0-2.8-1.3-2.8-2.8v-14.5
 		C-59,420.8-57.7,419.5-56.2,419.5z"/>
 	<text transform="matrix(1 0 0 1 -55 433.8448)" class="st2 st9">无痛</text>
 </g>
-<g id="shape90-90" transform="translate(296.608 -334.865)">
-	<path class="st5" d="M-59,439.6v0.1h51.1l0,0l0,0l6-6.9l-6-6.9l0,0l0,0H-59v0.1l5.9,6.7L-59,439.6z"/>
-</g>
-<g id="shape91-92" transform="translate(296.608 -302.895)">
-	<path class="st5" d="M-59,439.6v0.1h51.1l0,0l0,0l6-6.9l-6-6.9l0,0l0,0H-59v0.1l5.9,6.7L-59,439.6z"/>
-</g>
-<g id="shape92-94" transform="translate(296.608 -270.926)">
-	<path class="st5" d="M-59,439.6v0.1h51.1l0,0l0,0l6-6.9l-6-6.9l0,0l0,0H-59v0.1l5.9,6.7L-59,439.6z"/>
-</g>
-<g id="shape105-96" transform="translate(296.608 -238.956)">
-	<path class="st6" d="M-59,439.6v0.1h51.1l0,0l0,0l6-6.9l-6-6.9l0,0l0,0H-59v0.1l5.9,6.7L-59,439.6z"/>
-</g>
-<g id="shape106-98" transform="translate(296.608 -206.987)">
-	<path class="st6" d="M-59,439.6v0.1h51.1l0,0l0,0l6-6.9l-6-6.9l0,0l0,0H-59v0.1l5.9,6.7L-59,439.6z"/>
-</g>
-<g id="shape107-100" transform="translate(297.958 -175.018)">
-	<path class="st6" d="M-59,439.6v0.1h51.1l0,0l0,0l6-6.9l-6-6.9l0,0l0,0H-59v0.1l5.9,6.7L-59,439.6z"/>
-</g>
-<g id="shape108-102" transform="translate(297.958 -143.048)">
-	<path class="st6" d="M-59,439.6v0.1h51.1l0,0l0,0l6-6.9l-6-6.9l0,0l0,0H-59v0.1l5.9,6.7L-59,439.6z"/>
-</g>
-<g id="shape109-104" transform="translate(297.958 -111.079)">
-	<path class="st7" d="M-59,439.6v0.1h51.1l0,0l0,0l6-6.9l-6-6.9l0,0l0,0H-59v0.1l5.9,6.7L-59,439.6z"/>
-</g>
-<g id="shape110-106" transform="translate(297.958 -79.1094)">
-	<path class="st7" d="M-59,439.6v0.1h51.1l0,0l0,0l6-6.9l-6-6.9l0,0l0,0H-59v0.1l5.9,6.7L-59,439.6z"/>
-</g>
-<g id="shape111-108" transform="translate(297.958 -47.14)">
-	<path class="st7" d="M-59,439.6v0.1h51.1l0,0l0,0l6-6.9l-6-6.9l0,0l0,0H-59v0.1l5.9,6.7L-59,439.6z"/>
-</g>
-<g id="shape112-110" transform="translate(379.238 -331.26)">
+<g id="pain-desc-level1" transform="translate(379.238 -331.26)">
 	<path class="st13" d="M-56.2,419.5H51.6c1.6,0,2.8,1.3,2.8,2.8v14.5c0,1.6-1.3,2.8-2.8,2.8H-56.2c-1.6,0-2.8-1.3-2.8-2.8v-14.5
 		C-59,420.8-57.7,419.5-56.2,419.5z"/>
 	<text transform="matrix(1 0 0 1 -55 433.8447)" class="st2 st9">安静平卧时不痛</text>
 </g>
-<g id="shape113-113" transform="translate(379.238 -203.624)">
+<g id="pain-desc-level5" transform="translate(379.238 -203.624)">
 	<path class="st13" d="M-56.2,419.5h146c1.6,0,2.8,1.3,2.8,2.8v14.5c0,1.6-1.3,2.8-2.8,2.8h-146c-1.6,0-2.8-1.3-2.8-2.8v-14.5
 		C-59,420.8-57.7,419.5-56.2,419.5z"/>
 	<text transform="matrix(1 0 0 1 -55 433.8447)" class="st2 st9">安静平卧时，持续疼痛</text>
 </g>
-<g id="shape114-116" transform="translate(379.238 -267.442)">
+<g id="pain-desc-level3" transform="translate(379.238 -267.442)">
 	<path class="st13" d="M-56.2,419.5h216.6c1.6,0,2.8,1.3,2.8,2.8v14.5c0,1.6-1.3,2.8-2.8,2.8H-56.2c-1.6,0-2.8-1.3-2.8-2.8v-14.5
 		C-59,420.8-57.7,419.5-56.2,419.5z"/>
 	<text transform="matrix(1 0 0 1 -55 433.8447)" class="st2 st9">安静平卧时不痛，咳嗽深呼吸疼痛</text>
 </g>
-<g id="shape115-119" transform="translate(379.238 -299.351)">
+<g id="pain-desc-level2" transform="translate(379.238 -299.351)">
 	<path class="st13" d="M-56.2,419.5h146c1.6,0,2.8,1.3,2.8,2.8v14.5c0,1.6-1.3,2.8-2.8,2.8h-146c-1.6,0-2.8-1.3-2.8-2.8v-14.5
 		C-59,420.8-57.7,419.5-56.2,419.5z"/>
 	<text transform="matrix(1 0 0 1 -55 433.8447)" class="st2 st9">咳嗽疼痛，深呼吸疼痛</text>
 </g>
-<g id="shape116-122" transform="translate(379.238 -235.533)">
+<g id="pain-desc-level4" transform="translate(379.238 -235.533)">
 	<path class="st13" d="M-56.2,419.5h146c1.6,0,2.8,1.3,2.8,2.8v14.5c0,1.6-1.3,2.8-2.8,2.8h-146c-1.6,0-2.8-1.3-2.8-2.8v-14.5
 		C-59,420.8-57.7,419.5-56.2,419.5z"/>
 	<text transform="matrix(1 0 0 1 -55 433.8447)" class="st2 st9">安静平卧时，间歇疼痛</text>
 </g>
-<g id="shape117-125" transform="translate(379.238 -171.715)">
+<g id="pain-desc-level6" transform="translate(379.238 -171.715)">
 	<path class="st13" d="M-56.2,419.5h146c1.6,0,2.8,1.3,2.8,2.8v14.5c0,1.6-1.3,2.8-2.8,2.8h-146c-1.6,0-2.8-1.3-2.8-2.8v-14.5
 		C-59,420.8-57.7,419.5-56.2,419.5z"/>
 	<text transform="matrix(1 0 0 1 -55 433.8447)" class="st2 st9">安静平卧时，疼痛较痛</text>
 </g>
-<g id="shape118-128" transform="translate(379.238 -139.806)">
+<g id="pain-desc-level7" transform="translate(379.238 -139.806)">
 	<path class="st13" d="M-56.2,419.5h201.8c1.6,0,2.8,1.3,2.8,2.8v14.5c0,1.6-1.3,2.8-2.8,2.8H-56.2c-1.6,0-2.8-1.3-2.8-2.8v-14.5
 		C-59,420.8-57.7,419.5-56.2,419.5z"/>
 	<text transform="matrix(1 0 0 1 -55 433.8447)" class="st2 st9">疼痛较重，翻转不安，无法入睡</text>
 </g>
-<g id="shape120-131" transform="translate(379.238 -75.9878)">
+<g id="pain-desc-level9" transform="translate(379.238 -75.9878)">
 	<path class="st13" d="M-56.2,419.5H76.2c1.6,0,2.8,1.3,2.8,2.8v14.5c0,1.6-1.3,2.8-2.8,2.8H-56.2c-1.6,0-2.8-1.3-2.8-2.8v-14.5
 		C-59,420.8-57.7,419.5-56.2,419.5z"/>
 	<text transform="matrix(1 0 0 1 -55 433.8447)" class="st2 st9">剧烈疼痛，无法忍受</text>
 </g>
-<g id="shape121-134" transform="translate(379.238 -107.897)">
+<g id="pain-desc-level8" transform="translate(379.238 -107.897)">
 	<path class="st13" d="M-56.2,419.5H104c1.6,0,2.8,1.3,2.8,2.8v14.5c0,1.6-1.3,2.8-2.8,2.8H-56.2c-1.6,0-2.8-1.3-2.8-2.8v-14.5
 		C-59,420.8-57.7,419.5-56.2,419.5z"/>
 	<text transform="matrix(1 0 0 1 -55 433.8447)" class="st2 st9">持续疼痛难忍，全身大汗</text>
 </g>
-<g id="shape122-137" transform="translate(379.238 -44.0787)">
+<g id="pain-desc-level10" transform="translate(379.238 -44.0787)">
 	<path class="st13" d="M-56.2,419.5H60.3c1.6,0,2.8,1.3,2.8,2.8v14.5c0,1.6-1.3,2.8-2.8,2.8H-56.2c-1.6,0-2.8-1.3-2.8-2.8v-14.5
 		C-59,420.8-57.7,419.5-56.2,419.5z"/>
 	<text transform="matrix(1 0 0 1 -55 433.8447)" class="st2 st9">最疼痛，生不如死</text>
