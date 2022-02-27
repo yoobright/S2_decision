@@ -239,7 +239,7 @@ addRadio(userPainBreakoutFreqTag, userPainBreakoutFreqList, "required");
 
   // $("#pain_leval_slider").slider();
   var marginSlider = document.getElementById("pain_leval_slider");
-  console.log(marginSlider)
+  console.log(marginSlider);
   if (marginSlider != undefined) {
     noUiSlider.create(marginSlider, {
       start: [0],
@@ -251,18 +251,18 @@ addRadio(userPainBreakoutFreqTag, userPainBreakoutFreqList, "required");
         max: 10,
       },
       pips: {
-        mode: 'steps',
+        mode: "steps",
         stepped: true,
-        density: 10
+        density: 10,
       },
       format: {
-        from: function(value) {
-                return parseInt(value);
-            },
-        to: function(value) {
-                return parseInt(value);
-            }
-        }
+        from: function (value) {
+          return parseInt(value);
+        },
+        to: function (value) {
+          return parseInt(value);
+        },
+      },
     });
     // var marginMin = document.getElementById("value-lower"),
     //   marginMax = document.getElementById("value-upper");
@@ -278,44 +278,44 @@ addRadio(userPainBreakoutFreqTag, userPainBreakoutFreqList, "required");
       "#773e14",
       "#773e14",
       "#773e14",
-    ]
+    ];
 
     marginSlider.noUiSlider.on("update", function (values, handle) {
       console.log(values);
       var value = values[0];
-      $("#pain_leval_slider .noUi-connect").css("background", change_color_list[value]);
+      $("#pain_leval_slider .noUi-connect").css(
+        "background",
+        change_color_list[value]
+      );
 
       var painDoc = document.getElementById("pain-level-image").contentDocument;
       if (painDoc != null) {
-        console.log(painDoc);
-        var painDocSelect= d3.select(painDoc);
-        var painG = painDocSelect.selectAll("g").filter(function(){
-          return d3.select(this).attr('id').startsWith('pain');
+        // console.log(painDoc);
+        var painDocSelect = d3.select(painDoc);
+        var painG = painDocSelect.selectAll("g").filter(function () {
+          return d3.select(this).attr("id").startsWith("pain");
         });
         painG.selectAll("text").style("font-weight", "normal");
-        
-        var prefixList = [
-          "#pain-desc-level",
-          "#pain-label-level"
-        ]
-        for (i = 0; i < prefixList.length; i++) { 
+
+        var prefixList = ["#pain-desc-level", "#pain-label-level"];
+        for (i = 0; i < prefixList.length; i++) {
           changeID = prefixList[i] + value;
           changeG = painDocSelect.select(changeID);
           changeG.selectAll("text").style("font-weight", "bold");
           // console.log(changeG.select("text"));
         }
-        
+
         // flag
-        var painFlag = painDocSelect.selectAll("g").filter(function(){
-          return d3.select(this).attr('id').startsWith('pain-flag');
+        var painFlag = painDocSelect.selectAll("g").filter(function () {
+          return d3.select(this).attr("id").startsWith("pain-flag");
         });
-        console.log(painFlag);
+        // console.log(painFlag);
         painFlag.selectAll("path").style("stroke-width", 0.25);
         var changeFlag = painDocSelect.select("#pain-flag-level" + value);
-        console.log(changeFlag);
+        // console.log(changeFlag);
         changeFlag.selectAll("path").style("stroke-width", 2);
       }
-      
+
       // if (handle) {
       //   console.log(values)
       //   // var color = change_color_list[values]
@@ -325,5 +325,81 @@ addRadio(userPainBreakoutFreqTag, userPainBreakoutFreqList, "required");
   }
 })(jQuery);
 
+$(document).ready(function () {
+  var table = $("#example").DataTable({
+    language: {
+      sProcessing: "处理中...",
+      sLengthMenu: "显示 _MENU_ 项结果",
+      sZeroRecords: "没有匹配结果",
+      sInfo: "显示第 _START_ 至 _END_ 项结果，共 _TOTAL_ 项",
+      sInfoEmpty: "显示第 0 至 0 项结果，共 0 项",
+      sInfoFiltered: "(由 _MAX_ 项结果过滤)",
+      sInfoPostFix: "",
+      sSearch: "搜索:",
+      sUrl: "",
+      sEmptyTable: "表中数据为空",
+      sLoadingRecords: "载入中...",
+      sInfoThousands: ",",
+      oPaginate: {
+        sFirst: "首页",
+        sPrevious: "上页",
+        sNext: "下页",
+        sLast: "末页",
+      },
+      oAria: {
+        sSortAscending: ": 以升序排列此列",
+        sSortDescending: ": 以降序排列此列",
+      },
+      select: {
+        rows: {
+          _: "选中%d行",
+          1: "选中1行",
+        },
+      },
+    },
 
+    paging: false,
+    responsive: true,
+    columnDefs: [
+      {
+        orderable: false,
+        className: "select-checkbox",
+        targets: 0,
+      },
+    ],
+    order: [[1, "asc"]],
+    select: {
+      style: "os",
+      selector: "td:first-child",
+    },
 
+    dom: "Bfrtip",
+    buttons: [
+      {
+        text: "增加项",
+        action: function (e, dt, node, config) {
+          console.log("add!!!");
+          table.row.add(["", "~", "", "", "", "", "", ""]).draw(false);
+        },
+      },
+
+      {
+        text: "删除项",
+        action: function (e, dt, node, config) {
+          console.log("del!!!");
+          table.row(".selected").remove().draw(false);
+        },
+      },
+    ],
+  });
+
+  // $("#addRow").on("click", function () {
+  //   table.row
+  //     .add(["~", "System Architect", ss, "33", "2011/04/25", "$3,120"])
+  //     .draw();
+  // });
+
+  // $("#delRow").on("click", function () {
+  //   table.row('.selected').remove().draw( false );
+  // });
+});
