@@ -226,16 +226,16 @@ addRadio(userPainBreakoutFreqTag, userPainBreakoutFreqList, "required");
     min: $.validator.format("请输入不小于 {0} 的数值"),
   });
 
-  $.dobPicker({
-    daySelector: "#birth_date",
-    monthSelector: "#birth_month",
-    yearSelector: "#birth_year",
-    dayDefault: "",
-    monthDefault: "",
-    yearDefault: "",
-    minimumAge: 0,
-    maximumAge: 120,
-  });
+  // $.dobPicker({
+  //   daySelector: "#birth_date",
+  //   monthSelector: "#birth_month",
+  //   yearSelector: "#birth_year",
+  //   dayDefault: "",
+  //   monthDefault: "",
+  //   yearDefault: "",
+  //   minimumAge: 0,
+  //   maximumAge: 120,
+  // });
 
   // $("#pain_leval_slider").slider();
   var marginSlider = document.getElementById("pain_leval_slider");
@@ -359,32 +359,45 @@ $(document).ready(function () {
     },
 
     paging: false,
-    responsive: true,
+    responsive: {
+      details: {
+        display: $.fn.dataTable.Responsive.display.childRowImmediate,
+        type: "inline",
+      },
+    },
     columnDefs: [
       {
+        className: "dtr-control",
         orderable: false,
-        className: "select-checkbox",
         targets: 0,
       },
     ],
+    // columnDefs: [
+    //   {
+    //     orderable: false,
+    //     className: "select-checkbox",
+    //     targets: 0,
+    //   },
+    // ],
     order: [[1, "asc"]],
-    select: {
-      style: "os",
-      selector: "td:first-child",
-    },
-
+    select: true,
+    info: true,
+    // scrollY: "200px",
+    // scrollCollapse: true,
     dom: "Bfrtip",
     buttons: [
       {
         text: "增加项",
+        titleAttr: "增加用药",
         action: function (e, dt, node, config) {
           console.log("add!!!");
-          table.row.add(["", "~", "", "", "", "", "", ""]).draw(false);
+          table.row.add(["", "~", "~", "", "", "", "", ""]).draw(false);
         },
       },
 
       {
         text: "删除项",
+        titleAttr: "增加选中用药",
         action: function (e, dt, node, config) {
           console.log("del!!!");
           table.row(".selected").remove().draw(false);
@@ -402,4 +415,13 @@ $(document).ready(function () {
   // $("#delRow").on("click", function () {
   //   table.row('.selected').remove().draw( false );
   // });
+
+  $("#example tbody").on("click", "tr", function () {
+    if ($(this).hasClass("selected")) {
+      $(this).removeClass("selected");
+    } else {
+      table.$("tr.selected").removeClass("selected");
+      $(this).addClass("selected");
+    }
+  });
 });

@@ -10,7 +10,14 @@
     <!-- Font Icon -->
     <!-- <link rel="stylesheet" href="fonts/material-icon/css/material-design-iconic-font.min.css"> -->
     <link rel="stylesheet" href="vendor/nouislider/nouislider.min.css" />
-    <link rel="stylesheet" href="css/datatables.css" />
+    <!-- <link rel="stylesheet" href="css/datatables.css" /> -->
+    <!-- <link rel="stylesheet" href="css/jquery.dataTables.min.css" />
+    <link rel="stylesheet" href="css/responsive.dataTables.min.css" /> -->
+
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.4/css/jquery.dataTables.css"/>
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/buttons/2.2.2/css/buttons.dataTables.css"/>
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/responsive/2.2.9/css/responsive.dataTables.css"/>
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/select/1.3.4/css/select.dataTables.css"/>
     <!-- Main css -->
     <link rel="stylesheet" href="css/style.css" />
   </head>
@@ -434,54 +441,96 @@
                   overflow-y: scroll;
                 "
               >
-              <table id="example" class="display" style="width: 100%">
-                <thead>
-                  <tr>
-                    <th></th>
-                    <th>用药名称</th>
-                    <th>用药频次</th>
-                    <th>单次用药剂量</th>
-                    <th>用药起止时长</th>
-                    <th>不良反应</th>
-                    <th>不良反应用药</th>
-                    <th>依从性</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr>
-                    <td></td>
-                    <td>~</td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                  </tr>
-                  <tr>
-                    <td></td>
-                    <td>~</td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                  </tr>               
-                </tbody>
-                <tfoot>
-                  <tr>
-                    <td></td>
-                    <th>用药名称</th>
-                    <th>用药频次</th>
-                    <th>单次用药剂量</th>
-                    <th>用药起止时长</th>
-                    <th>不良反应</th>
-                    <th>不良反应用药</th>
-                    <th>依从性</th>
-                  </tr>
-                </tfoot>
-              </table>
+              <div class="tab-content">
+                <table id="example" class="display nowrap" style="width: 100%">
+                  <thead>
+                    <tr>
+                      <th></th>
+                      <th>用药名称</th>
+                      <th>用药频次</th>
+                      <th>单次用药剂量</th>
+                      <th>用药起止时长</th>
+                      <th>不良反应</th>
+                      <th>不良反应用药</th>
+                      <th>依从性</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td></td>
+                      <td>~</td>
+  
+                      <td>
+                        <label><input name="freq" type="radio" value="" />一天    次</label><br>
+                        <label><input name="freq" type="radio" value="" />每   小时/次</label><br> 
+                        <label><input name="freq" type="radio" value="" />   天/贴</label><br> 
+                        <label><input name="freq" type="radio" value="" />prn（必要时）</label><br> 
+                        <label><input name="freq" type="radio" value="" />每晚</label><br> 
+                      </td>
+                      <td>
+                        mg/片
+                      </td>
+                      <td>
+                        <label><input name="duration" type="radio" value="" />>7天</label><br> 
+                        <label><input name="duration" type="radio" value="" />≤7天</label><br> 
+                      </td>
+                      <td>                      
+                        <label><input name="duration" type="checkbox" value="" />无</label><br>
+                        <label><input name="duration" type="checkbox" value="" />便秘</label><br>
+                        <label><input name="duration" type="checkbox" value="" />恶心呕吐</label><br>
+                        <label><input name="duration" type="checkbox" value="" />谵妄</label><br>
+                        <label><input name="duration" type="checkbox" value="" />过度镇静</label><br>
+                        <label><input name="duration" type="checkbox" value="" />皮肤瘙痒</label><br>
+                        <label><input name="duration" type="checkbox" value="" />呼吸抑制</label><br>
+                        <label><input name="duration" type="checkbox" value="" />其他</label><br>
+                      </td>
+                      <td></td>
+                      <td>
+                        <label>您是否有时会忘记服药？</label><br>
+                        <input name="ans1" type="radio" value=""/><span style="margin-right: 10;">是</span>
+                        <input name="ans1" type="radio" value=""/><span style="margin-right: 10;">否</span>
+                        <br>
+                        <label>您是否有时不注意服药？</label><br>
+                        <input name="ans1" type="radio" value=""/><span style="margin-right: 10;">是</span>
+                        <input name="ans1" type="radio" value=""/><span style="margin-right: 10;">否</span>
+                        <br>
+                        <label>您自觉症状好转时是否会自行停药？</label><br>
+                        <input name="ans1" type="radio" value=""/><span style="margin-right: 10;">是</span>
+                        <input name="ans1" type="radio" value=""/><span style="margin-right: 10;">否</span>
+                        <br>
+                        <label>您服药后自觉症状更糟时是否曾停止服药？</label><br>
+                        <input name="ans1" type="radio" value=""/><span style="margin-right: 10;">是</span>
+                        <input name="ans1" type="radio" value=""/><span style="margin-right: 10;">否</span>
+                        <br>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td></td>
+                      <td>~</td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                    </tr>               
+                  </tbody>
+                  <tfoot>
+                    <tr>
+                      <th></th>
+                      <th>用药名称</th>
+                      <th>用药频次</th>
+                      <th>单次用药剂量</th>
+                      <th>用药起止时长</th>
+                      <th>不良反应</th>
+                      <th>不良反应用药</th>
+                      <th>依从性</th>
+                    </tr>
+                  </tfoot>
+                </table>
+
+              </div>
+              
             </div>
             </fieldset>
           </div>
@@ -495,11 +544,23 @@
     <script src="vendor/jquery-validation/dist/jquery.validate.min.js"></script>
     <script src="vendor/jquery-validation/dist/additional-methods.min.js"></script>
     <script src="vendor/jquery-steps/jquery.steps.min.js"></script>
-    <script src="vendor/minimalist-picker/dobpicker.js"></script>
+    <!-- <script src="vendor/minimalist-picker/dobpicker.js"></script> -->
     <script src="vendor/nouislider/nouislider.min.js"></script>
     <script src="vendor/d3.v5.min.js"></script>
-    <script src="vendor/datatables.js"></script>
-    <script src="vendor/buttons.html5.min.js"></script>
+
+
+     
+    <script type="text/javascript" src="https://cdn.datatables.net/1.11.4/js/jquery.dataTables.js"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/buttons/2.2.2/js/dataTables.buttons.js"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/responsive/2.2.9/js/dataTables.responsive.js"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/select/1.3.4/js/dataTables.select.js"></script>
+
+
+    <!-- <script src="vendor/datatables.js"></script> -->
+    <!-- <script src="vendor/buttons.html5.min.js"></script> -->
+    <!-- <script src="vendor/jquery.dataTables.min.css"></script> -->
+    <!-- <script src="vendor/dataTables.responsive.min.js"></script> -->
+  
     <!-- <script src="vendor/wnumb/wNumb.js"></script> -->
     <script src="js/main.js"></script>
   </body>

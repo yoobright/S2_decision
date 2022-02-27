@@ -609,6 +609,15 @@ div.fieldset-content {
   max-height: 420px;
 }
 
+div.tab-content {
+  width: 1000px;
+}
+
+@media screen and (max-width: 1024px) {
+
+}
+
+
 @media screen and (max-width: 768px) {
   #pain-level-image {
     width: 400px;
@@ -617,12 +626,20 @@ div.fieldset-content {
   div.fieldset-content {
     max-height: 400px;
   }
+
+  div.tab-content {
+    width: 600px;
+  }
 }
 
 @media screen and (max-width: 480px) {
   #pain-level-image {
     width: calc(100% - 8px);
     max-width: 100%;
+  }
+
+  div.tab-content {
+    width: 360px;
   }
 
 
