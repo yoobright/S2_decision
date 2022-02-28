@@ -683,6 +683,11 @@ div.fieldset-content {
     width: calc(100% - 8px);
     max-width: 100%;
   }
+
+  #body-view-image{
+    width: calc(100% - 8px);
+    max-width: 100%;
+  }
   div.tab-content {
     width: calc(100% - 8px);
     max-width: 100%;
