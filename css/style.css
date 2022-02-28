@@ -196,13 +196,15 @@ input {
   display: block;
   width: 100%;
   overflow: hidden; }
-  .vertical .steps {
-    float: none;
-    width: 100%; }
-  .vertical .content,
-  .vertical .actions {
-    float: none;
-    width: 100%; }
+.vertical .steps {
+    float: left;
+    width: 200px; }
+
+.vertical .content,
+.vertical .actions {
+    float: right;
+    width: 1200px;
+}
 
 .content {
   height: 600px; }
@@ -478,6 +480,13 @@ input.error {
   .your-money .money {
     font-size: 28px;
     font-weight: bold; }
+
+@media screen and (max-width: 1200px) {
+  .vertical .content,
+  .vertical .actions {
+    width: 1000px;
+  }
+}
 
 @media screen and (max-width: 1024px) {
   .container {

@@ -8,21 +8,16 @@
 	.st1{fill:#31528F;}
 	.st2{font-family:'AdobeSongStd-Light-GBpc-EUC-H';}
 	.st3{font-size:18px;}
-	
-		.st4{fill-rule:evenodd;clip-rule:evenodd;fill:#F7CBAC;stroke:#F7CBAC;stroke-width:0.25;stroke-linecap:butt;stroke-miterlimit:3;}
-	
-		.st5{fill-rule:evenodd;clip-rule:evenodd;fill:#F4B183;stroke:#F4B183;stroke-width:0.25;stroke-linecap:butt;stroke-miterlimit:3;}
-	
-		.st6{fill-rule:evenodd;clip-rule:evenodd;fill:#C55A11;stroke:#C55A11;stroke-width:0.25;stroke-linecap:butt;stroke-miterlimit:3;}
-	
-		.st7{fill-rule:evenodd;clip-rule:evenodd;fill:#833C0B;stroke:#833C0B;stroke-width:0.25;stroke-linecap:butt;stroke-miterlimit:3;}
+	.st4{fill-rule:evenodd;clip-rule:evenodd;fill:#F7CBAC;stroke:#F7CBAC;stroke-width:0.25;stroke-miterlimit:3;}
+	.st5{fill-rule:evenodd;clip-rule:evenodd;fill:#F4B183;stroke:#F4B183;stroke-width:0.25;stroke-miterlimit:3;}
+	.st6{fill-rule:evenodd;clip-rule:evenodd;fill:#C55A11;stroke:#C55A11;stroke-width:0.25;stroke-miterlimit:3;}
+	.st7{fill-rule:evenodd;clip-rule:evenodd;fill:#833C0B;stroke:#833C0B;stroke-width:0.25;stroke-miterlimit:3;}
 	.st8{fill:none;stroke:#C8C8C8;stroke-linecap:square;stroke-miterlimit:3;}
 	.st9{font-size:13.9999px;}
 	.st10{fill:none;}
 	.st11{font-family:'ArialMT';}
 	.st12{font-size:16px;}
 	.st13{fill:none;stroke:#C7C8C8;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:3;}
-    /* .st-bold{font-weight="bold"; } */
 </style>
 <g id="group4-1" transform="translate(68.1554 -20.8346)">
 	<g id="group5-2">
@@ -161,9 +156,9 @@
 	<text transform="matrix(1 0 0 1 -55 433.8448)" class="st2 st9">无痛</text>
 </g>
 <g id="pain-desc-level1" transform="translate(379.238 -331.26)">
-	<path class="st13" d="M-56.2,419.5H51.6c1.6,0,2.8,1.3,2.8,2.8v14.5c0,1.6-1.3,2.8-2.8,2.8H-56.2c-1.6,0-2.8-1.3-2.8-2.8v-14.5
-		C-59,420.8-57.7,419.5-56.2,419.5z"/>
-	<text transform="matrix(1 0 0 1 -55 433.8447)" class="st2 st9">安静平卧时不痛</text>
+	<path class="st13" d="M-53.4,419.5h216.5c3.2,0,5.6,1.3,5.6,2.8v14.5c0,1.6-2.6,2.8-5.6,2.8H-53.4c-3.2,0-5.6-1.3-5.6-2.8v-14.5
+		C-59,420.8-56.4,419.5-53.4,419.5z"/>
+	<text transform="matrix(1 0 0 1 -55 433.8447)" class="st2 st9">安静平卧时不痛， 翻身咳嗽时疼痛</text>
 </g>
 <g id="pain-desc-level5" transform="translate(379.238 -203.624)">
 	<path class="st13" d="M-56.2,419.5h146c1.6,0,2.8,1.3,2.8,2.8v14.5c0,1.6-1.3,2.8-2.8,2.8h-146c-1.6,0-2.8-1.3-2.8-2.8v-14.5
@@ -213,42 +208,42 @@
 <g id="shape142-141" transform="translate(131.206 -37.508)">
 	<path class="st10" d="M-59,397.2h42.5v42.5H-59V397.2z"/>
 	
-		<image style="overflow:visible;enable-background:new    ;" width="364" height="373" xlink:href="./D5E246A7.jpg"  transform="matrix(0.1154 0 0 0.1154 -58.7388 396.9707)">
+		<image style="overflow:visible;enable-background:new    ;" width="364" height="373" xlink:href="D5E246A7.jpg"  transform="matrix(0.1154 0 0 0.1154 -58.7388 396.9707)">
 	</image>
 	<path class="st10" d="M-59,397.2h42.5v42.5H-59V397.2z"/>
 </g>
 <g id="shape143-145" transform="translate(131.206 -346.234)">
 	<path class="st10" d="M-59,397.2h42.5v42.5H-59V397.2z"/>
 	
-		<image style="overflow:visible;enable-background:new    ;" width="364" height="364" xlink:href="./D5E246A2.jpg"  transform="matrix(0.1168 0 0 0.1168 -59 397.2287)">
+		<image style="overflow:visible;enable-background:new    ;" width="364" height="364" xlink:href="D5E246A2.jpg"  transform="matrix(0.1168 0 0 0.1168 -59 397.2287)">
 	</image>
 	<path class="st10" d="M-59,397.2h42.5v42.5H-59V397.2z"/>
 </g>
 <g id="shape144-149" transform="translate(131.206 -284.489)">
 	<path class="st10" d="M-59,397.2h42.5v42.5H-59V397.2z"/>
 	
-		<image style="overflow:visible;enable-background:new    ;" width="364" height="373" xlink:href="./D5E246A1.jpg"  transform="matrix(0.1154 0 0 0.1154 -58.7388 396.9707)">
+		<image style="overflow:visible;enable-background:new    ;" width="364" height="373" xlink:href="D5E246A1.jpg"  transform="matrix(0.1154 0 0 0.1154 -58.7388 396.9707)">
 	</image>
 	<path class="st10" d="M-59,397.2h42.5v42.5H-59V397.2z"/>
 </g>
 <g id="shape145-153" transform="translate(131.206 -222.744)">
 	<path class="st10" d="M-59,397.2h42.5v42.5H-59V397.2z"/>
 	
-		<image style="overflow:visible;enable-background:new    ;" width="364" height="373" xlink:href="./D5E246AE.jpg"  transform="matrix(0.1154 0 0 0.1154 -58.7388 396.9707)">
+		<image style="overflow:visible;enable-background:new    ;" width="364" height="373" xlink:href="D5E246AE.jpg"  transform="matrix(0.1154 0 0 0.1154 -58.7388 396.9707)">
 	</image>
 	<path class="st10" d="M-59,397.2h42.5v42.5H-59V397.2z"/>
 </g>
 <g id="shape146-157" transform="translate(131.206 -160.998)">
 	<path class="st10" d="M-59,397.2h42.5v42.5H-59V397.2z"/>
 	
-		<image style="overflow:visible;enable-background:new    ;" width="364" height="373" xlink:href="./D5E246A0.jpg"  transform="matrix(0.1154 0 0 0.1154 -58.7388 396.9707)">
+		<image style="overflow:visible;enable-background:new    ;" width="364" height="373" xlink:href="D5E246A0.jpg"  transform="matrix(0.1154 0 0 0.1154 -58.7388 396.9707)">
 	</image>
 	<path class="st10" d="M-59,397.2h42.5v42.5H-59V397.2z"/>
 </g>
 <g id="shape147-161" transform="translate(131.206 -99.2532)">
 	<path class="st10" d="M-59,397.2h42.5v42.5H-59V397.2z"/>
 	
-		<image style="overflow:visible;enable-background:new    ;" width="364" height="364" xlink:href="./D5E246A6.jpg"  transform="matrix(0.1168 0 0 0.1168 -59 397.2287)">
+		<image style="overflow:visible;enable-background:new    ;" width="364" height="364" xlink:href="D5E246A6.jpg"  transform="matrix(0.1168 0 0 0.1168 -59 397.2287)">
 	</image>
 	<path class="st10" d="M-59,397.2h42.5v42.5H-59V397.2z"/>
 </g>
