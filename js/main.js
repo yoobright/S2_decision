@@ -35,7 +35,7 @@ function addCheckBox(for_type, element_list, required = "") {
 
 function addRadio(for_type, element_list, required = "") {
   template =
-    "<label type='radio' style='word-wrap:break-word; vertical-align: middle'> \
+    "<label type='radio'> \
     <input type='radio' \
       name='{0}' \
       id='{0}' \
