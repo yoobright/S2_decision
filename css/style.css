@@ -85,10 +85,11 @@ body {
 .main {
   padding: 50px 0;
   position: relative;
-  z-index: 99; }
+  z-index: 99; 
+}
 
 .container {
-  width: 1400px;
+  width: calc(100% - 80px);
   margin: 0 auto;
   background: #fff; }
 
@@ -100,6 +101,8 @@ fieldset {
   padding-right: 30px;
   padding-top: 30px; 
   padding-bottom: 30px;
+  width: calc(100% - 40px);
+  max-width: 100%;
 }
 
 p.desc {
@@ -194,12 +197,12 @@ input {
   width: 100%;
   overflow: hidden; }
   .vertical .steps {
-    float: left;
-    width: 310px; }
+    float: none;
+    width: 100%; }
   .vertical .content,
   .vertical .actions {
-    float: right;
-    width: 1080px; }
+    float: none;
+    width: 100%; }
 
 .content {
   height: 600px; }
@@ -555,7 +558,7 @@ input[type="radio"] {
 }
 
 label[type="radio"] {
-  display: inline;
+  display: inline-block;
   height: 36px;
   box-sizing: border-box;
   padding: 0 5px;
@@ -563,6 +566,8 @@ label[type="radio"] {
   color: #222;
   /* font-weight: bold; */
   font-size: 16px;
+  vertical-align: middle;
+  word-wrap: break-word;
 }
 
 input[type="checkbox"] {
@@ -572,7 +577,7 @@ input[type="checkbox"] {
 }
 
 label[type="checkbox"] {
-  display: inline;
+  display: inline-block;
   height: 36px;
   box-sizing: border-box;
   padding: 0 5px;
@@ -580,6 +585,11 @@ label[type="checkbox"] {
   color: #222;
   /* font-weight: bold; */
   font-size: 16px;
+  /* display: flex; */
+  /* justify-content: center;
+  align-items: center; */
+  vertical-align: middle;
+  word-wrap: break-word;
 }
 
 
@@ -609,20 +619,34 @@ div.fieldset-content {
   max-height: 420px;
 }
 
-div.tab-content {
+/* div.tab-content {
   max-width: 1000px;
-}
+} */
 
 @media screen and (max-width: 1024px) {
   div.tab-content {
     width: calc(100% - 60px);
     max-width: 100%;
   }
+
+  fieldset {
+    padding-left: 8px;
+    padding-right: 8px;
+    width: calc(100% - 16px);
+    max-width: 100%;
+  }
 }
 
 @media screen and (max-width: 992px) {
   div.tab-content {
-    width: calc(100% - 40px);
+    width: calc(100% - 16px);
+    max-width: 100%;
+  }
+
+  fieldset {
+    padding-left: 8px;
+    padding-right: 8px;
+    width: calc(100% - 16px);
     max-width: 100%;
   }
 }
@@ -631,14 +655,17 @@ div.tab-content {
   #pain-level-image {
     width: 400px;
   }
-  
-  div.tab-content {
-    width: calc(100% - 30px);
+
+  fieldset {
+    padding-left: 8px;
+    padding-right: 8px;
+    width: calc(100% - 16px);
     max-width: 100%;
   }
-
+  
   div.tab-content {
-    width: 500px;
+    width: calc(100% - 16px);
+    max-width: 100%;
   }
 }
 
@@ -647,21 +674,28 @@ div.tab-content {
     width: calc(100% - 8px);
     max-width: 100%;
   }
-
   div.tab-content {
-    width: 320px;
+    width: calc(100% - 8px);
+    max-width: 100%;
   }
+
+  /* div.tab-content {
+    width: 320px;
+  } */
 
 
   div.fieldset-content {
     padding-left: 14px;
     padding-right: 14px;
     max-height: 400px;
+    max-width: 100%;
   }
 
   fieldset {
     padding-left: 8px;
     padding-right: 8px;
+    width: calc(100% - 16px);
+    max-width: 100%;
   }
 
   label[type="checkbox"] {
@@ -689,4 +723,8 @@ td input {
 
 input.drug-input {
   min-width: 180px;
+}
+
+div.input-group {
+  max-width: 640px;
 }

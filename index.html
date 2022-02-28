@@ -18,6 +18,7 @@
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/buttons/2.2.2/css/buttons.dataTables.css"/>
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/responsive/2.2.9/css/responsive.dataTables.css"/>
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/select/1.3.4/css/select.dataTables.css"/>
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/fixedheader/3.2.1/css/fixedHeader.dataTables.min.css"/>
     <!-- Main css -->
     <link rel="stylesheet" href="css/style.css" />
   </head>
@@ -373,7 +374,7 @@
                     >疼痛原因<span style="color: crimson">*</span>
                     （多选）</label
                   >
-                  <div class="chceckbox-div"></div>
+                  <div class="chceckbox-div input-group"></div>
                 </div>
                 <div class="form-group">
                   <label for="user_pain_part" class="form-label"
@@ -385,7 +386,7 @@
                     >疼痛性质<span style="color: crimson">*</span>
                     （多选）</label
                   >
-                  <div class="chceckbox-div"></div>
+                  <div class="chceckbox-div input-group"></div>
                 </div>
                 <div class="form-group">
                   <label for="user_pain_level" class="form-label"
@@ -408,37 +409,38 @@
                     >疼痛加重因素<span style="color: crimson">*</span>
                     （多选）</label
                   >
-                  <div class="chceckbox-div"></div>
+                  <div class="chceckbox-div input-group"></div>
                 </div>
                 <div class="form-group">
                   <label for="user_pain_reli_factor" class="form-label"
                     >疼痛缓解因素<span style="color: crimson">*</span>
                     （多选）</label
                   >
-                  <div class="chceckbox-div"></div>
+                  <div class="chceckbox-div input-group"></div>
                 </div>
                 <div class="form-group">
                   <label for="user_pain_breakout_type" class="form-label"
                     >疼痛爆发类型<span style="color: crimson">*</span></label
                   >
-                  <div class="radio-div"></div>
+                  <div class="radio-div input-group"></div>
                 </div>
                 <div class="form-group">
                   <label for="user_pain_breakout_freq" class="form-label"
                     >疼痛爆发频率<span style="color: crimson">*</span></label
                   >
-                  <div class="radio-div"></div>
+                  <div class="radio-div input-group"></div>
                 </div>
               </div>
             </fieldset>
             <h3>第三步</h3>
-            <fieldset>
+            <fieldset style="min-inline-size: auto;">
               <h2>既往用药情况</h2>
               <p class="desc"><span style="color: crimson">*</span>代表必填</p>
               <div
                 class="fieldset-content"
                 style="
                   overflow-y: scroll;
+                  max-width: 100% - 8px;
                 "
               >
               <div class="tab-content">
@@ -555,6 +557,7 @@
     <script type="text/javascript" src="https://cdn.datatables.net/buttons/2.2.2/js/dataTables.buttons.js"></script>
     <script type="text/javascript" src="https://cdn.datatables.net/responsive/2.2.9/js/dataTables.responsive.js"></script>
     <script type="text/javascript" src="https://cdn.datatables.net/select/1.3.4/js/dataTables.select.js"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/fixedheader/3.2.1/js/dataTables.fixedHeader.min.js"></script>
 
 
     <!-- <script src="vendor/datatables.js"></script> -->

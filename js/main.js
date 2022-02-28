@@ -8,16 +8,18 @@ if (!String.prototype.format) {
 }
 
 function addCheckBox(for_type, element_list, required = "") {
-  template =
-    "<input type='checkbox' \
+  var template =
+    "<label type='checkbox' > \
+    <input type='checkbox' \
     name='{0}' \
     id='{0}' \
     value='{1}' \
     class='{2}'/> \
-    <label type='checkbox'>{3}</label>";
+    {3}</label>";
 
   var labelElement = $("label[for='{0}']".format(for_type));
   UElement = labelElement.next();
+
   if (UElement.is("div")) {
     for (var i = 0; i < element_list.length; i++) {
       var nodeString = template.format(
@@ -33,12 +35,13 @@ function addCheckBox(for_type, element_list, required = "") {
 
 function addRadio(for_type, element_list, required = "") {
   template =
-    "<input type='radio' \
+    "<label type='radio' style='word-wrap:break-word; vertical-align: middle'> \
+    <input type='radio' \
       name='{0}' \
       id='{0}' \
       value='{1}' \
       class='{2}'/> \
-      <label type='radio'>{3}</label>";
+      {3}</label>";
 
   var labelElement = $("label[for='{0}']".format(for_type));
   UElement = labelElement.next();
@@ -190,6 +193,7 @@ addRadio(userPainBreakoutFreqTag, userPainBreakoutFreqList, "required");
           .removeClass("footer-2")
           .addClass("footer-" + currentIndex + "");
       }
+      console.log(currentIndex);
       // if(currentIndex === 4) {
       //     form.parent().parent().parent().append('<div class="footer" style="height:752px;"></div>');
       // }
@@ -566,6 +570,10 @@ $(document).ready(function () {
     order: [[1, "asc"]],
     // select: true,
     info: true,
+    fixedHeader: {
+      header: true,
+      // footer: true
+    },
     // fixedHeader: true,
     // scrollY: "240px",
     // scrollCollapse: true,
@@ -595,7 +603,7 @@ $(document).ready(function () {
 
       {
         text: "删除项",
-        titleAttr: "增加选中用药",
+        titleAttr: "删除选中用药",
         action: function (e, dt, node, config) {
           console.log("del!!!");
           table.row(".selected").remove().draw(false);
