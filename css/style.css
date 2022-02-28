@@ -609,12 +609,13 @@ div.fieldset-content {
   max-height: 420px;
 }
 
-div.tab-content {
-  width: 1000px;
-}
+
 
 @media screen and (max-width: 1024px) {
-
+  div.tab-content {
+    width: calc(100% - 60px);
+    max-width: 100%;
+  }
 }
 
 
@@ -623,12 +624,13 @@ div.tab-content {
     width: 400px;
   }
   
-  div.fieldset-content {
-    max-height: 400px;
+  div.tab-content {
+    width: calc(100% - 30px);
+    max-width: 100%;
   }
 
   div.tab-content {
-    width: 600px;
+    width: 500px;
   }
 }
 
@@ -639,7 +641,7 @@ div.tab-content {
   }
 
   div.tab-content {
-    width: 360px;
+    width: 320px;
   }
 
 

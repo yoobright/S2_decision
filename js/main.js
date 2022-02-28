@@ -363,6 +363,21 @@ $(document).ready(function () {
       details: {
         display: $.fn.dataTable.Responsive.display.childRowImmediate,
         type: "inline",
+      //   renderer: function ( api, rowIdx, columns ) {
+      //     var data = $.map( columns, function ( col, i ) {
+      //         return col.hidden ?
+      //             '<tr data-dt-row="'+col.rowIndex+'" data-dt-column="'+col.columnIndex+'">'+
+      //                 '<td>'+col.title+':'+'</td> '+
+      //                 '<td>'+col.data+'</td>'+
+      //             '</tr>' :
+      //             '';
+      //     } ).join('');
+
+      //     return data ?
+      //         $('<table/>').append( data ) :
+      //         false;
+      // }
+        
       },
     },
     columnDefs: [
@@ -380,7 +395,7 @@ $(document).ready(function () {
     //   },
     // ],
     order: [[1, "asc"]],
-    select: true,
+    // select: true,
     info: true,
     // scrollY: "200px",
     // scrollCollapse: true,
@@ -416,12 +431,17 @@ $(document).ready(function () {
   //   table.row('.selected').remove().draw( false );
   // });
 
-  $("#example tbody").on("click", "tr", function () {
-    if ($(this).hasClass("selected")) {
-      $(this).removeClass("selected");
-    } else {
-      table.$("tr.selected").removeClass("selected");
-      $(this).addClass("selected");
+  $("#example tbody").on("click", "tr", function (event) {
+
+    var isTd = $(event.target).is("td");
+    // console.log(isTd)
+    if (isTd) {
+      if ($(this).hasClass("selected")) {
+        $(this).removeClass("selected");
+      } else {
+        table.$("tr.selected").removeClass("selected");
+        $(this).addClass("selected");
+      }
     }
   });
 });
