@@ -325,129 +325,46 @@ addRadio(userPainBreakoutFreqTag, userPainBreakoutFreqList, "required");
   }
 })(jQuery);
 
-$(document).ready(function () {
-  var table = $("#example").DataTable({
-    language: {
-      sProcessing: "处理中...",
-      sLengthMenu: "显示 _MENU_ 项结果",
-      sZeroRecords: "没有匹配结果",
-      sInfo: "显示第 _START_ 至 _END_ 项结果，共 _TOTAL_ 项",
-      sInfoEmpty: "显示第 0 至 0 项结果，共 0 项",
-      sInfoFiltered: "(由 _MAX_ 项结果过滤)",
-      sInfoPostFix: "",
-      sSearch: "搜索:",
-      sUrl: "",
-      sEmptyTable: "表中数据为空",
-      sLoadingRecords: "载入中...",
-      sInfoThousands: ",",
-      oPaginate: {
-        sFirst: "首页",
-        sPrevious: "上页",
-        sNext: "下页",
-        sLast: "末页",
-      },
-      oAria: {
-        sSortAscending: ": 以升序排列此列",
-        sSortDescending: ": 以降序排列此列",
-      },
-      select: {
-        rows: {
-          _: "选中%d行",
-          1: "选中1行",
-        },
-      },
-    },
+var col1_template = "<input class='drug-input'>";
 
-    paging: false,
-    responsive: {
-      details: {
-        display: $.fn.dataTable.Responsive.display.childRowImmediate,
-        type: "inline",
-      //   renderer: function ( api, rowIdx, columns ) {
-      //     var data = $.map( columns, function ( col, i ) {
-      //         return col.hidden ?
-      //             '<tr data-dt-row="'+col.rowIndex+'" data-dt-column="'+col.columnIndex+'">'+
-      //                 '<td>'+col.title+':'+'</td> '+
-      //                 '<td>'+col.data+'</td>'+
-      //             '</tr>' :
-      //             '';
-      //     } ).join('');
+var col2_template = "<label><input name='freq' type='radio' value='' />一天    次</label><br>\
+<label><input name='freq' type='radio' value='' />每   小时/次</label><br>\
+<label><input name='freq' type='radio' value='' />   天/贴</label><br>\
+<label><input name='freq' type='radio' value='' />prn（必要时）</label><br>\
+<label><input name='freq' type='radio' value='' />每晚</label><br> ";
+var col3_template = "mg/片";
 
-      //     return data ?
-      //         $('<table/>').append( data ) :
-      //         false;
-      // }
-        
-      },
-    },
-    columnDefs: [
-      {
-        className: "dtr-control",
-        orderable: false,
-        targets: 0,
-      },
-    ],
-    // columnDefs: [
-    //   {
-    //     orderable: false,
-    //     className: "select-checkbox",
-    //     targets: 0,
-    //   },
-    // ],
-    order: [[1, "asc"]],
-    // select: true,
-    info: true,
-    // scrollY: "200px",
-    // scrollCollapse: true,
-    dom: "Bfrtip",
-    buttons: [
-      {
-        text: "增加项",
-        titleAttr: "增加用药",
-        action: function (e, dt, node, config) {
-          console.log("add!!!");
-          table.row.add(["", "~", "~", "", "", "", "", ""]).draw(false);
-        },
-      },
+var col4_template = "<label><input name='duration' type='radio' value='' />>7天</label><br>\
+<label><input name='duration' type='radio' value='' />≤7天</label><br>";
 
-      {
-        text: "删除项",
-        titleAttr: "增加选中用药",
-        action: function (e, dt, node, config) {
-          console.log("del!!!");
-          table.row(".selected").remove().draw(false);
-        },
-      },
-    ],
-  });
+var col5_template = "<label><input name='duration' type='checkbox' value='' />无</label><br>\
+<label><input name='duration' type='checkbox' value='' />便秘</label><br>\
+<label><input name='duration' type='checkbox' value='' />恶心呕吐</label><br>\
+<label><input name='duration' type='checkbox' value='' />谵妄</label><br>\
+<label><input name='duration' type='checkbox' value='' />过度镇静</label><br>\
+<label><input name='duration' type='checkbox' value='' />皮肤瘙痒</label><br>\
+<label><input name='duration' type='checkbox' value='' />呼吸抑制</label><br>\
+<label><input name='duration' type='checkbox' value='' />其他</label><br>";
 
-  // $("#addRow").on("click", function () {
-  //   table.row
-  //     .add(["~", "System Architect", ss, "33", "2011/04/25", "$3,120"])
-  //     .draw();
-  // });
+var col6_template = "";
 
-  // $("#delRow").on("click", function () {
-  //   table.row('.selected').remove().draw( false );
-  // });
+var col7_template = "<label>您是否有时会忘记服药？</label><br>\
+<input name='ans1' type='radio' value=''/><span style='margin-right: 10;'>是</span>\
+<input name='ans1' type='radio' value=''/><span style='margin-right: 10;'>否</span>\
+<br>\
+<label>您是否有时不注意服药？</label><br>\
+<input name='ans1' type='radio' value=''/><span style='margin-right: 10;'>是</span>\
+<input name='ans1' type='radio' value=''/><span style='margin-right: 10;'>否</span>\
+<br>\
+<label>您自觉症状好转时是否会自行停药？</label><br>\
+<input name='ans1' type='radio' value=''/><span style='margin-right: 10;'>是</span>\
+<input name='ans1' type='radio' value=''/><span style='margin-right: 10;'>否</span>\
+<br>\
+<label>您服药后自觉症状更糟时是否曾停止服药？</label><br>\
+<input name='ans1' type='radio' value=''/><span style='margin-right: 10;'>是</span>\
+<input name='ans1' type='radio' value=''/><span style='margin-right: 10;'>否</span>>";
 
-  $("#example tbody").on("click", "tr", function (event) {
-
-    var isTd = $(event.target).is("td");
-    // console.log(isTd)
-    if (isTd) {
-      if ($(this).hasClass("selected")) {
-        $(this).removeClass("selected");
-      } else {
-        table.$("tr.selected").removeClass("selected");
-        $(this).addClass("selected");
-      }
-    }
-  });
-});
-
-
-$( function() {
+$(function () {
   var availableTags = [
     "羟考酮缓释片10mg",
     "硫酸吗啡缓释片 10mg",
@@ -575,9 +492,144 @@ $( function() {
     "米氮平口腔崩解片15mg",
     "盐酸丙米嗪片25mg",
     "比沙可啶肠溶片5mg",
-    "盐酸格拉司琼胶囊1mg"
+    "盐酸格拉司琼胶囊1mg",
   ];
-  $("input.drug-input").autocomplete({
-    source: availableTags
+
+$(document).ready(function () {
+  var table = $("#example").DataTable({
+    language: {
+      sProcessing: "处理中...",
+      sLengthMenu: "显示 _MENU_ 项结果",
+      sZeroRecords: "没有匹配结果",
+      sInfo: "显示第 _START_ 至 _END_ 项结果，共 _TOTAL_ 项",
+      sInfoEmpty: "显示第 0 至 0 项结果，共 0 项",
+      sInfoFiltered: "(由 _MAX_ 项结果过滤)",
+      sInfoPostFix: "",
+      sSearch: "搜索:",
+      sUrl: "",
+      sEmptyTable: "表中数据为空",
+      sLoadingRecords: "载入中...",
+      sInfoThousands: ",",
+      oPaginate: {
+        sFirst: "首页",
+        sPrevious: "上页",
+        sNext: "下页",
+        sLast: "末页",
+      },
+      oAria: {
+        sSortAscending: ": 以升序排列此列",
+        sSortDescending: ": 以降序排列此列",
+      },
+      select: {
+        rows: {
+          _: "选中%d行",
+          1: "选中1行",
+        },
+      },
+    },
+
+    paging: false,
+    responsive: {
+      details: {
+        display: $.fn.dataTable.Responsive.display.childRowImmediate,
+        type: "inline",
+        //   renderer: function ( api, rowIdx, columns ) {
+        //     var data = $.map( columns, function ( col, i ) {
+        //         return col.hidden ?
+        //             '<tr data-dt-row="'+col.rowIndex+'" data-dt-column="'+col.columnIndex+'">'+
+        //                 '<td>'+col.title+':'+'</td> '+
+        //                 '<td>'+col.data+'</td>'+
+        //             '</tr>' :
+        //             '';
+        //     } ).join('');
+
+        //     return data ?
+        //         $('<table/>').append( data ) :
+        //         false;
+        // }
+      },
+    },
+    columnDefs: [
+      {
+        className: "dtr-control",
+        orderable: false,
+        targets: 0,
+      },
+    ],
+    // columnDefs: [
+    //   {
+    //     orderable: false,
+    //     className: "select-checkbox",
+    //     targets: 0,
+    //   },
+    // ],
+    order: [[1, "asc"]],
+    // select: true,
+    info: true,
+    // fixedHeader: true,
+    // scrollY: "240px",
+    // scrollCollapse: true,
+    dom: "Bfrtip",
+    buttons: [
+      {
+        text: "增加项",
+        titleAttr: "增加用药",
+        action: function (e, dt, node, config) {
+          console.log("add!!!");
+          table.row.add([
+            "", 
+            col1_template, 
+            col2_template, 
+            col3_template, 
+            col4_template, 
+            col5_template, 
+            col6_template, 
+            col7_template
+          ]).draw(false);
+          
+          $("input.drug-input").autocomplete({
+            source: availableTags,
+          });
+        },
+      },
+
+      {
+        text: "删除项",
+        titleAttr: "增加选中用药",
+        action: function (e, dt, node, config) {
+          console.log("del!!!");
+          table.row(".selected").remove().draw(false);
+        },
+      },
+    ],
   });
-} );
+
+  // $("#addRow").on("click", function () {
+  //   table.row
+  //     .add(["~", "System Architect", ss, "33", "2011/04/25", "$3,120"])
+  //     .draw();
+  // });
+
+  // $("#delRow").on("click", function () {
+  //   table.row('.selected').remove().draw( false );
+  // });
+
+  $("#example tbody").on("click", "tr", function (event) {
+    var isTd = $(event.target).is("td");
+    // console.log(isTd)
+    if (isTd) {
+      if ($(this).hasClass("selected")) {
+        $(this).removeClass("selected");
+      } else {
+        table.$("tr.selected").removeClass("selected");
+        $(this).addClass("selected");
+      }
+    }
+  });
+});
+
+
+  $("input.drug-input").autocomplete({
+    source: availableTags,
+  });
+});
