@@ -10,6 +10,7 @@
     <!-- Font Icon -->
     <!-- <link rel="stylesheet" href="fonts/material-icon/css/material-design-iconic-font.min.css"> -->
     <link rel="stylesheet" href="vendor/nouislider/nouislider.min.css" />
+    <link rel="stylesheet" href="css/jquery-ui.min.css" />
     <!-- <link rel="stylesheet" href="css/datatables.css" /> -->
     <!-- <link rel="stylesheet" href="css/jquery.dataTables.min.css" />
     <link rel="stylesheet" href="css/responsive.dataTables.min.css" /> -->
@@ -458,8 +459,9 @@
                   <tbody>
                     <tr>
                       <td></td>
-                      <td>~</td>
-  
+                      <td>
+                        <input class="drug-input">
+                      </td>
                       <td>
                         <label><input name="freq" type="radio" value="" />一天    次</label><br>
                         <label><input name="freq" type="radio" value="" />每   小时/次</label><br> 
@@ -540,7 +542,7 @@
 
     <!-- JS -->
     <script src="vendor/jquery/jquery.min.js"></script>
-    <!-- <script src="vendor/jquery/jquery-ui.min.js"></script> -->
+    <script src="vendor/jquery/jquery-ui.min.js"></script>
     <script src="vendor/jquery-validation/dist/jquery.validate.min.js"></script>
     <script src="vendor/jquery-validation/dist/additional-methods.min.js"></script>
     <script src="vendor/jquery-steps/jquery.steps.min.js"></script>
