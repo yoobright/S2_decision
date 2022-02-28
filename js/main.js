@@ -211,6 +211,34 @@ addRadio(userPainBreakoutFreqTag, userPainBreakoutFreqList, "required");
       alert("Submited");
     },
     onStepChanged: function (event, currentIndex, priorIndex) {
+      if (currentIndex == 1) {
+        var bodyDoc = document.getElementById("body-view-image").contentDocument;
+        console.log(bodyDoc)
+        var bodyPloygon = d3.select(bodyDoc).selectAll("polygon");
+        bodyPloygon.attr("data_selceted", "false");
+
+        bodyPloygon.on("click", function () {
+          var p = d3.select(this);
+          var body_id = p.attr("id").split("_")[2];
+          console.log(body_id);
+          // if (body_id.match(/\d+/)) {
+          //   togglePartView(p, body_id);
+        //   // }
+        });
+
+
+        d3.select(bodyDoc).selectAll("text").filter(function () {
+          return !d3.select(this).classed("st_label");
+        })
+        .on("click", function () {
+          var bodyID = d3.select(this).text().trim();
+          var idName = "#part_x5F_".concat(bodyID);
+          console.log(idName);
+          // var partPolygon = d3.select(this.parentNode).select(idName);
+          // togglePartView(partPolygon, bodyID);
+        });
+
+      }
       return true;
     },
   });
@@ -637,7 +665,24 @@ $(document).ready(function () {
 });
 
 
-  $("input.drug-input").autocomplete({
+$("input.drug-input").autocomplete({
     source: availableTags,
   });
 });
+
+// $(document).ready(function () {
+// var bodyDoc = document.getElementById("body-view-image").contentDocument;
+// console.log(bodyDoc)
+// var bodyPloygon = d3.select(bodyDoc).selectAll("polygon")
+// console.log(bodyPloygon)
+// bodyPloygon.attr("data_selceted", "false");
+
+// bodyPloygon.on("click", function () {
+//   var p = d3.select(this);
+//   var body_id = p.attr("id").split("_")[2];
+//   console.log(body_id);
+//   // if (body_id.match(/\d+/)) {
+//   //   togglePartView(p, body_id);
+//   // }
+// });
+// });

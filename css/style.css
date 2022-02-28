@@ -735,7 +735,7 @@ input.drug-input {
 }
 
 div.input-group {
-  max-width: 640px;
+  max-width: 600px;
   display: flex;
   flex-wrap: wrap;
 }

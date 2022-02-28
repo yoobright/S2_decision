@@ -359,8 +359,8 @@
             </fieldset>
 
             <h3>第二步</h3>
-            <fieldset disabled="disabled">
-            <!-- <fieldset> -->
+            <!-- <fieldset disabled="disabled"> -->
+            <fieldset>
               <h2>疼痛评估</h2>
               <p class="desc"><span style="color: crimson">*</span>代表必填</p>
               <div
@@ -380,7 +380,14 @@
                   <label for="user_pain_part" class="form-label"
                     >疼痛部位<span style="color: crimson">*</span></label
                   >
+                  <object id="body-view-image" type="image/svg+xml" data="images/body_view.svg" width="400px">                 
+                  </object><br>
+                  <div class="input-group">
+                    <textarea rows="5" style="width: 100%; margin: 0 10px;">                  
+                    </textarea>
+                  </div>
                 </div>
+
                 <div class="form-group">
                   <label for="user_pain_character" class="form-label"
                     >疼痛性质<span style="color: crimson">*</span>
