@@ -130,7 +130,42 @@ var userPainBreakoutFreqList = [" ＜3", "≥3"];
 var userPainBreakoutFreqTag = "user_pain_breakout_freq";
 addRadio(userPainBreakoutFreqTag, userPainBreakoutFreqList, "required");
 
-
+const bodyKV = {
+  1: "面部",
+  2: "头后部",
+  3: "右上臂（内侧）",
+  4: "右上臂（外侧）",
+  5: "左上臂（内侧）",
+  6: "左上臂（外侧）",
+  7: "右前臂（内侧）",
+  8: "右前臂（外侧）",
+  9: "左前臂（内侧）",
+  10: "左前臂（外侧）",
+  11: "右手",
+  12: "左手",
+  13: "颈胸部",
+  14: "颈背部",
+  15: "腹部（前）",
+  16: "腹部（后）",
+  17: "腰部（前）",
+  18: "腰部（后）",
+  19: "盆部（右）",
+  20: "腰骶部（右）",
+  21: "臀部（右）",
+  22: "盆部（左）",
+  23: "腰骶部（左）",
+  24: "臀部（左）",
+  25: "大腿（右前）",
+  26: "大腿（右后）",
+  27: "大腿（左前）",
+  28: "大腿（左后）",
+  29: "小腿（右前）",
+  30: "小腿（右后）",
+  31: "小腿（左前）",
+  32: "小腿（左后）",
+  33: "右足",
+  34: "左足",
+};
 
 function togglePartView(p, body_id) {
   var dataSelceted = p.attr("data_selceted");
@@ -146,6 +181,24 @@ function togglePartView(p, body_id) {
     p.classed("st1", false);
     p.classed("st1_selected", true);
     p.style("opacity", 0.4);
+  }
+}
+
+function updateBodySelected(bodyId, currentSelect, bodyPloygon) {
+  if (bodyId.match(/\d+/)) {
+    togglePartView(currentSelect, bodyId);
+    var bodySelect = bodyPloygon.filter("[data_selceted='true']");
+    var selectIDList = [];
+    for (const value of bodySelect._groups[0]) {
+      selectIDList.push(value.id.split("_")[2]);
+    }
+    // var bodySelect.
+    console.log(selectIDList);
+    var selectNameList = selectIDList.map(function (id) {
+      return bodyKV[id];
+    });
+    $("#user_pain_part").text(selectNameList.join(", "));
+    // console.log(list);
   }
 }
 
@@ -231,32 +284,33 @@ function togglePartView(p, body_id) {
     },
     onStepChanged: function (event, currentIndex, priorIndex) {
       if (currentIndex == 1) {
-        var bodyDoc = document.getElementById("body-view-image").contentDocument;
-        console.log(bodyDoc)
+        var bodyDoc =
+          document.getElementById("body-view-image").contentDocument;
+        console.log(bodyDoc);
         var bodyPloygon = d3.select(bodyDoc).selectAll("polygon");
         bodyPloygon.attr("data_selceted", "false");
 
         bodyPloygon.on("click", function () {
           var p = d3.select(this);
-          var body_id = p.attr("id").split("_")[2];
-          console.log(body_id);
-          if (body_id.match(/\d+/)) {
-            togglePartView(p, body_id);
-          }
+          var bodyID = p.attr("id").split("_")[2];
+          console.log(bodyID);
+          updateBodySelected(bodyID, p, bodyPloygon);
         });
 
-
-        d3.select(bodyDoc).selectAll("text").filter(function () {
-          return !d3.select(this).classed("st_label");
-        })
-        .on("click", function () {
-          var bodyID = d3.select(this).text().trim();
-          var idName = "#part_x5F_".concat(bodyID);
-          console.log(idName);
-          var partPolygon = d3.select(this.parentNode.parentNode).select(idName);
-          togglePartView(partPolygon, bodyID);
-        });
-
+        d3.select(bodyDoc)
+          .selectAll("text")
+          .filter(function () {
+            return !d3.select(this).classed("st_label");
+          })
+          .on("click", function () {
+            var bodyID = d3.select(this).text().trim();
+            var idName = "#part_x5F_".concat(bodyID);
+            console.log(idName);
+            var p = d3
+              .select(this.parentNode.parentNode)
+              .select(idName);
+            updateBodySelected(bodyID, p, bodyPloygon);;
+          });
       }
       return true;
     },
@@ -378,17 +432,20 @@ function togglePartView(p, body_id) {
 
 var col1_template = "<input class='drug-input'>";
 
-var col2_template = "<label><input name='freq' type='radio' value='' />一天    次</label><br>\
+var col2_template =
+  "<label><input name='freq' type='radio' value='' />一天    次</label><br>\
 <label><input name='freq' type='radio' value='' />每   小时/次</label><br>\
 <label><input name='freq' type='radio' value='' />   天/贴</label><br>\
 <label><input name='freq' type='radio' value='' />prn（必要时）</label><br>\
 <label><input name='freq' type='radio' value='' />每晚</label><br> ";
 var col3_template = "mg/片";
 
-var col4_template = "<label><input name='duration' type='radio' value='' />>7天</label><br>\
+var col4_template =
+  "<label><input name='duration' type='radio' value='' />>7天</label><br>\
 <label><input name='duration' type='radio' value='' />≤7天</label><br>";
 
-var col5_template = "<label><input name='duration' type='checkbox' value='' />无</label><br>\
+var col5_template =
+  "<label><input name='duration' type='checkbox' value='' />无</label><br>\
 <label><input name='duration' type='checkbox' value='' />便秘</label><br>\
 <label><input name='duration' type='checkbox' value='' />恶心呕吐</label><br>\
 <label><input name='duration' type='checkbox' value='' />谵妄</label><br>\
@@ -399,7 +456,8 @@ var col5_template = "<label><input name='duration' type='checkbox' value='' />�
 
 var col6_template = "";
 
-var col7_template = "<label>您是否有时会忘记服药？</label><br>\
+var col7_template =
+  "<label>您是否有时会忘记服药？</label><br>\
 <input name='ans1' type='radio' value=''/><span style='margin-right: 10;'>是</span>\
 <input name='ans1' type='radio' value=''/><span style='margin-right: 10;'>否</span>\
 <br>\
@@ -546,148 +604,151 @@ $(function () {
     "盐酸格拉司琼胶囊1mg",
   ];
 
-$(document).ready(function () {
-  var table = $("#example").DataTable({
-    language: {
-      sProcessing: "处理中...",
-      sLengthMenu: "显示 _MENU_ 项结果",
-      sZeroRecords: "没有匹配结果",
-      sInfo: "显示第 _START_ 至 _END_ 项结果，共 _TOTAL_ 项",
-      sInfoEmpty: "显示第 0 至 0 项结果，共 0 项",
-      sInfoFiltered: "(由 _MAX_ 项结果过滤)",
-      sInfoPostFix: "",
-      sSearch: "搜索:",
-      sUrl: "",
-      sEmptyTable: "表中数据为空",
-      sLoadingRecords: "载入中...",
-      sInfoThousands: ",",
-      oPaginate: {
-        sFirst: "首页",
-        sPrevious: "上页",
-        sNext: "下页",
-        sLast: "末页",
-      },
-      oAria: {
-        sSortAscending: ": 以升序排列此列",
-        sSortDescending: ": 以降序排列此列",
-      },
-      select: {
-        rows: {
-          _: "选中%d行",
-          1: "选中1行",
+  $(document).ready(function () {
+    var table = $("#example").DataTable({
+      language: {
+        sProcessing: "处理中...",
+        sLengthMenu: "显示 _MENU_ 项结果",
+        sZeroRecords: "没有匹配结果",
+        sInfo: "显示第 _START_ 至 _END_ 项结果，共 _TOTAL_ 项",
+        sInfoEmpty: "显示第 0 至 0 项结果，共 0 项",
+        sInfoFiltered: "(由 _MAX_ 项结果过滤)",
+        sInfoPostFix: "",
+        sSearch: "搜索:",
+        sUrl: "",
+        sEmptyTable: "表中数据为空",
+        sLoadingRecords: "载入中...",
+        sInfoThousands: ",",
+        oPaginate: {
+          sFirst: "首页",
+          sPrevious: "上页",
+          sNext: "下页",
+          sLast: "末页",
         },
-      },
-    },
-
-    paging: false,
-    responsive: {
-      details: {
-        display: $.fn.dataTable.Responsive.display.childRowImmediate,
-        type: "inline",
-        //   renderer: function ( api, rowIdx, columns ) {
-        //     var data = $.map( columns, function ( col, i ) {
-        //         return col.hidden ?
-        //             '<tr data-dt-row="'+col.rowIndex+'" data-dt-column="'+col.columnIndex+'">'+
-        //                 '<td>'+col.title+':'+'</td> '+
-        //                 '<td>'+col.data+'</td>'+
-        //             '</tr>' :
-        //             '';
-        //     } ).join('');
-
-        //     return data ?
-        //         $('<table/>').append( data ) :
-        //         false;
-        // }
-      },
-    },
-    columnDefs: [
-      {
-        className: "dtr-control",
-        orderable: false,
-        targets: 0,
-      },
-    ],
-    // columnDefs: [
-    //   {
-    //     orderable: false,
-    //     className: "select-checkbox",
-    //     targets: 0,
-    //   },
-    // ],
-    order: [[1, "asc"]],
-    // select: true,
-    info: true,
-    fixedHeader: {
-      header: true,
-      // footer: true
-    },
-    // fixedHeader: true,
-    // scrollY: "240px",
-    // scrollCollapse: true,
-    dom: "Bfrtip",
-    buttons: [
-      {
-        text: "增加项",
-        titleAttr: "增加用药",
-        action: function (e, dt, node, config) {
-          console.log("add!!!");
-          table.row.add([
-            "", 
-            col1_template, 
-            col2_template, 
-            col3_template, 
-            col4_template, 
-            col5_template, 
-            col6_template, 
-            col7_template
-          ]).draw(false);
-          
-          $("input.drug-input").autocomplete({
-            source: availableTags,
-          });
+        oAria: {
+          sSortAscending: ": 以升序排列此列",
+          sSortDescending: ": 以降序排列此列",
+        },
+        select: {
+          rows: {
+            _: "选中%d行",
+            1: "选中1行",
+          },
         },
       },
 
-      {
-        text: "删除项",
-        titleAttr: "删除选中用药",
-        action: function (e, dt, node, config) {
-          console.log("del!!!");
-          table.row(".selected").remove().draw(false);
+      paging: false,
+      responsive: {
+        details: {
+          display: $.fn.dataTable.Responsive.display.childRowImmediate,
+          type: "inline",
+          //   renderer: function ( api, rowIdx, columns ) {
+          //     var data = $.map( columns, function ( col, i ) {
+          //         return col.hidden ?
+          //             '<tr data-dt-row="'+col.rowIndex+'" data-dt-column="'+col.columnIndex+'">'+
+          //                 '<td>'+col.title+':'+'</td> '+
+          //                 '<td>'+col.data+'</td>'+
+          //             '</tr>' :
+          //             '';
+          //     } ).join('');
+
+          //     return data ?
+          //         $('<table/>').append( data ) :
+          //         false;
+          // }
         },
       },
-    ],
-  });
+      columnDefs: [
+        {
+          className: "dtr-control",
+          orderable: false,
+          targets: 0,
+        },
+      ],
+      // columnDefs: [
+      //   {
+      //     orderable: false,
+      //     className: "select-checkbox",
+      //     targets: 0,
+      //   },
+      // ],
+      order: [[1, "asc"]],
+      // select: true,
+      info: true,
+      fixedHeader: {
+        header: true,
+        // footer: true
+      },
+      // fixedHeader: true,
+      // scrollY: "240px",
+      // scrollCollapse: true,
+      dom: "Bfrtip",
+      buttons: [
+        {
+          text: "增加项",
+          titleAttr: "增加用药",
+          action: function (e, dt, node, config) {
+            console.log("add!!!");
+            table.row
+              .add([
+                "",
+                col1_template,
+                col2_template,
+                col3_template,
+                col4_template,
+                col5_template,
+                col6_template,
+                col7_template,
+              ])
+              .draw(false);
 
-  // $("#addRow").on("click", function () {
-  //   table.row
-  //     .add(["~", "System Architect", ss, "33", "2011/04/25", "$3,120"])
-  //     .draw();
-  // });
+            $("input.drug-input").autocomplete({
+              source: availableTags,
+            });
+          },
+        },
 
-  // $("#delRow").on("click", function () {
-  //   table.row('.selected').remove().draw( false );
-  // });
+        {
+          text: "删除项",
+          titleAttr: "删除选中用药",
+          action: function (e, dt, node, config) {
+            console.log("del!!!");
+            table.row(".selected").remove().draw(false);
+          },
+        },
+      ],
+    });
 
-  $("#example tbody").on("click", "tr", function (event) {
-    var isTd = $(event.target).is("td");
-    // console.log(isTd)
-    if (isTd) {
-      if ($(this).hasClass("selected")) {
-        $(this).removeClass("selected");
-      } else {
-        table.$("tr.selected").removeClass("selected");
-        $(this).addClass("selected");
+    // $("#addRow").on("click", function () {
+    //   table.row
+    //     .add(["~", "System Architect", ss, "33", "2011/04/25", "$3,120"])
+    //     .draw();
+    // });
+
+    // $("#delRow").on("click", function () {
+    //   table.row('.selected').remove().draw( false );
+    // });
+
+    $("#example tbody").on("click", "tr", function (event) {
+      var isTd = $(event.target).is("td");
+      // console.log(isTd)
+      if (isTd) {
+        if ($(this).hasClass("selected")) {
+          $(this).removeClass("selected");
+        } else {
+          table.$("tr.selected").removeClass("selected");
+          $(this).addClass("selected");
+        }
       }
-    }
+    });
   });
-});
 
-
-$("input.drug-input").autocomplete({
+  $("input.drug-input").autocomplete({
     source: availableTags,
   });
 });
+
+
 
 // $(document).ready(function () {
 // var bodyDoc = document.getElementById("body-view-image").contentDocument;

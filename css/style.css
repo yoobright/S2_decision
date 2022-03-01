@@ -359,6 +359,7 @@ label.error {
   display: block;
   position: absolute;
   color: #f63726;
+  font-size: 14px;
   top: 4px;
   right: 10px; }
   /* label.error:after {
