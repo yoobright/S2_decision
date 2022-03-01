@@ -130,6 +130,25 @@ var userPainBreakoutFreqList = [" ＜3", "≥3"];
 var userPainBreakoutFreqTag = "user_pain_breakout_freq";
 addRadio(userPainBreakoutFreqTag, userPainBreakoutFreqList, "required");
 
+
+
+function togglePartView(p, body_id) {
+  var dataSelceted = p.attr("data_selceted");
+  // console.log('svg click!!!!', this.id, data_selceted);
+  if (dataSelceted == "true") {
+    p.attr("data_selceted", "false");
+    p.classed("st1", true);
+    p.classed("st1_selected", false);
+    p.style("opacity", 0.5);
+    p.style("fill", "");
+  } else {
+    p.attr("data_selceted", "true");
+    p.classed("st1", false);
+    p.classed("st1_selected", true);
+    p.style("opacity", 0.4);
+  }
+}
+
 (function ($) {
   var form = $("#signup-form");
   form.validate({
@@ -221,9 +240,9 @@ addRadio(userPainBreakoutFreqTag, userPainBreakoutFreqList, "required");
           var p = d3.select(this);
           var body_id = p.attr("id").split("_")[2];
           console.log(body_id);
-          // if (body_id.match(/\d+/)) {
-          //   togglePartView(p, body_id);
-        //   // }
+          if (body_id.match(/\d+/)) {
+            togglePartView(p, body_id);
+          }
         });
 
 
@@ -234,8 +253,8 @@ addRadio(userPainBreakoutFreqTag, userPainBreakoutFreqList, "required");
           var bodyID = d3.select(this).text().trim();
           var idName = "#part_x5F_".concat(bodyID);
           console.log(idName);
-          // var partPolygon = d3.select(this.parentNode).select(idName);
-          // togglePartView(partPolygon, bodyID);
+          var partPolygon = d3.select(this.parentNode.parentNode).select(idName);
+          togglePartView(partPolygon, bodyID);
         });
 
       }
