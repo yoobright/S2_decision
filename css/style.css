@@ -83,7 +83,7 @@ body {
   padding: 0px; }
 
 .main {
-  padding: 50px 0;
+  padding: 40px 0;
   position: relative;
   z-index: 99; 
 }
@@ -489,6 +489,42 @@ input.error {
   }
 }
 
+div.input-textarea {
+  max-width: 600px;
+  display: flex;
+  flex-wrap: wrap;
+}
+
+div.input-textarea textarea {
+  width: 100%;
+  margin: 0 10px;
+  font-size: 16px;
+  max-height: 110px;
+  padding: 5px 10px;
+}
+
+@media screen and (min-width: 1200px) {
+  label.error {
+    right: 400px;
+  }
+  #body-view-image {
+    display: inline;
+  }
+
+  div.input-textarea {
+    display: inline;
+  }
+
+  div.input-textarea textarea {
+    width: 360px;
+    max-width: 360px;
+    max-height: 200px;
+    margin-bottom: 40px;
+    margin-left: 40px;
+  }
+
+}
+
 @media screen and (max-width: 1024px) {
   .container {
     width: calc(100% - 40px);
@@ -685,6 +721,10 @@ div.fieldset-content {
 }
 
 @media screen and (max-width: 480px) {
+  .main {
+    padding: 8px 0;
+  }
+
   #pain-level-image {
     width: calc(100% - 8px);
     max-width: 100%;
