@@ -571,7 +571,7 @@ input[type="radio"] {
   height: unset;
 }
 
-label[type="radio"] {
+label[type="radio-label"] {
   /* display: inline-block; */
   /* height: 36px; */
   box-sizing: border-box;
@@ -590,7 +590,7 @@ input[type="checkbox"] {
   height: unset;
 }
 
-label[type="checkbox"] {
+label[type="checkbox-label"] {
   /* display: inline-block; */
   /* height: 36px; */
   box-sizing: border-box;
@@ -707,22 +707,24 @@ div.fieldset-content {
   div.fieldset-content {
     padding-left: 14px;
     padding-right: 14px;
-    max-height: 400px;
+    max-height: 460px;
     max-width: 100%;
   }
 
   fieldset {
     padding-left: 8px;
     padding-right: 8px;
+    padding-top: 12px;
+    padding-bottom: 12px;
     width: calc(100% - 16px);
     max-width: 100%;
   }
 
-  label[type="checkbox"] {
+  label[type="checkbox-label"] {
     padding: 0 0px;
   }
 
-  label[type="radio"] {
+  label[type="radio-label"] {
     padding: 0 0px;
   }
 
@@ -732,7 +734,27 @@ div.fieldset-content {
 
   .container {
     width: calc(100% - 20px);
-    max-width: 100%; }
+    max-width: 100%;
+  }
+
+  .steps ul:after {
+    display: none;
+  }
+  .steps ul li {
+    display: none;
+  }
+  .steps ul li.current {
+    display: block;
+    padding-bottom: 8px
+  }
+
+  .steps ul {
+    padding-left: 20px;
+    padding-top: 8px;
+  }
+  h2 {
+    font-size: 24px;
+  }
 }
 
 td input {

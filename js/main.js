@@ -9,7 +9,7 @@ if (!String.prototype.format) {
 
 function addCheckBox(for_type, element_list, required = "") {
   var template =
-    "<label type='checkbox' > \
+    "<label type='checkbox-label' > \
     <input type='checkbox' \
     name='{0}' \
     id='{0}' \
@@ -35,7 +35,7 @@ function addCheckBox(for_type, element_list, required = "") {
 
 function addRadio(for_type, element_list, required = "") {
   template =
-    "<label type='radio'> \
+    "<label type='radio-label'> \
     <input type='radio' \
       name='{0}' \
       id='{0}' \
@@ -87,7 +87,7 @@ var userPainCharacterList = [
   "尖锐痛",
 ];
 var userPainCharacterTag = "user_pain_character";
-addCheckBox(userPainCharacterTag, userPainCharacterList, "required");
+addCheckBox(userPainCharacterTag, userPainCharacterList);
 
 // userPainAggrFactor
 var userPainAggrFactorList = [
@@ -102,7 +102,7 @@ var userPainAggrFactorList = [
   "精神因素",
 ];
 var userPainAggrFactorTag = "user_pain_aggr_factor";
-addCheckBox(userPainAggrFactorTag, userPainAggrFactorList, "required");
+addCheckBox(userPainAggrFactorTag, userPainAggrFactorList);
 
 // userPainReliFactor
 var userPainReliFactorList = [
@@ -114,7 +114,7 @@ var userPainReliFactorList = [
   "家人陪伴",
 ];
 var userPainReliFactorTag = "user_pain_reli_factor";
-addCheckBox(userPainReliFactorTag, userPainReliFactorList, "required");
+addCheckBox(userPainReliFactorTag, userPainReliFactorList);
 
 // userPainBreakoutType
 var userPainBreakoutTypeList = [
@@ -123,12 +123,12 @@ var userPainBreakoutTypeList = [
   "控制不佳的持续性疼痛",
 ];
 var userPainBreakoutTypeTag = "user_pain_breakout_type";
-addRadio(userPainBreakoutTypeTag, userPainBreakoutTypeList, "required");
+addRadio(userPainBreakoutTypeTag, userPainBreakoutTypeList);
 
 // userPainBreakoutFreq
 var userPainBreakoutFreqList = [" ＜3", "≥3"];
 var userPainBreakoutFreqTag = "user_pain_breakout_freq";
-addRadio(userPainBreakoutFreqTag, userPainBreakoutFreqList, "required");
+addRadio(userPainBreakoutFreqTag, userPainBreakoutFreqList);
 
 const bodyKV = {
   1: "面部",
@@ -187,17 +187,42 @@ function togglePartView(p, body_id) {
 function updateBodySelected(bodyId, currentSelect, bodyPloygon) {
   if (bodyId.match(/\d+/)) {
     togglePartView(currentSelect, bodyId);
-    var bodySelect = bodyPloygon.filter("[data_selceted='true']");
-    var selectIDList = [];
-    for (const value of bodySelect._groups[0]) {
-      selectIDList.push(value.id.split("_")[2]);
-    }
+    const bodySelect = bodyPloygon.filter("[data_selceted='true']");
+    const selectIDList = bodySelect._groups[0].map(function (value) {
+      return value.id.split("_")[2];
+    });
+    // for (const value of bodySelect._groups[0]) {
+    //   selectIDList.push(value.id.split("_")[2]);
+    // }
     // var bodySelect.
     console.log(selectIDList);
-    var selectNameList = selectIDList.map(function (id) {
+    const selectNameList = selectIDList.map(function (id) {
       return bodyKV[id];
     });
-    $("#user_pain_part").text(selectNameList.join(", "));
+
+    var currentNameList = $("#user_pain_part").text().trim()
+    if (currentNameList == "") {
+      currentNameList = []
+    } else {
+      currentNameList = currentNameList.split(", ")
+    }
+    console.log(currentNameList)
+    if (currentNameList.length < selectNameList.length) {
+      for (let i = 0; i < selectNameList.length; ++i)  {
+        if (currentNameList.indexOf(selectNameList[i]) == -1) {
+          currentNameList.push(selectNameList[i])
+        }
+      }
+    } else {
+      for (let i = 0; i < currentNameList.length; ++i)  {
+        if (selectNameList.indexOf(currentNameList[i]) == -1) {
+          currentNameList.splice(i, 1)
+        }
+      }
+    }
+
+    console.log(currentNameList)
+    $("#user_pain_part").text(currentNameList.join(", "));
     // console.log(list);
   }
 }
@@ -208,15 +233,33 @@ function updateBodySelected(bodyId, currentSelect, bodyPloygon) {
     errorPlacement: function errorPlacement(error, element) {
       element.after(error);
     },
+
     rules: {
-      email: {
-        email: true,
+      user_pain_reason: {
+        required: true
+      },
+      user_pain_character: {
+        required: true
+      },
+      user_pain_aggr_factor: {
+        required: true
+      },
+      user_pain_reli_factor: {
+        required: true
+      },
+      user_pain_breakout_type: {
+        required: true
+      },
+      user_pain_breakout_freq: {
+        required: true
       },
     },
+
     onfocusout: function (element) {
       $(element).valid();
     },
   });
+
   form.children("div").steps({
     headerTag: "h3",
     bodyTag: "fieldset",
@@ -288,6 +331,7 @@ function updateBodySelected(bodyId, currentSelect, bodyPloygon) {
           document.getElementById("body-view-image").contentDocument;
         console.log(bodyDoc);
         var bodyPloygon = d3.select(bodyDoc).selectAll("polygon");
+
         bodyPloygon.attr("data_selceted", "false");
 
         bodyPloygon.on("click", function () {
