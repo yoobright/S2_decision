@@ -220,7 +220,7 @@ function updateBodySelected(bodyId, currentSelect, bodyPloygon) {
   form.children("div").steps({
     headerTag: "h3",
     bodyTag: "fieldset",
-    transitionEffect: "fade",
+    transitionEffect: "slideLeft",
     stepsOrientation: "vertical",
     titleTemplate:
       '<div class="title"><span class="step-number">#index#</span><span class="step-text">#title#</span></div>',
@@ -311,6 +311,12 @@ function updateBodySelected(bodyId, currentSelect, bodyPloygon) {
               .select(idName);
             updateBodySelected(bodyID, p, bodyPloygon);;
           });
+      }
+
+      if (currentIndex == 2) {
+        var table = $("#example").DataTable()
+        // table.draw();
+        table.columns.adjust().responsive.recalc();
       }
       return true;
     },
@@ -476,7 +482,7 @@ var col7_template =
 $(function () {
   var availableTags = [
     "羟考酮缓释片10mg",
-    "硫酸吗啡缓释片 10mg",
+    "硫酸吗啡缓释片10mg",
     "芬太尼透皮贴剂4.2mg",
     "盐酸曲马多缓释片100mg",
     "氨酚羟考酮片5mg:325mg",
@@ -491,14 +497,14 @@ $(function () {
     "醋酸泼尼松片5mg",
     "对乙酰氨基酚片100mg",
     "布洛芬缓释胶囊300mg",
-    "盐酸布桂嗪片 30mg",
-    "盐酸哌替啶注射液 2 ml:100mg",
-    "地佐辛注射液 1ml:5mg",
-    "盐酸布桂嗪注射液 2ml:100mg",
+    "盐酸布桂嗪片30mg",
+    "盐酸哌替啶注射液2ml:100mg",
+    "地佐辛注射液1ml:5mg",
+    "盐酸布桂嗪注射液2ml:100mg",
     "美洛昔康片7.5mg",
     "地西泮注射液2ml:10mg",
     "喷他佐辛注射液1ml:30mg",
-    "丁丙诺菲透皮贴剂 5mg",
+    "丁丙诺菲透皮贴剂5mg",
     "盐酸氨溴索片30mg",
     "草乌甲素片0.4mg",
     "依托考昔片60mg",
@@ -506,25 +512,25 @@ $(function () {
     "可待因桔梗片12mg",
     "盐酸吗啡注射液1 ml:10mg",
     "醋酸地塞米松片750mg",
-    "盐酸乙哌立松片 50mg",
+    "盐酸乙哌立松片50mg",
     "吲哚美辛片25mg",
-    "巴氯芬片 10mg",
+    "巴氯芬片10mg",
     "盐酸吗啡注射液1 ml:10mg",
-    "盐酸曲马多注射液1 ml:50 mg",
+    "盐酸曲马多注射液1 ml:50mg",
     "硫酸吗啡栓10mg",
     "磷酸可待因片15mg",
-    "氟比洛芬凝胶贴膏 40mg",
+    "氟比洛芬凝胶贴膏40mg",
     "盐酸替扎尼定片1mg",
     "盐酸文拉法辛缓释胶囊75mg",
-    "苯甲酸利扎曲普坦胶囊 5mg",
+    "苯甲酸利扎曲普坦胶囊5mg",
     "氟比洛芬酯注射液5ml:50mg",
-    "卡马西平片 100mg",
+    "卡马西平片100mg",
     "利伐沙班片15mg",
-    "双氯芬酸栓 50mg",
+    "双氯芬酸栓50mg",
     "盐酸纳洛酮注射液1mg:1mg",
-    "地塞米松针 5mg",
-    "硫酸四氢帕马丁注射液 2 ml:60mg",
-    "阿普唑仑片 400mg",
+    "地塞米松针5mg",
+    "硫酸四氢帕马丁注射液2ml:60mg",
+    "阿普唑仑片400mg",
     "注射用帕瑞昔布钠30mg",
     "盐酸曲马多片50mg",
     "枸橼酸芬太尼注射液2ml:0.1mg",
@@ -538,7 +544,7 @@ $(function () {
     "盐酸羟考酮注射液1ml:10mg",
     "双氯芬酸钠肠溶片25mg",
     "双氯芬酸钠肠溶片75mg",
-    "加巴喷丁胶囊 100mg",
+    "加巴喷丁胶囊100mg",
     "洛芬待因缓释片0.2g:13mg",
     "对乙酰氨基酚缓释片650mg",
     "酮咯酸氨丁三醇注射液1ml:30mg",
@@ -585,13 +591,13 @@ $(function () {
     "阿司匹林肠溶片100mg",
     "苯甲酸利扎曲普坦胶囊5mg",
     "羟考酮缓释片40mg",
-    "硫酸吗啡缓释片 30mg",
-    "硫酸吗啡缓释片 60mg",
+    "硫酸吗啡缓释片30mg",
+    "硫酸吗啡缓释片60mg",
     "硫酸吗啡片20mg",
     "硫酸吗啡片30mg",
     "美洛昔康注射液1.5ml:15mg",
     "吲哚美辛肠溶片25mg",
-    "盐酸曲马多注射液2 ml:100 mg",
+    "盐酸曲马多注射液2ml:100mg",
     "氟比洛芬缓释片100mg",
     "利伐沙班片10mg",
     "利伐沙班片20mg",
@@ -731,7 +737,7 @@ $(function () {
 
     $("#example tbody").on("click", "tr", function (event) {
       var isTd = $(event.target).is("td");
-      // console.log(isTd)
+      
       if (isTd) {
         if ($(this).hasClass("selected")) {
           $(this).removeClass("selected");
