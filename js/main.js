@@ -8,7 +8,7 @@ if (!String.prototype.format) {
 }
 
 function addCheckBox(for_type, element_list, required = "") {
-  var template =
+  const template =
     "<label type='checkbox-label' > \
     <input type='checkbox' \
     name='{0}' \
@@ -17,8 +17,8 @@ function addCheckBox(for_type, element_list, required = "") {
     class='{2}'/> \
     {3}</label>";
 
-  var labelElement = $("label[for='{0}']".format(for_type));
-  UElement = labelElement.next();
+  const labelElement = $("label[for='{0}']".format(for_type));
+  const UElement = labelElement.next();
 
   if (UElement.is("div")) {
     for (var i = 0; i < element_list.length; i++) {
@@ -34,7 +34,7 @@ function addCheckBox(for_type, element_list, required = "") {
 }
 
 function addRadio(for_type, element_list, required = "") {
-  template =
+  const template =
     "<label type='radio-label'> \
     <input type='radio' \
       name='{0}' \
@@ -43,8 +43,8 @@ function addRadio(for_type, element_list, required = "") {
       class='{2}'/> \
       {3}</label>";
 
-  var labelElement = $("label[for='{0}']".format(for_type));
-  UElement = labelElement.next();
+  const labelElement = $("label[for='{0}']".format(for_type));
+  const UElement = labelElement.next();
   if (UElement.is("div")) {
     for (var i = 0; i < element_list.length; i++) {
       var nodeString = template.format(
@@ -59,12 +59,12 @@ function addRadio(for_type, element_list, required = "") {
 }
 
 // userReason
-var userReasonList = ["肿瘤", "肿瘤治疗", "非肿瘤相关性"];
-var userPainReasonTag = "user_pain_reason";
+const userReasonList = ["肿瘤", "肿瘤治疗", "非肿瘤相关性"];
+const userPainReasonTag = "user_pain_reason";
 addCheckBox(userPainReasonTag, userReasonList, "required");
 
 // userPainCharacter
-var userPainCharacterList = [
+const userPainCharacterList = [
   "酸痛",
   "刺痛",
   "跳痛",
@@ -86,11 +86,11 @@ var userPainCharacterList = [
   "隐痛",
   "尖锐痛",
 ];
-var userPainCharacterTag = "user_pain_character";
+const userPainCharacterTag = "user_pain_character";
 addCheckBox(userPainCharacterTag, userPainCharacterList);
 
 // userPainAggrFactor
-var userPainAggrFactorList = [
+const userPainAggrFactorList = [
   "行走",
   "活动",
   "体位变化",
@@ -101,11 +101,11 @@ var userPainAggrFactorList = [
   "乏力",
   "精神因素",
 ];
-var userPainAggrFactorTag = "user_pain_aggr_factor";
+const userPainAggrFactorTag = "user_pain_aggr_factor";
 addCheckBox(userPainAggrFactorTag, userPainAggrFactorList);
 
 // userPainReliFactor
-var userPainReliFactorList = [
+const userPainReliFactorList = [
   "服用镇痛药",
   "环境安静",
   "光线柔和",
@@ -113,16 +113,16 @@ var userPainReliFactorList = [
   "心理积极",
   "家人陪伴",
 ];
-var userPainReliFactorTag = "user_pain_reli_factor";
+const userPainReliFactorTag = "user_pain_reli_factor";
 addCheckBox(userPainReliFactorTag, userPainReliFactorList);
 
 // userPainBreakoutType
-var userPainBreakoutTypeList = [
+const userPainBreakoutTypeList = [
   "与特定活动或事件相关联",
   "发生在按时给予镇痛药物的剂量间隔结束时",
   "控制不佳的持续性疼痛",
 ];
-var userPainBreakoutTypeTag = "user_pain_breakout_type";
+const userPainBreakoutTypeTag = "user_pain_breakout_type";
 addRadio(userPainBreakoutTypeTag, userPainBreakoutTypeList);
 
 // userPainBreakoutFreq
@@ -168,7 +168,7 @@ const bodyKV = {
 };
 
 function togglePartView(p, body_id) {
-  var dataSelceted = p.attr("data_selceted");
+  const dataSelceted = p.attr("data_selceted");
   // console.log('svg click!!!!', this.id, data_selceted);
   if (dataSelceted == "true") {
     p.attr("data_selceted", "false");
@@ -200,23 +200,23 @@ function updateBodySelected(bodyId, currentSelect, bodyPloygon) {
       return bodyKV[id];
     });
 
-    var currentNameList = $("#user_pain_part").text().trim()
+    var currentNameList = $("#user_pain_part").text().trim();
     if (currentNameList == "") {
-      currentNameList = []
+      currentNameList = [];
     } else {
-      currentNameList = currentNameList.split(", ")
+      currentNameList = currentNameList.split(", ");
     }
     console.log(currentNameList)
     if (currentNameList.length < selectNameList.length) {
       for (let i = 0; i < selectNameList.length; ++i)  {
         if (currentNameList.indexOf(selectNameList[i]) == -1) {
-          currentNameList.push(selectNameList[i])
+          currentNameList.push(selectNameList[i]);
         }
       }
     } else {
       for (let i = 0; i < currentNameList.length; ++i)  {
         if (selectNameList.indexOf(currentNameList[i]) == -1) {
-          currentNameList.splice(i, 1)
+          currentNameList.splice(i, 1);
         }
       }
     }
@@ -353,7 +353,7 @@ function updateBodySelected(bodyId, currentSelect, bodyPloygon) {
             var p = d3
               .select(this.parentNode.parentNode)
               .select(idName);
-            updateBodySelected(bodyID, p, bodyPloygon);;
+            updateBodySelected(bodyID, p, bodyPloygon);
           });
       }
 
@@ -421,7 +421,7 @@ function updateBodySelected(bodyId, currentSelect, bodyPloygon) {
     });
     // var marginMin = document.getElementById("value-lower"),
     //   marginMax = document.getElementById("value-upper");
-    var change_color_list = [
+    const change_color_list = [
       "#edccae",
       "#e6b287",
       "#e6b287",
@@ -480,21 +480,21 @@ function updateBodySelected(bodyId, currentSelect, bodyPloygon) {
   }
 })(jQuery);
 
-var col1_template = "<input class='drug-input'>";
+const col1_template = "<input class='drug-input'>";
 
-var col2_template =
+const col2_template =
   "<label><input name='freq' type='radio' value='' />一天    次</label><br>\
 <label><input name='freq' type='radio' value='' />每   小时/次</label><br>\
 <label><input name='freq' type='radio' value='' />   天/贴</label><br>\
 <label><input name='freq' type='radio' value='' />prn（必要时）</label><br>\
 <label><input name='freq' type='radio' value='' />每晚</label><br> ";
-var col3_template = "mg/片";
+const col3_template = "mg/片";
 
-var col4_template =
+const col4_template =
   "<label><input name='duration' type='radio' value='' />>7天</label><br>\
 <label><input name='duration' type='radio' value='' />≤7天</label><br>";
 
-var col5_template =
+const col5_template =
   "<label><input name='duration' type='checkbox' value='' />无</label><br>\
 <label><input name='duration' type='checkbox' value='' />便秘</label><br>\
 <label><input name='duration' type='checkbox' value='' />恶心呕吐</label><br>\
@@ -504,7 +504,7 @@ var col5_template =
 <label><input name='duration' type='checkbox' value='' />呼吸抑制</label><br>\
 <label><input name='duration' type='checkbox' value='' />其他</label><br>";
 
-var col6_template = "";
+const col6_template = "";
 
 // var col7_template =
 //   "<label>您是否有时会忘记服药？</label><br>\
@@ -524,7 +524,7 @@ var col6_template = "";
 // <input name='ans4' type='radio' value=''/><span style='margin-right: 10;'>否</span>>";
 
 $(function () {
-  var availableTags = [
+  const availableTags = [
     "羟考酮缓释片10mg",
     "硫酸吗啡缓释片10mg",
     "芬太尼透皮贴剂4.2mg",
