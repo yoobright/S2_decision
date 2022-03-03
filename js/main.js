@@ -200,28 +200,28 @@ function updateBodySelected(bodyId, currentSelect, bodyPloygon) {
       return bodyKV[id];
     });
 
-    var currentNameList = $("#user_pain_part").text().trim();
+    var currentNameList = $("#user_pain_part").text().trim()
     if (currentNameList == "") {
-      currentNameList = [];
+      currentNameList = []
     } else {
-      currentNameList = currentNameList.split(", ");
+      currentNameList = currentNameList.split(", ")
     }
-    console.log(currentNameList);
+    console.log(currentNameList)
     if (currentNameList.length < selectNameList.length) {
-      for (let i = 0; i < selectNameList.length; ++i) {
+      for (let i = 0; i < selectNameList.length; ++i)  {
         if (currentNameList.indexOf(selectNameList[i]) == -1) {
-          currentNameList.push(selectNameList[i]);
+          currentNameList.push(selectNameList[i])
         }
       }
     } else {
-      for (let i = 0; i < currentNameList.length; ++i) {
+      for (let i = 0; i < currentNameList.length; ++i)  {
         if (selectNameList.indexOf(currentNameList[i]) == -1) {
-          currentNameList.splice(i, 1);
+          currentNameList.splice(i, 1)
         }
       }
     }
 
-    console.log(currentNameList);
+    console.log(currentNameList)
     $("#user_pain_part").text(currentNameList.join(", "));
     // console.log(list);
   }
@@ -236,22 +236,22 @@ function updateBodySelected(bodyId, currentSelect, bodyPloygon) {
 
     rules: {
       user_pain_reason: {
-        required: true,
+        required: true
       },
       user_pain_character: {
-        required: true,
+        required: true
       },
       user_pain_aggr_factor: {
-        required: true,
+        required: true
       },
       user_pain_reli_factor: {
-        required: true,
+        required: true
       },
       user_pain_breakout_type: {
-        required: true,
+        required: true
       },
       user_pain_breakout_freq: {
-        required: true,
+        required: true
       },
     },
 
@@ -350,13 +350,15 @@ function updateBodySelected(bodyId, currentSelect, bodyPloygon) {
             var bodyID = d3.select(this).text().trim();
             var idName = "#part_x5F_".concat(bodyID);
             console.log(idName);
-            var p = d3.select(this.parentNode.parentNode).select(idName);
-            updateBodySelected(bodyID, p, bodyPloygon);
+            var p = d3
+              .select(this.parentNode.parentNode)
+              .select(idName);
+            updateBodySelected(bodyID, p, bodyPloygon);;
           });
       }
 
       if (currentIndex == 2) {
-        var table = $("#example").DataTable();
+        var table = $("#example").DataTable()
         // table.draw();
         table.columns.adjust().responsive.recalc();
       }
@@ -782,7 +784,7 @@ $(function () {
 
     $("#example tbody").on("click", "tr", function (event) {
       var isTd = $(event.target).is("td");
-
+      
       if (isTd) {
         if ($(this).hasClass("selected")) {
           $(this).removeClass("selected");
@@ -798,6 +800,8 @@ $(function () {
     source: availableTags,
   });
 });
+
+
 
 // $(document).ready(function () {
 // var bodyDoc = document.getElementById("body-view-image").contentDocument;
