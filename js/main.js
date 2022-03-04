@@ -206,22 +206,23 @@ function updateBodySelected(bodyId, currentSelect, bodyPloygon) {
     } else {
       currentNameList = currentNameList.split(", ");
     }
-    console.log(currentNameList)
+    console.log("select: " + selectNameList);
+    console.log("current: " + currentNameList);
     if (currentNameList.length < selectNameList.length) {
-      for (let i = 0; i < selectNameList.length; ++i)  {
+      for (let i = 0; i < selectNameList.length; ++i) {
         if (currentNameList.indexOf(selectNameList[i]) == -1) {
           currentNameList.push(selectNameList[i]);
         }
       }
-    } else {
-      for (let i = 0; i < currentNameList.length; ++i)  {
+    } else if (currentNameList.length > selectNameList.length) {
+      for (let i = 0; i < currentNameList.length; ++i) {
         if (selectNameList.indexOf(currentNameList[i]) == -1) {
           currentNameList.splice(i, 1);
         }
       }
     }
 
-    console.log(currentNameList)
+    console.log(currentNameList);
     $("#user_pain_part").text(currentNameList.join(", "));
     // console.log(list);
   }
@@ -236,22 +237,22 @@ function updateBodySelected(bodyId, currentSelect, bodyPloygon) {
 
     rules: {
       user_pain_reason: {
-        required: true
+        required: true,
       },
       user_pain_character: {
-        required: true
+        required: true,
       },
       user_pain_aggr_factor: {
-        required: true
+        required: true,
       },
       user_pain_reli_factor: {
-        required: true
+        required: true,
       },
       user_pain_breakout_type: {
-        required: true
+        required: true,
       },
       user_pain_breakout_freq: {
-        required: true
+        required: true,
       },
     },
 
@@ -259,6 +260,8 @@ function updateBodySelected(bodyId, currentSelect, bodyPloygon) {
       $(element).valid();
     },
   });
+
+  var bodyPloygon;
 
   form.children("div").steps({
     headerTag: "h3",
@@ -327,43 +330,45 @@ function updateBodySelected(bodyId, currentSelect, bodyPloygon) {
     },
     onStepChanged: function (event, currentIndex, priorIndex) {
       if (currentIndex == 1) {
-        var bodyDoc =
-          document.getElementById("body-view-image").contentDocument;
-        console.log(bodyDoc);
-        var bodyPloygon = d3.select(bodyDoc).selectAll("polygon");
+        if (bodyPloygon == undefined) {
+          const bodyDoc =
+            document.getElementById("body-view-image").contentDocument;
+          console.log(bodyDoc);
+          bodyPloygon = d3.select(bodyDoc).selectAll("polygon");
 
-        bodyPloygon.attr("data_selceted", "false");
+          bodyPloygon.attr("data_selceted", "false");
 
-        bodyPloygon.on("click", function () {
-          var p = d3.select(this);
-          var bodyID = p.attr("id").split("_")[2];
-          console.log(bodyID);
-          updateBodySelected(bodyID, p, bodyPloygon);
-        });
-
-        d3.select(bodyDoc)
-          .selectAll("text")
-          .filter(function () {
-            return !d3.select(this).classed("st_label");
-          })
-          .on("click", function () {
-            var bodyID = d3.select(this).text().trim();
-            var idName = "#part_x5F_".concat(bodyID);
-            console.log(idName);
-            var p = d3
-              .select(this.parentNode.parentNode)
-              .select(idName);
+          bodyPloygon.on("click", function () {
+            const p = d3.select(this);
+            const bodyID = p.attr("id").split("_")[2];
+            console.log(bodyID);
             updateBodySelected(bodyID, p, bodyPloygon);
           });
+
+          d3.select(bodyDoc)
+            .selectAll("text")
+            .filter(function () {
+              return !d3.select(this).classed("st_label");
+            })
+            .on("click", function () {
+              const bodyID = d3.select(this).text().trim();
+              const idName = "#part_x5F_".concat(bodyID);
+              console.log(idName);
+              const p = d3.select(this.parentNode.parentNode).select(idName);
+              updateBodySelected(bodyID, p, bodyPloygon);
+            });
+        }
       }
 
       if (currentIndex == 2) {
-        var table = $("#example").DataTable()
+        const table = $("#example").DataTable();
         // table.draw();
         table.columns.adjust().responsive.recalc();
       }
       return true;
     },
+
+    onInit: function (event, currentIndex) {},
   });
 
   jQuery.extend(jQuery.validator.messages, {
@@ -437,22 +442,22 @@ function updateBodySelected(bodyId, currentSelect, bodyPloygon) {
 
     marginSlider.noUiSlider.on("update", function (values, handle) {
       console.log(values);
-      var value = values[0];
+      const value = values[0];
       $("#pain_leval_slider .noUi-connect").css(
         "background",
         change_color_list[value]
       );
 
-      var painDoc = document.getElementById("pain-level-image").contentDocument;
+      const painDoc = document.getElementById("pain-level-image").contentDocument;
       if (painDoc != null) {
         // console.log(painDoc);
-        var painDocSelect = d3.select(painDoc);
-        var painG = painDocSelect.selectAll("g").filter(function () {
+        const painDocSelect = d3.select(painDoc);
+        const painG = painDocSelect.selectAll("g").filter(function () {
           return d3.select(this).attr("id").startsWith("pain");
         });
         painG.selectAll("text").style("font-weight", "normal");
 
-        var prefixList = ["#pain-desc-level", "#pain-label-level"];
+        const prefixList = ["#pain-desc-level", "#pain-label-level"];
         for (i = 0; i < prefixList.length; i++) {
           changeID = prefixList[i] + value;
           changeG = painDocSelect.select(changeID);
@@ -461,12 +466,12 @@ function updateBodySelected(bodyId, currentSelect, bodyPloygon) {
         }
 
         // flag
-        var painFlag = painDocSelect.selectAll("g").filter(function () {
+        const painFlag = painDocSelect.selectAll("g").filter(function () {
           return d3.select(this).attr("id").startsWith("pain-flag");
         });
         // console.log(painFlag);
         painFlag.selectAll("path").style("stroke-width", 0.25);
-        var changeFlag = painDocSelect.select("#pain-flag-level" + value);
+        const changeFlag = painDocSelect.select("#pain-flag-level" + value);
         // console.log(changeFlag);
         changeFlag.selectAll("path").style("stroke-width", 2);
       }
@@ -784,7 +789,7 @@ $(function () {
 
     $("#example tbody").on("click", "tr", function (event) {
       var isTd = $(event.target).is("td");
-      
+
       if (isTd) {
         if ($(this).hasClass("selected")) {
           $(this).removeClass("selected");
@@ -800,8 +805,6 @@ $(function () {
     source: availableTags,
   });
 });
-
-
 
 // $(document).ready(function () {
 // var bodyDoc = document.getElementById("body-view-image").contentDocument;
