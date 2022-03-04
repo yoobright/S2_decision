@@ -21,13 +21,14 @@ function addCheckBox(for_type, element_list, required = "") {
   const UElement = labelElement.next();
 
   if (UElement.is("div")) {
-    for (var i = 0; i < element_list.length; i++) {
-      var nodeString = template.format(
+    for (let i = 0; i < element_list.length; i++) {
+      const nodeString = template.format(
         for_type,
         (i + 1).toString(),
         required,
         element_list[i]
       );
+
       UElement.append(nodeString);
     }
   }
@@ -45,14 +46,16 @@ function addRadio(for_type, element_list, required = "") {
 
   const labelElement = $("label[for='{0}']".format(for_type));
   const UElement = labelElement.next();
+
   if (UElement.is("div")) {
-    for (var i = 0; i < element_list.length; i++) {
-      var nodeString = template.format(
+    for (let i = 0; i < element_list.length; i++) {
+      const nodeString = template.format(
         for_type,
         (i + 1).toString(),
         required,
         element_list[i]
       );
+
       UElement.append(nodeString);
     }
   }
@@ -61,6 +64,7 @@ function addRadio(for_type, element_list, required = "") {
 // userReason
 const userReasonList = ["肿瘤", "肿瘤治疗", "非肿瘤相关性"];
 const userPainReasonTag = "user_pain_reason";
+
 addCheckBox(userPainReasonTag, userReasonList, "required");
 
 // userPainCharacter
@@ -87,6 +91,7 @@ const userPainCharacterList = [
   "尖锐痛",
 ];
 const userPainCharacterTag = "user_pain_character";
+
 addCheckBox(userPainCharacterTag, userPainCharacterList);
 
 // userPainAggrFactor
@@ -102,6 +107,7 @@ const userPainAggrFactorList = [
   "精神因素",
 ];
 const userPainAggrFactorTag = "user_pain_aggr_factor";
+
 addCheckBox(userPainAggrFactorTag, userPainAggrFactorList);
 
 // userPainReliFactor
@@ -114,6 +120,7 @@ const userPainReliFactorList = [
   "家人陪伴",
 ];
 const userPainReliFactorTag = "user_pain_reli_factor";
+
 addCheckBox(userPainReliFactorTag, userPainReliFactorList);
 
 // userPainBreakoutType
@@ -123,11 +130,13 @@ const userPainBreakoutTypeList = [
   "控制不佳的持续性疼痛",
 ];
 const userPainBreakoutTypeTag = "user_pain_breakout_type";
+
 addRadio(userPainBreakoutTypeTag, userPainBreakoutTypeList);
 
 // userPainBreakoutFreq
-var userPainBreakoutFreqList = [" ＜3", "≥3"];
-var userPainBreakoutFreqTag = "user_pain_breakout_freq";
+const userPainBreakoutFreqList = [" ＜3", "≥3"];
+const userPainBreakoutFreqTag = "user_pain_breakout_freq";
+
 addRadio(userPainBreakoutFreqTag, userPainBreakoutFreqList);
 
 const bodyKV = {
@@ -191,39 +200,38 @@ function updateBodySelected(bodyId, currentSelect, bodyPloygon) {
     const selectIDList = bodySelect._groups[0].map(function (value) {
       return value.id.split("_")[2];
     });
-    // for (const value of bodySelect._groups[0]) {
-    //   selectIDList.push(value.id.split("_")[2]);
-    // }
-    // var bodySelect.
+
     console.log(selectIDList);
     const selectNameList = selectIDList.map(function (id) {
       return bodyKV[id];
     });
 
-    var currentNameList = $("#user_pain_part").text().trim();
-    if (currentNameList == "") {
-      currentNameList = [];
-    } else {
-      currentNameList = currentNameList.split(", ");
-    }
+    const currentNameList = $("#user_pain_part")
+                          .text()
+                          .trim()
+                          .split(", ")
+                          .filter(v => v != '');
+  
     console.log("select: " + selectNameList);
     console.log("current: " + currentNameList);
     if (currentNameList.length < selectNameList.length) {
-      for (let i = 0; i < selectNameList.length; ++i) {
-        if (currentNameList.indexOf(selectNameList[i]) == -1) {
-          currentNameList.push(selectNameList[i]);
-        }
-      }
+      const addNameList = selectNameList.filter(function(v, i) {
+        return currentNameList.indexOf(v) == -1;
+      });
+      console.log("add: " + addNameList);
+
+      var updateNameList = currentNameList.concat(addNameList);
+
     } else if (currentNameList.length > selectNameList.length) {
-      for (let i = 0; i < currentNameList.length; ++i) {
-        if (selectNameList.indexOf(currentNameList[i]) == -1) {
-          currentNameList.splice(i, 1);
-        }
-      }
+      var updateNameList = currentNameList.filter(function(v, i) {
+        return selectNameList.indexOf(v) != -1;
+      });
+    } else {
+      var updateNameList = currentNameList;
     }
 
-    console.log(currentNameList);
-    $("#user_pain_part").text(currentNameList.join(", "));
+    console.log(updateNameList);
+    $("#user_pain_part").text(updateNameList.join(", "));
     // console.log(list);
   }
 }
@@ -284,6 +292,7 @@ function updateBodySelected(bodyId, currentSelect, bodyPloygon) {
           .parent()
           .append('<div class="footer footer-' + currentIndex + '"></div>');
       }
+
       if (currentIndex === 1) {
         form
           .parent()
@@ -293,6 +302,7 @@ function updateBodySelected(bodyId, currentSelect, bodyPloygon) {
           .removeClass("footer-0")
           .addClass("footer-" + currentIndex + "");
       }
+
       if (currentIndex === 2) {
         form
           .parent()
@@ -302,6 +312,7 @@ function updateBodySelected(bodyId, currentSelect, bodyPloygon) {
           .removeClass("footer-1")
           .addClass("footer-" + currentIndex + "");
       }
+
       if (currentIndex === 3) {
         form
           .parent()
@@ -318,6 +329,7 @@ function updateBodySelected(bodyId, currentSelect, bodyPloygon) {
       if (currentIndex > newIndex) {
         return true;
       }
+
       form.validate().settings.ignore = ":disabled,:hidden";
       return form.valid();
     },
@@ -333,14 +345,15 @@ function updateBodySelected(bodyId, currentSelect, bodyPloygon) {
         if (bodyPloygon == undefined) {
           const bodyDoc =
             document.getElementById("body-view-image").contentDocument;
+
           console.log(bodyDoc);
           bodyPloygon = d3.select(bodyDoc).selectAll("polygon");
-
           bodyPloygon.attr("data_selceted", "false");
 
           bodyPloygon.on("click", function () {
             const p = d3.select(this);
             const bodyID = p.attr("id").split("_")[2];
+
             console.log(bodyID);
             updateBodySelected(bodyID, p, bodyPloygon);
           });
@@ -355,6 +368,7 @@ function updateBodySelected(bodyId, currentSelect, bodyPloygon) {
               const idName = "#part_x5F_".concat(bodyID);
               console.log(idName);
               const p = d3.select(this.parentNode.parentNode).select(idName);
+              
               updateBodySelected(bodyID, p, bodyPloygon);
             });
         }
@@ -456,8 +470,8 @@ function updateBodySelected(bodyId, currentSelect, bodyPloygon) {
           return d3.select(this).attr("id").startsWith("pain");
         });
         painG.selectAll("text").style("font-weight", "normal");
-
         const prefixList = ["#pain-desc-level", "#pain-label-level"];
+
         for (i = 0; i < prefixList.length; i++) {
           changeID = prefixList[i] + value;
           changeG = painDocSelect.select(changeID);
@@ -473,6 +487,7 @@ function updateBodySelected(bodyId, currentSelect, bodyPloygon) {
         painFlag.selectAll("path").style("stroke-width", 0.25);
         const changeFlag = painDocSelect.select("#pain-flag-level" + value);
         // console.log(changeFlag);
+
         changeFlag.selectAll("path").style("stroke-width", 2);
       }
 
