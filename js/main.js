@@ -7,6 +7,16 @@ if (!String.prototype.format) {
   };
 }
 
+function getJsonSync(url) {
+  var text = "";
+  $.ajaxSetup({ async: false});
+  $.getJSON(url, (data) => {
+      text = data;
+  });
+  $.ajaxSetup({ async: true});
+  return text;
+}
+
 function addCheckBox(for_type, element_list, required = "") {
   const template =
     "<label type='checkbox-label' > \
@@ -139,42 +149,10 @@ const userPainBreakoutFreqTag = "user_pain_breakout_freq";
 
 addRadio(userPainBreakoutFreqTag, userPainBreakoutFreqList);
 
-const bodyKV = {
-  1: "面部",
-  2: "头后部",
-  3: "右上臂（内侧）",
-  4: "右上臂（外侧）",
-  5: "左上臂（内侧）",
-  6: "左上臂（外侧）",
-  7: "右前臂（内侧）",
-  8: "右前臂（外侧）",
-  9: "左前臂（内侧）",
-  10: "左前臂（外侧）",
-  11: "右手",
-  12: "左手",
-  13: "颈胸部",
-  14: "颈背部",
-  15: "腹部（前）",
-  16: "腹部（后）",
-  17: "腰部（前）",
-  18: "腰部（后）",
-  19: "盆部（右）",
-  20: "腰骶部（右）",
-  21: "臀部（右）",
-  22: "盆部（左）",
-  23: "腰骶部（左）",
-  24: "臀部（左）",
-  25: "大腿（右前）",
-  26: "大腿（右后）",
-  27: "大腿（左前）",
-  28: "大腿（左后）",
-  29: "小腿（右前）",
-  30: "小腿（右后）",
-  31: "小腿（左前）",
-  32: "小腿（左后）",
-  33: "右足",
-  34: "左足",
-};
+
+
+const bodyKV = getJsonSync("/data/body_kv.json");
+// console.log("bodyKV: " + bodyKV)
 
 function togglePartView(p, body_id) {
   const dataSelceted = p.attr("data_selceted");
