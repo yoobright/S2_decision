@@ -149,8 +149,6 @@ const userPainBreakoutFreqTag = "user_pain_breakout_freq";
 
 addRadio(userPainBreakoutFreqTag, userPainBreakoutFreqList);
 
-
-
 const bodyKV = getJsonSync("/data/body_kv.json");
 // console.log("bodyKV: " + bodyKV)
 
@@ -389,7 +387,6 @@ function updateBodySelected(bodyId, currentSelect, bodyPloygon) {
   //   maximumAge: 120,
   // });
 
-  // $("#pain_leval_slider").slider();
   var marginSlider = document.getElementById("pain_leval_slider");
   console.log(marginSlider);
   if (marginSlider != undefined) {
@@ -521,137 +518,12 @@ const col6_template = "";
 // <input name='ans4' type='radio' value=''/><span style='margin-right: 10;'>是</span>\
 // <input name='ans4' type='radio' value=''/><span style='margin-right: 10;'>否</span>>";
 
-$(function () {
-  const availableTags = [
-    "羟考酮缓释片10mg",
-    "硫酸吗啡缓释片10mg",
-    "芬太尼透皮贴剂4.2mg",
-    "盐酸曲马多缓释片100mg",
-    "氨酚羟考酮片5mg:325mg",
-    "双氯芬酸钠双释放肠溶胶囊75mg",
-    "塞来昔布胶囊200mg",
-    "加巴喷丁胶囊300mg",
-    "硫酸吗啡片10mg",
-    "盐酸阿米替林片25mg",
-    "盐酸度洛西汀肠溶胶囊30mg",
-    "艾瑞昔布片100mg",
-    "尼美舒利片100mg",
-    "醋酸泼尼松片5mg",
-    "对乙酰氨基酚片100mg",
-    "布洛芬缓释胶囊300mg",
-    "盐酸布桂嗪片30mg",
-    "盐酸哌替啶注射液2ml:100mg",
-    "地佐辛注射液1ml:5mg",
-    "盐酸布桂嗪注射液2ml:100mg",
-    "美洛昔康片7.5mg",
-    "地西泮注射液2ml:10mg",
-    "喷他佐辛注射液1ml:30mg",
-    "丁丙诺菲透皮贴剂5mg",
-    "盐酸氨溴索片30mg",
-    "草乌甲素片0.4mg",
-    "依托考昔片60mg",
-    "普瑞巴林胶囊75mg",
-    "可待因桔梗片12mg",
-    "盐酸吗啡注射液1 ml:10mg",
-    "醋酸地塞米松片750mg",
-    "盐酸乙哌立松片50mg",
-    "吲哚美辛片25mg",
-    "巴氯芬片10mg",
-    "盐酸吗啡注射液1 ml:10mg",
-    "盐酸曲马多注射液1 ml:50mg",
-    "硫酸吗啡栓10mg",
-    "磷酸可待因片15mg",
-    "氟比洛芬凝胶贴膏40mg",
-    "盐酸替扎尼定片1mg",
-    "盐酸文拉法辛缓释胶囊75mg",
-    "苯甲酸利扎曲普坦胶囊5mg",
-    "氟比洛芬酯注射液5ml:50mg",
-    "卡马西平片100mg",
-    "利伐沙班片15mg",
-    "双氯芬酸栓50mg",
-    "盐酸纳洛酮注射液1mg:1mg",
-    "地塞米松针5mg",
-    "硫酸四氢帕马丁注射液2ml:60mg",
-    "阿普唑仑片400mg",
-    "注射用帕瑞昔布钠30mg",
-    "盐酸曲马多片50mg",
-    "枸橼酸芬太尼注射液2ml:0.1mg",
-    "酒石酸布托啡诺注射液1ml:1mg",
-    "吲哚布芬片200mg",
-    "洛索洛芬钠片60mg",
-    "盐酸氢吗啡酮注射液2ml:2mg",
-    "双氯芬酸钠盐酸利多卡因注射液2ml",
-    "地西泮片2.5mg",
-    "盐酸羟考酮注射液2ml:20mg",
-    "盐酸羟考酮注射液1ml:10mg",
-    "双氯芬酸钠肠溶片25mg",
-    "双氯芬酸钠肠溶片75mg",
-    "加巴喷丁胶囊100mg",
-    "洛芬待因缓释片0.2g:13mg",
-    "对乙酰氨基酚缓释片650mg",
-    "酮咯酸氨丁三醇注射液1ml:30mg",
-    "吲哚美辛缓释片25mg",
-    "盐酸舍曲林片50mg",
-    "盐酸帕罗西汀肠溶缓释片12.5mg",
-    "氢溴酸西酞普兰片20mg",
-    "盐酸米那普仑片25mg",
-    "盐酸多塞平片25mg",
-    "奥氮平片5mg",
-    "盐酸安非他酮片75mg",
-    "安非他酮缓释片150mg",
-    "米氮平片30mg",
-    "萘普生片100mg",
-    "盐酸氯米帕明注射液2ml:25mg",
-    "盐酸丙米嗪片12.5mg",
-    "氟哌噻吨美利曲辛片0.5mg:10mg",
-    "盐酸氟西汀胶囊20mg",
-    "马来酸氟伏沙明片50mg",
-    "草酸艾司西酞普兰片10mg",
-    "吗氯贝胺片100mg",
-    "盐酸司来吉兰片5mg",
-    "氯硝西泮片2mg",
-    "艾司唑仑片1mg",
-    "比沙可啶栓10mg",
-    "通便灵胶囊250mg",
-    "麻仁胶囊350mg",
-    "甲氧氯普胺片5mg",
-    "氟哌啶醇片2mg",
-    "盐酸格拉司琼片3ml:3mg",
-    "盐酸昂丹司琼片8mg",
-    "利培酮片1mg",
-    "盐酸哌甲酯片10mg",
-    "盐酸西替利嗪片10mg",
-    "盐酸苯海拉明片25mg",
-    "盐酸异丙嗪片25mg",
-    "盐酸羟嗪片25mg",
-    "多库酯钠片100mg",
-    "酚酞片100mg",
-    "消旋山莨菪碱片5mg",
-    "呋塞米片20mg",
-    "氯雷他定片10mg",
-    "枸橼酸莫沙必利片5mg",
-    "阿司匹林肠溶片100mg",
-    "苯甲酸利扎曲普坦胶囊5mg",
-    "羟考酮缓释片40mg",
-    "硫酸吗啡缓释片30mg",
-    "硫酸吗啡缓释片60mg",
-    "硫酸吗啡片20mg",
-    "硫酸吗啡片30mg",
-    "美洛昔康注射液1.5ml:15mg",
-    "吲哚美辛肠溶片25mg",
-    "盐酸曲马多注射液2ml:100mg",
-    "氟比洛芬缓释片100mg",
-    "利伐沙班片10mg",
-    "利伐沙班片20mg",
-    "盐酸帕罗西汀肠溶缓释片25mg",
-    "奥氮平片10mg",
-    "盐酸安非他酮缓释片150mg",
-    "米氮平口腔崩解片15mg",
-    "盐酸丙米嗪片25mg",
-    "比沙可啶肠溶片5mg",
-    "盐酸格拉司琼胶囊1mg",
-  ];
 
+
+$(function () {
+  const PCNEData = getJsonSync("/data/PCNE_data.json");
+  const availableDrugs = PCNEData.map(v => v["name"] + v["spec"]);
+    
   $(document).ready(function () {
     var table = $("#example").DataTable({
       language: {
@@ -795,7 +667,7 @@ $(function () {
   });
 
   $("input.drug-input").autocomplete({
-    source: availableTags,
+    source: availableDrugs,
   });
 });
 
