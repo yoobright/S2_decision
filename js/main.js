@@ -9,11 +9,11 @@ if (!String.prototype.format) {
 
 function getJsonSync(url) {
   var text = "";
-  $.ajaxSetup({ async: false});
+  $.ajaxSetup({ async: false });
   $.getJSON(url, (data) => {
-      text = data;
+    text = data;
   });
-  $.ajaxSetup({ async: true});
+  $.ajaxSetup({ async: true });
   return text;
 }
 
@@ -183,23 +183,22 @@ function updateBodySelected(bodyId, currentSelect, bodyPloygon) {
     });
 
     const currentNameList = $("#user_pain_part")
-                          .text()
-                          .trim()
-                          .split(", ")
-                          .filter(v => v != '');
-  
+      .text()
+      .trim()
+      .split(", ")
+      .filter((v) => v != "");
+
     console.log("select: " + selectNameList);
     console.log("current: " + currentNameList);
     if (currentNameList.length < selectNameList.length) {
-      const addNameList = selectNameList.filter(function(v, i) {
+      const addNameList = selectNameList.filter(function (v, i) {
         return currentNameList.indexOf(v) == -1;
       });
       console.log("add: " + addNameList);
 
       var updateNameList = currentNameList.concat(addNameList);
-
     } else if (currentNameList.length > selectNameList.length) {
-      var updateNameList = currentNameList.filter(function(v, i) {
+      var updateNameList = currentNameList.filter(function (v, i) {
         return selectNameList.indexOf(v) != -1;
       });
     } else {
@@ -344,7 +343,7 @@ function updateBodySelected(bodyId, currentSelect, bodyPloygon) {
               const idName = "#part_x5F_".concat(bodyID);
               console.log(idName);
               const p = d3.select(this.parentNode.parentNode).select(idName);
-              
+
               updateBodySelected(bodyID, p, bodyPloygon);
             });
         }
@@ -437,7 +436,8 @@ function updateBodySelected(bodyId, currentSelect, bodyPloygon) {
         change_color_list[value]
       );
 
-      const painDoc = document.getElementById("pain-level-image").contentDocument;
+      const painDoc =
+        document.getElementById("pain-level-image").contentDocument;
       if (painDoc != null) {
         // console.log(painDoc);
         const painDocSelect = d3.select(painDoc);
@@ -478,12 +478,17 @@ function updateBodySelected(bodyId, currentSelect, bodyPloygon) {
 const col1_template = "<input class='drug-input'>";
 
 const col2_template =
-  "<label><input name='freq' type='radio' value='' />一天    次</label><br>\
-<label><input name='freq' type='radio' value='' />每   小时/次</label><br>\
-<label><input name='freq' type='radio' value='' />   天/贴</label><br>\
+  "<label><input name='freq' type='radio' value='' />一天<input name='dose' type='text'\
+  class='small-input'/>次</label><br>\
+<label><input name='freq' type='radio' value='' />每<input name='dose' type='text'\
+class='small-input'/>小时/次</label><br>\
+<label><input name='freq' type='radio' value='' /><input name='dose' type='text'\
+class='small-input'/>天/贴</label><br>\
 <label><input name='freq' type='radio' value='' />prn（必要时）</label><br>\
 <label><input name='freq' type='radio' value='' />每晚</label><br> ";
-const col3_template = "mg/片";
+const col3_template =
+  "<label><input name='dose' type='text' \
+class='middle-input' />{0}</label>";
 
 const col4_template =
   "<label><input name='duration' type='radio' value='' />>7天</label><br>\
@@ -518,12 +523,10 @@ const col6_template = "";
 // <input name='ans4' type='radio' value=''/><span style='margin-right: 10;'>是</span>\
 // <input name='ans4' type='radio' value=''/><span style='margin-right: 10;'>否</span>>";
 
-
-
 $(function () {
   const PCNEData = getJsonSync("/data/PCNE_data.json");
-  const availableDrugs = PCNEData.map(v => v["name"] + v["spec"]);
-    
+  const availableDrugs = PCNEData.map((v) => v["name"] + v["spec"]);
+
   $(document).ready(function () {
     var table = $("#example").DataTable({
       language: {
@@ -617,7 +620,7 @@ $(function () {
                 "",
                 col1_template,
                 col2_template,
-                col3_template,
+                "",
                 col4_template,
                 col5_template,
                 col6_template,
@@ -626,7 +629,17 @@ $(function () {
               .draw(false);
 
             $("input.drug-input").autocomplete({
-              source: availableTags,
+              source: availableDrugs,
+              change: function (event, ui) {
+                const val = $(this).val();
+                const index = availableDrugs.indexOf(val);
+
+                if (index != -1) {
+                  const col = $(this).parent().siblings()[2];
+                  console.log($(col).html());
+                  $(col).html(col3_template.format(PCNEData[index]["unit"]));
+                }
+              },
             });
           },
         },
@@ -641,16 +654,6 @@ $(function () {
         },
       ],
     });
-
-    // $("#addRow").on("click", function () {
-    //   table.row
-    //     .add(["~", "System Architect", ss, "33", "2011/04/25", "$3,120"])
-    //     .draw();
-    // });
-
-    // $("#delRow").on("click", function () {
-    //   table.row('.selected').remove().draw( false );
-    // });
 
     $("#example tbody").on("click", "tr", function (event) {
       var isTd = $(event.target).is("td");
@@ -670,20 +673,3 @@ $(function () {
     source: availableDrugs,
   });
 });
-
-// $(document).ready(function () {
-// var bodyDoc = document.getElementById("body-view-image").contentDocument;
-// console.log(bodyDoc)
-// var bodyPloygon = d3.select(bodyDoc).selectAll("polygon")
-// console.log(bodyPloygon)
-// bodyPloygon.attr("data_selceted", "false");
-
-// bodyPloygon.on("click", function () {
-//   var p = d3.select(this);
-//   var body_id = p.attr("id").split("_")[2];
-//   console.log(body_id);
-//   // if (body_id.match(/\d+/)) {
-//   //   togglePartView(p, body_id);
-//   // }
-// });
-// });

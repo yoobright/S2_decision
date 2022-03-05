@@ -928,6 +928,19 @@ td input {
   font-size: 14px;
   height: 24px;
   padding: 0 5px;
+  margin: 2px 5px;
+}
+
+td input.small-input {
+  max-width: 40px;
+  /* height: 20px; */
+  display: inline;
+}
+
+td input.middle-input {
+  max-width: 60px;
+  /* height: 20px; */
+  display: inline;
 }
 
 input.drug-input {
