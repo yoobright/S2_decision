@@ -149,7 +149,7 @@ const userPainBreakoutFreqTag = "user_pain_breakout_freq";
 
 addRadio(userPainBreakoutFreqTag, userPainBreakoutFreqList);
 
-const bodyKV = getJsonSync("/data/body_kv.json");
+const bodyKV = getJsonSync("./assets/body_kv.json");
 // console.log("bodyKV: " + bodyKV)
 
 function togglePartView(p, body_id) {
@@ -524,7 +524,7 @@ const col6_template = "";
 // <input name='ans4' type='radio' value=''/><span style='margin-right: 10;'>否</span>>";
 
 $(function () {
-  const PCNEData = getJsonSync("/data/PCNE_data.json");
+  const PCNEData = getJsonSync("./assets/PCNE_data.json");
   const availableDrugs = PCNEData.map((v) => v["name"] + v["spec"]);
 
   $(document).ready(function () {
