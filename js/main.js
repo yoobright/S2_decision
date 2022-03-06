@@ -473,6 +473,8 @@ function updateBodySelected(bodyId, currentSelect, bodyPloygon) {
       // }
     });
   }
+
+  
 })(jQuery);
 
 const col1_template = "<input class='drug-input'>";
@@ -601,10 +603,10 @@ $(function () {
       order: [[1, "asc"]],
       // select: true,
       info: true,
-      fixedHeader: {
-        header: true,
-        // footer: true
-      },
+      // fixedHeader: {
+      // header: true,
+      // footer: true
+      // },
       // fixedHeader: true,
       // scrollY: "240px",
       // scrollCollapse: true,
@@ -671,5 +673,9 @@ $(function () {
 
   $("input.drug-input").autocomplete({
     source: availableDrugs,
+  });
+
+  $("#user_dverse_reaction_drug").tagit( {
+    availableTags: availableDrugs,
   });
 });

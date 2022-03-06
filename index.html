@@ -10,6 +10,8 @@
     <!-- <link rel="stylesheet" href="fonts/material-icon/css/material-design-iconic-font.min.css"> -->
     <link rel="stylesheet" href="vendor/nouislider/nouislider.min.css" />
     <link rel="stylesheet" href="css/jquery-ui.min.css" />
+    <link href="css/jquery.tagit.css" rel="stylesheet" />
+    <link href="css/tagit.ui-zendesk.css" rel="stylesheet" />
     <!-- <link rel="stylesheet" href="css/datatables.css" /> -->
     <!-- <link rel="stylesheet" href="css/jquery.dataTables.min.css" />
     <link rel="stylesheet" href="css/responsive.dataTables.min.css" /> -->
@@ -522,6 +524,19 @@
                 <div class="form-group"></div>
                 <div class="form-group">
                   <label for="user_compliance" class="form-label"
+                    >不良反应<span style="color: crimson">*</span></label
+                  >
+                </div>
+                <div class="form-group">
+                  <label for="user_compliance" class="form-label"
+                    >不良反应用药</label
+                  >
+                  <ul id="user_dverse_reaction_drug">
+                    <li></li>
+                  </ul>
+                </div>
+                <div class="form-group">
+                  <label for="user_compliance" class="form-label"
                     >依从性<span style="color: crimson">*</span></label
                   >
                   <label
@@ -623,10 +638,12 @@
     <!-- JS -->
     <script src="vendor/jquery/jquery.min.js"></script>
     <script src="vendor/jquery/jquery-ui.min.js"></script>
+    <script src="js/tag-it.js"></script>
     <script src="vendor/jquery-validation/dist/jquery.validate.min.js"></script>
     <script src="vendor/jquery-validation/dist/additional-methods.min.js"></script>
     <script src="vendor/jquery-steps/jquery.steps.min.js"></script>
     <!-- <script src="vendor/minimalist-picker/dobpicker.js"></script> -->
+
     <script src="vendor/nouislider/nouislider.min.js"></script>
     <script src="vendor/d3.v5.min.js"></script>
 
@@ -650,6 +667,7 @@
       type="text/javascript"
       src="https://cdn.datatables.net/fixedheader/3.2.1/js/dataTables.fixedHeader.min.js"
     ></script>
+
     <!-- <script src="//cdn.rawgit.com/ashl1/datatables-rowsgroup/v1.0.0/dataTables.rowsGroup.js"></script> -->
 
     <!-- <script src="vendor/datatables.js"></script> -->
@@ -658,6 +676,7 @@
     <!-- <script src="vendor/dataTables.responsive.min.js"></script> -->
 
     <!-- <script src="vendor/wnumb/wNumb.js"></script> -->
+
     <script src="js/main.js"></script>
   </body>
 </html>
