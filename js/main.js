@@ -622,8 +622,8 @@ $(function () {
                 col2_template,
                 "",
                 col4_template,
-                col5_template,
-                col6_template,
+                // col5_template,
+                // col6_template,
                 // col7_template,
               ])
               .draw(false);
