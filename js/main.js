@@ -1,7 +1,7 @@
 if (!String.prototype.format) {
   String.prototype.format = function () {
     var args = arguments;
-    return this.replace(/(\d+)/gu, function (match, number) {
+    return this.replace(/(\d+)/gu, (match, number) => {
       return typeof args[number] !== undefined ? args[number] : match;
     });
   };
@@ -92,12 +92,12 @@ function updateBodySelected(bodyId, currentSelect, bodyPloygon) {
   if (bodyId.match(/\d+/u)) {
     togglePartView(currentSelect, bodyId);
     const bodySelect = bodyPloygon.filter("[data_selceted='true']");
-    const selectIDList = bodySelect._groups[0].map(function (value) {
+    const selectIDList = bodySelect._groups[0].map((value) => {
       return value.id.split("_")[2];
     });
 
     console.log(selectIDList);
-    const selectNameList = selectIDList.map(function (id) {
+    const selectNameList = selectIDList.map((id) => {
       return bodyKV[id];
     });
 
@@ -290,7 +290,7 @@ const availableAdverseReactionDrugs = PCNEData.filter(
   // --------------------------------------------------------------------------
 
   // body view image
-  $("#body-view-image").on("load", function () {
+  $("#body-view-image").on("load", () => {
     console.log("load body image");
     const bodyDoc = document.getElementById("body-view-image").contentDocument;
     const bodyPloygon = d3.select(bodyDoc).selectAll("polygon");
@@ -440,7 +440,7 @@ const availableAdverseReactionDrugs = PCNEData.filter(
       "#773e14",
     ];
 
-    marginSlider.noUiSlider.on("update", function (values, handle) {
+    marginSlider.noUiSlider.on("update", (values, handle) => {
       console.log(values);
       const value = values[0];
       $("#pain_leval_slider .noUi-connect").css(
