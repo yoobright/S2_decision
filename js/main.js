@@ -74,7 +74,13 @@ function addRadio(for_type, element_list, required = "") {
 const bodyKV = getJsonSync("./assets/body_kv.json");
 const PCNEData = getJsonSync("./assets/PCNE_data.json");
 const availableDrugs = PCNEData.map((v) => v["name"] + v["spec"]);
-// console.log("bodyKV: " + bodyKV)
+const adverseReactionRegex = /^(L).*/;
+const availableAdverseReactionDrugs = PCNEData.filter(
+  (v) =>
+    v["class"].split("/").filter((v) => adverseReactionRegex.test(v)).length >=
+    1
+).map((v) => v["name"] + v["spec"]);
+// console.log("availableAdverseReactionDrugs: " + availableAdverseReactionDrugs)
 
 function togglePartView(p, body_id) {
   const dataSelceted = p.attr("data_selceted");
@@ -138,7 +144,6 @@ function updateBodySelected(bodyId, currentSelect, bodyPloygon) {
 var bodyPloygon;
 
 (function ($) {
-
   jQuery.extend(jQuery.validator.messages, {
     required: "输入不能为空",
     remote: "请修正此字段",
@@ -316,7 +321,7 @@ var bodyPloygon;
   const userReasonList = ["肿瘤", "肿瘤治疗", "非肿瘤相关性"];
   const userPainReasonTag = "user_pain_reason";
 
-  addCheckBox(userPainReasonTag, userReasonList, "required");
+  addCheckBox(userPainReasonTag, userReasonList);
 
   // userPainCharacter
   const userPainCharacterList = [
@@ -482,7 +487,6 @@ var bodyPloygon;
   // step 3
   // --------------------------------------------------------------------------
 
-
   // drug table
   const col1_template = "<input class='drug-input'>";
 
@@ -514,7 +518,6 @@ class='middle-input' />{0}</label>";
 <label><input name='duration' type='checkbox' value='' />其他</label><br>";
 
   const col6_template = "";
-
 
   var table = $("#example").DataTable({
     language: {
@@ -660,8 +663,24 @@ class='middle-input' />{0}</label>";
     source: availableDrugs,
   });
 
-  $("#user_dverse_reaction_drug").tagit({
-    availableTags: availableDrugs,
+  // userAdverseReaction
+  const userAdverseReactionList = [
+    "无",
+    "便秘",
+    "恶心呕吐",
+    "谵妄",
+    "过度镇静",
+    "皮肤瘙痒",
+    "呼吸抑制",
+    "其他",
+  ];
+  const userAdverseReactionTag = "user_adverse_reaction";
+
+  addCheckBox(userAdverseReactionTag, userAdverseReactionList);
+
+  // userAdverseReactionDrug
+  $("#user_adverse_reaction_drug").tagit({
+    availableTags: availableAdverseReactionDrugs,
   });
 
   // $.dobPicker({
