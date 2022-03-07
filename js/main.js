@@ -31,16 +31,16 @@ function addCheckBox(for_type, element_list, required = "") {
   const UElement = labelElement.next();
 
   if (UElement.is("div")) {
-    for (let i = 0; i < element_list.length; i++) {
-      const nodeString = template.format(
+    const items = element_list.map((v, i) => 
+      template.format(
         for_type,
         (i + 1).toString(),
         required,
-        element_list[i]
-      );
+        v
+      )
+    );
 
-      UElement.append(nodeString);
-    }
+    UElement.append(items); 
   }
 }
 
@@ -58,16 +58,16 @@ function addRadio(for_type, element_list, required = "") {
   const UElement = labelElement.next();
 
   if (UElement.is("div")) {
-    for (let i = 0; i < element_list.length; i++) {
-      const nodeString = template.format(
+    const items = element_list.map((v, i) => 
+      template.format(
         for_type,
         (i + 1).toString(),
         required,
-        element_list[i]
-      );
+        v
+      )
+    );
 
-      UElement.append(nodeString);
-    }
+    UElement.append(items); 
   }
 }
 
@@ -458,14 +458,15 @@ const availableAdverseReactionDrugs = PCNEData.filter(
         });
         painG.selectAll("text").style("font-weight", "normal");
 
-        const prefixList = ["#pain-desc-level", "#pain-label-level"];
+        const selectStr = 
+          "#pain-desc-level{0}, #pain-label-level{0}".format(
+          value
+        );
 
-        for (let i = 0; i < prefixList.length; i++) {
-          changeID = prefixList[i] + value;
-          changeG = painDocSelect.select(changeID);
-          changeG.selectAll("text").style("font-weight", "bold");
-          // console.log(changeG.select("text"));
-        }
+        painDocSelect
+          .select(selectStr)
+          .selectAll("text").style("font-weight", "bold");
+
 
         // flag
         const painFlag = painDocSelect.selectAll("g").filter(function () {
