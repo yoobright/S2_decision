@@ -71,85 +71,9 @@ function addRadio(for_type, element_list, required = "") {
   }
 }
 
-// userReason
-const userReasonList = ["肿瘤", "肿瘤治疗", "非肿瘤相关性"];
-const userPainReasonTag = "user_pain_reason";
-
-addCheckBox(userPainReasonTag, userReasonList, "required");
-
-// userPainCharacter
-const userPainCharacterList = [
-  "酸痛",
-  "刺痛",
-  "跳痛",
-  "钝痛",
-  "绞痛",
-  "胀痛",
-  "坠痛",
-  "钻顶样痛",
-  "爆裂样痛",
-  "撕裂样痛",
-  "牵拉样痛",
-  "压榨样痛",
-  "放电样痛",
-  "烧灼样痛",
-  "麻木样痛",
-  "刀割样痛",
-  "轻触痛",
-  "无名痛",
-  "隐痛",
-  "尖锐痛",
-];
-const userPainCharacterTag = "user_pain_character";
-
-addCheckBox(userPainCharacterTag, userPainCharacterList);
-
-// userPainAggrFactor
-const userPainAggrFactorList = [
-  "行走",
-  "活动",
-  "体位变化",
-  "排便",
-  "咳嗽",
-  "进食",
-  "天气",
-  "乏力",
-  "精神因素",
-];
-const userPainAggrFactorTag = "user_pain_aggr_factor";
-
-addCheckBox(userPainAggrFactorTag, userPainAggrFactorList);
-
-// userPainReliFactor
-const userPainReliFactorList = [
-  "服用镇痛药",
-  "环境安静",
-  "光线柔和",
-  "温度适宜",
-  "心理积极",
-  "家人陪伴",
-];
-const userPainReliFactorTag = "user_pain_reli_factor";
-
-addCheckBox(userPainReliFactorTag, userPainReliFactorList);
-
-// userPainBreakoutType
-const userPainBreakoutTypeList = [
-  "与特定活动或事件相关联",
-  "发生在按时给予镇痛药物的剂量间隔结束时",
-  "控制不佳的持续性疼痛",
-];
-const userPainBreakoutTypeTag = "user_pain_breakout_type";
-
-addRadio(userPainBreakoutTypeTag, userPainBreakoutTypeList);
-
-// userPainBreakoutFreq
-const userPainBreakoutFreqList = [" ＜3", "≥3"];
-const userPainBreakoutFreqTag = "user_pain_breakout_freq";
-
-addRadio(userPainBreakoutFreqTag, userPainBreakoutFreqList);
-
 const bodyKV = getJsonSync("./assets/body_kv.json");
+const PCNEData = getJsonSync("./assets/PCNE_data.json");
+const availableDrugs = PCNEData.map((v) => v["name"] + v["spec"]);
 // console.log("bodyKV: " + bodyKV)
 
 function togglePartView(p, body_id) {
@@ -211,8 +135,30 @@ function updateBodySelected(bodyId, currentSelect, bodyPloygon) {
   }
 }
 
+var bodyPloygon;
+
 (function ($) {
-  var form = $("#signup-form");
+
+  jQuery.extend(jQuery.validator.messages, {
+    required: "输入不能为空",
+    remote: "请修正此字段",
+    email: "请输入有效的电子邮件地址",
+    url: "请输入有效的网址",
+    date: "请输入有效的日期",
+    dateISO: "请输入有效的日期 (YYYY-MM-DD)",
+    number: "请输入有效的数字",
+    digits: "只能输入数字",
+    creditcard: "请输入有效的信用卡号码",
+    equalTo: "你的输入不相同",
+    max: $.validator.format("请输入不大于 {0} 的数值"),
+    min: $.validator.format("请输入不小于 {0} 的数值"),
+  });
+
+  // --------------------------------------------------------------------------
+  // steps
+  // --------------------------------------------------------------------------
+
+  const form = $("#signup-form");
   form.validate({
     errorPlacement: function errorPlacement(error, element) {
       element.after(error);
@@ -243,8 +189,6 @@ function updateBodySelected(bodyId, currentSelect, bodyPloygon) {
       $(element).valid();
     },
   });
-
-  var bodyPloygon;
 
   form.children("div").steps({
     headerTag: "h3",
@@ -360,31 +304,91 @@ function updateBodySelected(bodyId, currentSelect, bodyPloygon) {
     onInit: function (event, currentIndex) {},
   });
 
-  jQuery.extend(jQuery.validator.messages, {
-    required: "输入不能为空",
-    remote: "请修正此字段",
-    email: "请输入有效的电子邮件地址",
-    url: "请输入有效的网址",
-    date: "请输入有效的日期",
-    dateISO: "请输入有效的日期 (YYYY-MM-DD)",
-    number: "请输入有效的数字",
-    digits: "只能输入数字",
-    creditcard: "请输入有效的信用卡号码",
-    equalTo: "你的输入不相同",
-    max: $.validator.format("请输入不大于 {0} 的数值"),
-    min: $.validator.format("请输入不小于 {0} 的数值"),
-  });
+  // --------------------------------------------------------------------------
+  // step 1
+  // --------------------------------------------------------------------------
 
-  // $.dobPicker({
-  //   daySelector: "#birth_date",
-  //   monthSelector: "#birth_month",
-  //   yearSelector: "#birth_year",
-  //   dayDefault: "",
-  //   monthDefault: "",
-  //   yearDefault: "",
-  //   minimumAge: 0,
-  //   maximumAge: 120,
-  // });
+  // --------------------------------------------------------------------------
+  // step 2
+  // --------------------------------------------------------------------------
+
+  // userReason
+  const userReasonList = ["肿瘤", "肿瘤治疗", "非肿瘤相关性"];
+  const userPainReasonTag = "user_pain_reason";
+
+  addCheckBox(userPainReasonTag, userReasonList, "required");
+
+  // userPainCharacter
+  const userPainCharacterList = [
+    "酸痛",
+    "刺痛",
+    "跳痛",
+    "钝痛",
+    "绞痛",
+    "胀痛",
+    "坠痛",
+    "钻顶样痛",
+    "爆裂样痛",
+    "撕裂样痛",
+    "牵拉样痛",
+    "压榨样痛",
+    "放电样痛",
+    "烧灼样痛",
+    "麻木样痛",
+    "刀割样痛",
+    "轻触痛",
+    "无名痛",
+    "隐痛",
+    "尖锐痛",
+  ];
+  const userPainCharacterTag = "user_pain_character";
+
+  addCheckBox(userPainCharacterTag, userPainCharacterList);
+
+  // userPainAggrFactor
+  const userPainAggrFactorList = [
+    "行走",
+    "活动",
+    "体位变化",
+    "排便",
+    "咳嗽",
+    "进食",
+    "天气",
+    "乏力",
+    "精神因素",
+  ];
+  const userPainAggrFactorTag = "user_pain_aggr_factor";
+
+  addCheckBox(userPainAggrFactorTag, userPainAggrFactorList);
+
+  // userPainReliFactor
+  const userPainReliFactorList = [
+    "服用镇痛药",
+    "环境安静",
+    "光线柔和",
+    "温度适宜",
+    "心理积极",
+    "家人陪伴",
+  ];
+  const userPainReliFactorTag = "user_pain_reli_factor";
+
+  addCheckBox(userPainReliFactorTag, userPainReliFactorList);
+
+  // userPainBreakoutType
+  const userPainBreakoutTypeList = [
+    "与特定活动或事件相关联",
+    "发生在按时给予镇痛药物的剂量间隔结束时",
+    "控制不佳的持续性疼痛",
+  ];
+  const userPainBreakoutTypeTag = "user_pain_breakout_type";
+
+  addRadio(userPainBreakoutTypeTag, userPainBreakoutTypeList);
+
+  // userPainBreakoutFreq
+  const userPainBreakoutFreqList = [" ＜3", "≥3"];
+  const userPainBreakoutFreqTag = "user_pain_breakout_freq";
+
+  addRadio(userPainBreakoutFreqTag, userPainBreakoutFreqList);
 
   var marginSlider = document.getElementById("pain_leval_slider");
   console.log(marginSlider);
@@ -474,13 +478,16 @@ function updateBodySelected(bodyId, currentSelect, bodyPloygon) {
     });
   }
 
-  
-})(jQuery);
+  // --------------------------------------------------------------------------
+  // step 3
+  // --------------------------------------------------------------------------
 
-const col1_template = "<input class='drug-input'>";
 
-const col2_template =
-  "<label><input name='freq' type='radio' value='' />一天<input name='dose' type='text'\
+  // drug table
+  const col1_template = "<input class='drug-input'>";
+
+  const col2_template =
+    "<label><input name='freq' type='radio' value='' />一天<input name='dose' type='text'\
   class='small-input'/>次</label><br>\
 <label><input name='freq' type='radio' value='' />每<input name='dose' type='text'\
 class='small-input'/>小时/次</label><br>\
@@ -488,16 +495,16 @@ class='small-input'/>小时/次</label><br>\
 class='small-input'/>天/贴</label><br>\
 <label><input name='freq' type='radio' value='' />prn（必要时）</label><br>\
 <label><input name='freq' type='radio' value='' />每晚</label><br> ";
-const col3_template =
-  "<label><input name='dose' type='text' \
+  const col3_template =
+    "<label><input name='dose' type='text' \
 class='middle-input' />{0}</label>";
 
-const col4_template =
-  "<label><input name='duration' type='radio' value='' />>7天</label><br>\
+  const col4_template =
+    "<label><input name='duration' type='radio' value='' />>7天</label><br>\
 <label><input name='duration' type='radio' value='' />≤7天</label><br>";
 
-const col5_template =
-  "<label><input name='duration' type='checkbox' value='' />无</label><br>\
+  const col5_template =
+    "<label><input name='duration' type='checkbox' value='' />无</label><br>\
 <label><input name='duration' type='checkbox' value='' />便秘</label><br>\
 <label><input name='duration' type='checkbox' value='' />恶心呕吐</label><br>\
 <label><input name='duration' type='checkbox' value='' />谵妄</label><br>\
@@ -506,176 +513,165 @@ const col5_template =
 <label><input name='duration' type='checkbox' value='' />呼吸抑制</label><br>\
 <label><input name='duration' type='checkbox' value='' />其他</label><br>";
 
-const col6_template = "";
+  const col6_template = "";
 
-// var col7_template =
-//   "<label>您是否有时会忘记服药？</label><br>\
-// <input name='ans1' type='radio' value=''/><span style='margin-right: 10;'>是</span>\
-// <input name='ans1' type='radio' value=''/><span style='margin-right: 10;'>否</span>\
-// <br>\
-// <label>您是否有时不注意服药？</label><br>\
-// <input name='ans2' type='radio' value=''/><span style='margin-right: 10;'>是</span>\
-// <input name='ans2' type='radio' value=''/><span style='margin-right: 10;'>否</span>\
-// <br>\
-// <label>您自觉症状好转时是否会自行停药？</label><br>\
-// <input name='ans3' type='radio' value=''/><span style='margin-right: 10;'>是</span>\
-// <input name='ans3' type='radio' value=''/><span style='margin-right: 10;'>否</span>\
-// <br>\
-// <label>您服药后自觉症状更糟时是否曾停止服药？</label><br>\
-// <input name='ans4' type='radio' value=''/><span style='margin-right: 10;'>是</span>\
-// <input name='ans4' type='radio' value=''/><span style='margin-right: 10;'>否</span>>";
 
-$(function () {
-  const PCNEData = getJsonSync("./assets/PCNE_data.json");
-  const availableDrugs = PCNEData.map((v) => v["name"] + v["spec"]);
-
-  $(document).ready(function () {
-    var table = $("#example").DataTable({
-      language: {
-        sProcessing: "处理中...",
-        sLengthMenu: "显示 _MENU_ 项结果",
-        sZeroRecords: "没有匹配结果",
-        sInfo: "显示第 _START_ 至 _END_ 项结果，共 _TOTAL_ 项",
-        sInfoEmpty: "显示第 0 至 0 项结果，共 0 项",
-        sInfoFiltered: "(由 _MAX_ 项结果过滤)",
-        sInfoPostFix: "",
-        sSearch: "搜索:",
-        sUrl: "",
-        sEmptyTable: "表中数据为空",
-        sLoadingRecords: "载入中...",
-        sInfoThousands: ",",
-        oPaginate: {
-          sFirst: "首页",
-          sPrevious: "上页",
-          sNext: "下页",
-          sLast: "末页",
+  var table = $("#example").DataTable({
+    language: {
+      sProcessing: "处理中...",
+      sLengthMenu: "显示 _MENU_ 项结果",
+      sZeroRecords: "没有匹配结果",
+      sInfo: "显示第 _START_ 至 _END_ 项结果，共 _TOTAL_ 项",
+      sInfoEmpty: "显示第 0 至 0 项结果，共 0 项",
+      sInfoFiltered: "(由 _MAX_ 项结果过滤)",
+      sInfoPostFix: "",
+      sSearch: "搜索:",
+      sUrl: "",
+      sEmptyTable: "表中数据为空",
+      sLoadingRecords: "载入中...",
+      sInfoThousands: ",",
+      oPaginate: {
+        sFirst: "首页",
+        sPrevious: "上页",
+        sNext: "下页",
+        sLast: "末页",
+      },
+      oAria: {
+        sSortAscending: ": 以升序排列此列",
+        sSortDescending: ": 以降序排列此列",
+      },
+      select: {
+        rows: {
+          _: "选中%d行",
+          1: "选中1行",
         },
-        oAria: {
-          sSortAscending: ": 以升序排列此列",
-          sSortDescending: ": 以降序排列此列",
-        },
-        select: {
-          rows: {
-            _: "选中%d行",
-            1: "选中1行",
-          },
+      },
+    },
+
+    paging: false,
+    responsive: {
+      details: {
+        display: $.fn.dataTable.Responsive.display.childRowImmediate,
+        type: "inline",
+        //   renderer: function ( api, rowIdx, columns ) {
+        //     var data = $.map( columns, function ( col, i ) {
+        //         return col.hidden ?
+        //             '<tr data-dt-row="'+col.rowIndex+'" data-dt-column="'+col.columnIndex+'">'+
+        //                 '<td>'+col.title+':'+'</td> '+
+        //                 '<td>'+col.data+'</td>'+
+        //             '</tr>' :
+        //             '';
+        //     } ).join('');
+
+        //     return data ?
+        //         $('<table/>').append( data ) :
+        //         false;
+        // }
+      },
+    },
+    columnDefs: [
+      {
+        className: "dtr-control",
+        orderable: false,
+        targets: 0,
+      },
+    ],
+    // rowsGroup: [
+    //   7
+    // ],
+    // columnDefs: [
+    //   {
+    //     orderable: false,
+    //     className: "select-checkbox",
+    //     targets: 0,
+    //   },
+    // ],
+    order: [[1, "asc"]],
+    // select: true,
+    info: true,
+    // fixedHeader: {
+    // header: true,
+    // footer: true
+    // },
+    // fixedHeader: true,
+    // scrollY: "240px",
+    // scrollCollapse: true,
+    dom: "Bfrtip",
+    buttons: [
+      {
+        text: "增加项",
+        titleAttr: "增加用药",
+        action: function (e, dt, node, config) {
+          console.log("add!!!");
+          table.row
+            .add([
+              "",
+              col1_template,
+              col2_template,
+              "",
+              col4_template,
+              // col5_template,
+              // col6_template,
+              // col7_template,
+            ])
+            .draw(false);
+
+          $("input.drug-input").autocomplete({
+            source: availableDrugs,
+            change: function (event, ui) {
+              const val = $(this).val();
+              const index = availableDrugs.indexOf(val);
+
+              if (index != -1) {
+                const col = $(this).parent().siblings()[2];
+                console.log($(col).html());
+                $(col).html(col3_template.format(PCNEData[index]["unit"]));
+              }
+            },
+          });
         },
       },
 
-      paging: false,
-      responsive: {
-        details: {
-          display: $.fn.dataTable.Responsive.display.childRowImmediate,
-          type: "inline",
-          //   renderer: function ( api, rowIdx, columns ) {
-          //     var data = $.map( columns, function ( col, i ) {
-          //         return col.hidden ?
-          //             '<tr data-dt-row="'+col.rowIndex+'" data-dt-column="'+col.columnIndex+'">'+
-          //                 '<td>'+col.title+':'+'</td> '+
-          //                 '<td>'+col.data+'</td>'+
-          //             '</tr>' :
-          //             '';
-          //     } ).join('');
-
-          //     return data ?
-          //         $('<table/>').append( data ) :
-          //         false;
-          // }
+      {
+        text: "删除项",
+        titleAttr: "删除选中用药",
+        action: function (e, dt, node, config) {
+          console.log("del!!!");
+          table.row(".selected").remove().draw(false);
         },
       },
-      columnDefs: [
-        {
-          className: "dtr-control",
-          orderable: false,
-          targets: 0,
-        },
-      ],
-      // rowsGroup: [
-      //   7
-      // ],
-      // columnDefs: [
-      //   {
-      //     orderable: false,
-      //     className: "select-checkbox",
-      //     targets: 0,
-      //   },
-      // ],
-      order: [[1, "asc"]],
-      // select: true,
-      info: true,
-      // fixedHeader: {
-      // header: true,
-      // footer: true
-      // },
-      // fixedHeader: true,
-      // scrollY: "240px",
-      // scrollCollapse: true,
-      dom: "Bfrtip",
-      buttons: [
-        {
-          text: "增加项",
-          titleAttr: "增加用药",
-          action: function (e, dt, node, config) {
-            console.log("add!!!");
-            table.row
-              .add([
-                "",
-                col1_template,
-                col2_template,
-                "",
-                col4_template,
-                // col5_template,
-                // col6_template,
-                // col7_template,
-              ])
-              .draw(false);
+    ],
+  });
 
-            $("input.drug-input").autocomplete({
-              source: availableDrugs,
-              change: function (event, ui) {
-                const val = $(this).val();
-                const index = availableDrugs.indexOf(val);
+  $("#example tbody").on("click", "tr", function (event) {
+    var isTd = $(event.target).is("td");
 
-                if (index != -1) {
-                  const col = $(this).parent().siblings()[2];
-                  console.log($(col).html());
-                  $(col).html(col3_template.format(PCNEData[index]["unit"]));
-                }
-              },
-            });
-          },
-        },
-
-        {
-          text: "删除项",
-          titleAttr: "删除选中用药",
-          action: function (e, dt, node, config) {
-            console.log("del!!!");
-            table.row(".selected").remove().draw(false);
-          },
-        },
-      ],
-    });
-
-    $("#example tbody").on("click", "tr", function (event) {
-      var isTd = $(event.target).is("td");
-
-      if (isTd) {
-        if ($(this).hasClass("selected")) {
-          $(this).removeClass("selected");
-        } else {
-          table.$("tr.selected").removeClass("selected");
-          $(this).addClass("selected");
-        }
+    if (isTd) {
+      if ($(this).hasClass("selected")) {
+        $(this).removeClass("selected");
+      } else {
+        table.$("tr.selected").removeClass("selected");
+        $(this).addClass("selected");
       }
-    });
+    }
   });
 
   $("input.drug-input").autocomplete({
     source: availableDrugs,
   });
 
-  $("#user_dverse_reaction_drug").tagit( {
+  $("#user_dverse_reaction_drug").tagit({
     availableTags: availableDrugs,
   });
-});
+
+  // $.dobPicker({
+  //   daySelector: "#birth_date",
+  //   monthSelector: "#birth_month",
+  //   yearSelector: "#birth_year",
+  //   dayDefault: "",
+  //   monthDefault: "",
+  //   yearDefault: "",
+  //   minimumAge: 0,
+  //   maximumAge: 120,
+  // });
+})(jQuery);
