@@ -141,7 +141,6 @@ function updateBodySelected(bodyId, currentSelect, bodyPloygon) {
   }
 }
 
-var bodyPloygon;
 
 (function ($) {
   jQuery.extend(jQuery.validator.messages, {
@@ -265,44 +264,13 @@ var bodyPloygon;
       alert("Submited");
     },
     onStepChanged: function (event, currentIndex, priorIndex) {
-      if (currentIndex == 1) {
-        if (bodyPloygon == undefined) {
-          const bodyDoc =
-            document.getElementById("body-view-image").contentDocument;
-
-          console.log(bodyDoc);
-          bodyPloygon = d3.select(bodyDoc).selectAll("polygon");
-          bodyPloygon.attr("data_selceted", "false");
-
-          bodyPloygon.on("click", function () {
-            const p = d3.select(this);
-            const bodyID = p.attr("id").split("_")[2];
-
-            console.log(bodyID);
-            updateBodySelected(bodyID, p, bodyPloygon);
-          });
-
-          d3.select(bodyDoc)
-            .selectAll("text")
-            .filter(function () {
-              return !d3.select(this).classed("st_label");
-            })
-            .on("click", function () {
-              const bodyID = d3.select(this).text().trim();
-              const idName = "#part_x5F_".concat(bodyID);
-              console.log(idName);
-              const p = d3.select(this.parentNode.parentNode).select(idName);
-
-              updateBodySelected(bodyID, p, bodyPloygon);
-            });
-        }
-      }
-
+    
       if (currentIndex == 2) {
         const table = $("#example").DataTable();
         // table.draw();
         table.columns.adjust().responsive.recalc();
       }
+      
       return true;
     },
 
@@ -316,6 +284,37 @@ var bodyPloygon;
   // --------------------------------------------------------------------------
   // step 2
   // --------------------------------------------------------------------------
+
+  // body view image
+  $("#body-view-image").on("load", function () {
+    console.log("load body image");
+    const bodyDoc = document.getElementById("body-view-image").contentDocument;
+    const bodyPloygon = d3.select(bodyDoc).selectAll("polygon");
+
+    bodyPloygon.attr("data_selceted", "false");
+
+    bodyPloygon.on("click", function () {
+      const p = d3.select(this);
+      const bodyID = p.attr("id").split("_")[2];
+
+      console.log(bodyID);
+      updateBodySelected(bodyID, p, bodyPloygon);
+    });
+
+    d3.select(bodyDoc)
+      .selectAll("text")
+      .filter(function () {
+        return !d3.select(this).classed("st_label");
+      })
+      .on("click", function () {
+        const bodyID = d3.select(this).text().trim();
+        const idName = "#part_x5F_".concat(bodyID);
+        console.log(idName);
+        const p = d3.select(this.parentNode.parentNode).select(idName);
+
+        updateBodySelected(bodyID, p, bodyPloygon);
+      });
+  });
 
   // userReason
   const userReasonList = ["肿瘤", "肿瘤治疗", "非肿瘤相关性"];
@@ -519,7 +518,7 @@ class='middle-input' />{0}</label>";
 
   const col6_template = "";
 
-  var table = $("#example").DataTable({
+  const table = $("#example").DataTable({
     language: {
       sProcessing: "处理中...",
       sLengthMenu: "显示 _MENU_ 项结果",
@@ -650,11 +649,11 @@ class='middle-input' />{0}</label>";
                 const table = $("#example").DataTable();
                 const thisTr = this.parentElement.parentElement;
                 const thisRowIdx = table.row(thisTr).index();
-                const colIdx = table.column('drug_dose:name').index();
+                const colIdx = table.column("drug_dose:name").index();
 
-                table.cell(thisRowIdx, colIdx).data(
-                  col3_template.format(PCNEData[index]["unit"])
-                );
+                table
+                  .cell(thisRowIdx, colIdx)
+                  .data(col3_template.format(PCNEData[index]["unit"]));
                 // console.log(table.row(thisTr));
               }
             },
@@ -674,7 +673,7 @@ class='middle-input' />{0}</label>";
   });
 
   $("#example tbody").on("click", "tr", function (event) {
-    var isTd = $(event.target).is("td");
+    const isTd = $(event.target).is("td");
 
     if (isTd) {
       if ($(this).hasClass("selected")) {
@@ -685,7 +684,6 @@ class='middle-input' />{0}</label>";
       }
     }
   });
-  
 
   $("input.drug-input").autocomplete({
     source: availableDrugs,
