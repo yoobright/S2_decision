@@ -71,17 +71,6 @@ function addRadio(for_type, element_list, required = "") {
   }
 }
 
-const bodyKV = getJsonSync("./assets/body_kv.json");
-const PCNEData = getJsonSync("./assets/PCNE_data.json");
-const availableDrugs = PCNEData.map((v) => v["name"] + v["spec"]);
-const adverseReactionRegex = /^(L).*/;
-const availableAdverseReactionDrugs = PCNEData.filter(
-  (v) =>
-    v["class"].split("/").filter((v) => adverseReactionRegex.test(v)).length >=
-    1
-).map((v) => v["name"] + v["spec"]);
-// console.log("availableAdverseReactionDrugs: " + availableAdverseReactionDrugs)
-
 function togglePartView(p, body_id) {
   const dataSelceted = p.attr("data_selceted");
   // console.log('svg click!!!!', this.id, data_selceted);
@@ -120,20 +109,19 @@ function updateBodySelected(bodyId, currentSelect, bodyPloygon) {
 
     console.log("select: " + selectNameList);
     console.log("current: " + currentNameList);
-    if (currentNameList.length < selectNameList.length) {
-      const addNameList = selectNameList.filter(function (v, i) {
-        return currentNameList.indexOf(v) == -1;
-      });
-      console.log("add: " + addNameList);
 
-      var updateNameList = currentNameList.concat(addNameList);
-    } else if (currentNameList.length > selectNameList.length) {
-      var updateNameList = currentNameList.filter(function (v, i) {
-        return selectNameList.indexOf(v) != -1;
-      });
-    } else {
-      var updateNameList = currentNameList;
-    }
+    const updateNameList = (function (current, select) {
+      if (current.length < select.length) {
+        const addNameList = select.filter((v) => current.indexOf(v) == -1);
+        console.log("add: " + addNameList);
+
+        return current.concat(addNameList);
+      } else if (current.length > select.length) {
+        return current.filter((v) => select.indexOf(v) != -1);
+      } else {
+        return current;
+      }
+    })(currentNameList, selectNameList);
 
     console.log(updateNameList);
     $("#user_pain_part").text(updateNameList.join(", "));
@@ -141,7 +129,24 @@ function updateBodySelected(bodyId, currentSelect, bodyPloygon) {
   }
 }
 
+// --------------------------------------------------------------------------
+// Global Constant
 
+const bodyKV = getJsonSync("./assets/body_kv.json");
+const PCNEData = getJsonSync("./assets/PCNE_data.json");
+const availableDrugs = PCNEData.map((v) => v["name"] + v["spec"]);
+const adverseReactionRegex = /^(L).*/;
+const availableAdverseReactionDrugs = PCNEData.filter(
+  (v) =>
+    v["class"].split("/").filter((v) => adverseReactionRegex.test(v)).length >=
+    1
+).map((v) => v["name"] + v["spec"]);
+
+// console.log("availableAdverseReactionDrugs: " + availableAdverseReactionDrugs)
+
+// --------------------------------------------------------------------------
+
+// document ready
 (function ($) {
   jQuery.extend(jQuery.validator.messages, {
     required: "输入不能为空",
@@ -264,13 +269,12 @@ function updateBodySelected(bodyId, currentSelect, bodyPloygon) {
       alert("Submited");
     },
     onStepChanged: function (event, currentIndex, priorIndex) {
-    
       if (currentIndex == 2) {
         const table = $("#example").DataTable();
         // table.draw();
         table.columns.adjust().responsive.recalc();
       }
-      
+
       return true;
     },
 
@@ -453,9 +457,10 @@ function updateBodySelected(bodyId, currentSelect, bodyPloygon) {
           return d3.select(this).attr("id").startsWith("pain");
         });
         painG.selectAll("text").style("font-weight", "normal");
+
         const prefixList = ["#pain-desc-level", "#pain-label-level"];
 
-        for (i = 0; i < prefixList.length; i++) {
+        for (let i = 0; i < prefixList.length; i++) {
           changeID = prefixList[i] + value;
           changeG = painDocSelect.select(changeID);
           changeG.selectAll("text").style("font-weight", "bold");
@@ -466,11 +471,11 @@ function updateBodySelected(bodyId, currentSelect, bodyPloygon) {
         const painFlag = painDocSelect.selectAll("g").filter(function () {
           return d3.select(this).attr("id").startsWith("pain-flag");
         });
-        // console.log(painFlag);
-        painFlag.selectAll("path").style("stroke-width", 0.25);
         const changeFlag = painDocSelect.select("#pain-flag-level" + value);
+        // console.log(painFlag);
         // console.log(changeFlag);
 
+        painFlag.selectAll("path").style("stroke-width", 0.25);
         changeFlag.selectAll("path").style("stroke-width", 2);
       }
 
