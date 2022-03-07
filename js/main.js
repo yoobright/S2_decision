@@ -1,8 +1,8 @@
 if (!String.prototype.format) {
   String.prototype.format = function () {
     var args = arguments;
-    return this.replace(/{(\d+)}/g, function (match, number) {
-      return typeof args[number] != "undefined" ? args[number] : match;
+    return this.replace(/(\d+)/gu, function (match, number) {
+      return typeof args[number] !== undefined ? args[number] : match;
     });
   };
 }
@@ -31,7 +31,7 @@ function addCheckBox(for_type, element_list, required = "") {
   const UElement = labelElement.next();
 
   if (UElement.is("div")) {
-    const items = element_list.map((v, i) => 
+    const items = element_list.map((v, i) =>
       template.format(
         for_type,
         (i + 1).toString(),
@@ -40,7 +40,7 @@ function addCheckBox(for_type, element_list, required = "") {
       )
     );
 
-    UElement.append(items); 
+    UElement.append(items);
   }
 }
 
@@ -58,7 +58,7 @@ function addRadio(for_type, element_list, required = "") {
   const UElement = labelElement.next();
 
   if (UElement.is("div")) {
-    const items = element_list.map((v, i) => 
+    const items = element_list.map((v, i) =>
       template.format(
         for_type,
         (i + 1).toString(),
@@ -67,14 +67,14 @@ function addRadio(for_type, element_list, required = "") {
       )
     );
 
-    UElement.append(items); 
+    UElement.append(items);
   }
 }
 
-function togglePartView(p, body_id) {
+function togglePartView(p) {
   const dataSelceted = p.attr("data_selceted");
   // console.log('svg click!!!!', this.id, data_selceted);
-  if (dataSelceted == "true") {
+  if (dataSelceted === "true") {
     p.attr("data_selceted", "false");
     p.classed("st1", true);
     p.classed("st1_selected", false);
@@ -89,7 +89,7 @@ function togglePartView(p, body_id) {
 }
 
 function updateBodySelected(bodyId, currentSelect, bodyPloygon) {
-  if (bodyId.match(/\d+/)) {
+  if (bodyId.match(/\d+/u)) {
     togglePartView(currentSelect, bodyId);
     const bodySelect = bodyPloygon.filter("[data_selceted='true']");
     const selectIDList = bodySelect._groups[0].map(function (value) {
@@ -105,19 +105,19 @@ function updateBodySelected(bodyId, currentSelect, bodyPloygon) {
       .text()
       .trim()
       .split(", ")
-      .filter((v) => v != "");
+      .filter((v) => v !== "");
 
     console.log("select: " + selectNameList);
     console.log("current: " + currentNameList);
 
     const updateNameList = (function (current, select) {
       if (current.length < select.length) {
-        const addNameList = select.filter((v) => current.indexOf(v) == -1);
+        const addNameList = select.filter((v) => current.indexOf(v) === -1);
         console.log("add: " + addNameList);
 
         return current.concat(addNameList);
       } else if (current.length > select.length) {
-        return current.filter((v) => select.indexOf(v) != -1);
+        return current.filter((v) => select.indexOf(v) !== -1);
       } else {
         return current;
       }
@@ -134,13 +134,13 @@ function updateBodySelected(bodyId, currentSelect, bodyPloygon) {
 
 const bodyKV = getJsonSync("./assets/body_kv.json");
 const PCNEData = getJsonSync("./assets/PCNE_data.json");
-const availableDrugs = PCNEData.map((v) => v["name"] + v["spec"]);
-const adverseReactionRegex = /^(L).*/;
+const availableDrugs = PCNEData.map((v) => v.name + v.spec);
+const adverseReactionRegex = /^(L).*/u;
 const availableAdverseReactionDrugs = PCNEData.filter(
   (v) =>
-    v["class"].split("/").filter((v) => adverseReactionRegex.test(v)).length >=
+    v.class.split("/").filter((v) => adverseReactionRegex.test(v)).length >=
     1
-).map((v) => v["name"] + v["spec"]);
+).map((v) => v.name + v.spec);
 
 // console.log("availableAdverseReactionDrugs: " + availableAdverseReactionDrugs)
 
@@ -205,7 +205,7 @@ const availableAdverseReactionDrugs = PCNEData.filter(
     transitionEffect: "slideLeft",
     stepsOrientation: "vertical",
     titleTemplate:
-      '<div class="title"><span class="step-number">#index#</span><span class="step-text">#title#</span></div>',
+      "<div class=\"title\"><span class=\"step-number\">#index#</span><span class=\"step-text\">#title#</span></div>",
     labels: {
       previous: "上一步",
       next: "下一步",
@@ -218,7 +218,7 @@ const availableAdverseReactionDrugs = PCNEData.filter(
           .parent()
           .parent()
           .parent()
-          .append('<div class="footer footer-' + currentIndex + '"></div>');
+          .append("<div class=\"footer footer-" + currentIndex + "\"></div>");
       }
 
       if (currentIndex === 1) {
@@ -269,7 +269,7 @@ const availableAdverseReactionDrugs = PCNEData.filter(
       alert("Submited");
     },
     onStepChanged: function (event, currentIndex, priorIndex) {
-      if (currentIndex == 2) {
+      if (currentIndex === 2) {
         const table = $("#example").DataTable();
         // table.draw();
         table.columns.adjust().responsive.recalc();
@@ -400,7 +400,7 @@ const availableAdverseReactionDrugs = PCNEData.filter(
 
   var marginSlider = document.getElementById("pain_leval_slider");
   console.log(marginSlider);
-  if (marginSlider != undefined) {
+  if (marginSlider !== undefined) {
     noUiSlider.create(marginSlider, {
       start: [0],
       step: 1,
@@ -450,7 +450,7 @@ const availableAdverseReactionDrugs = PCNEData.filter(
 
       const painDoc =
         document.getElementById("pain-level-image").contentDocument;
-      if (painDoc != null) {
+      if (painDoc !== null) {
         // console.log(painDoc);
         const painDocSelect = d3.select(painDoc);
         const painG = painDocSelect.selectAll("g").filter(function () {
@@ -458,10 +458,10 @@ const availableAdverseReactionDrugs = PCNEData.filter(
         });
         painG.selectAll("text").style("font-weight", "normal");
 
-        const selectStr = 
+        const selectStr =
           "#pain-desc-level{0}, #pain-label-level{0}".format(
-          value
-        );
+            value
+          );
 
         painDocSelect
           .select(selectStr)
@@ -512,17 +512,17 @@ class='middle-input' />{0}</label>";
     "<label><input name='duration' type='radio' value='' />>7天</label><br>\
 <label><input name='duration' type='radio' value='' />≤7天</label><br>";
 
-  const col5_template =
-    "<label><input name='duration' type='checkbox' value='' />无</label><br>\
-<label><input name='duration' type='checkbox' value='' />便秘</label><br>\
-<label><input name='duration' type='checkbox' value='' />恶心呕吐</label><br>\
-<label><input name='duration' type='checkbox' value='' />谵妄</label><br>\
-<label><input name='duration' type='checkbox' value='' />过度镇静</label><br>\
-<label><input name='duration' type='checkbox' value='' />皮肤瘙痒</label><br>\
-<label><input name='duration' type='checkbox' value='' />呼吸抑制</label><br>\
-<label><input name='duration' type='checkbox' value='' />其他</label><br>";
+  //   const col5_template =
+  //     "<label><input name='duration' type='checkbox' value='' />无</label><br>\
+  // <label><input name='duration' type='checkbox' value='' />便秘</label><br>\
+  // <label><input name='duration' type='checkbox' value='' />恶心呕吐</label><br>\
+  // <label><input name='duration' type='checkbox' value='' />谵妄</label><br>\
+  // <label><input name='duration' type='checkbox' value='' />过度镇静</label><br>\
+  // <label><input name='duration' type='checkbox' value='' />皮肤瘙痒</label><br>\
+  // <label><input name='duration' type='checkbox' value='' />呼吸抑制</label><br>\
+  // <label><input name='duration' type='checkbox' value='' />其他</label><br>";
 
-  const col6_template = "";
+  //   const col6_template = "";
 
   const table = $("#example").DataTable({
     language: {
@@ -651,7 +651,7 @@ class='middle-input' />{0}</label>";
               const val = $(this).val();
               const index = availableDrugs.indexOf(val);
 
-              if (index != -1) {
+              if (index !== -1) {
                 const table = $("#example").DataTable();
                 const thisTr = this.parentElement.parentElement;
                 const thisRowIdx = table.row(thisTr).index();
@@ -659,7 +659,7 @@ class='middle-input' />{0}</label>";
 
                 table
                   .cell(thisRowIdx, colIdx)
-                  .data(col3_template.format(PCNEData[index]["unit"]));
+                  .data(col3_template.format(PCNEData[index].unit));
                 // console.log(table.row(thisTr));
               }
             },
