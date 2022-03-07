@@ -574,9 +574,30 @@ class='middle-input' />{0}</label>";
     },
     columnDefs: [
       {
+        name: "foo",
         className: "dtr-control",
         orderable: false,
         targets: 0,
+      },
+      {
+        name: "drug_name",
+        orderable: true,
+        targets: 1,
+      },
+      {
+        name: "drug_freq",
+        orderable: false,
+        targets: 2,
+      },
+      {
+        name: "drug_dose",
+        orderable: false,
+        targets: 3,
+      },
+      {
+        name: "drug_durtion",
+        orderable: false,
+        targets: 4,
       },
     ],
     // rowsGroup: [
@@ -626,9 +647,15 @@ class='middle-input' />{0}</label>";
               const index = availableDrugs.indexOf(val);
 
               if (index != -1) {
-                const col = $(this).parent().siblings()[2];
-                console.log($(col).html());
-                $(col).html(col3_template.format(PCNEData[index]["unit"]));
+                const table = $("#example").DataTable();
+                const thisTr = this.parentElement.parentElement;
+                const thisRowIdx = table.row(thisTr).index();
+                const colIdx = table.column('drug_dose:name').index();
+
+                table.cell(thisRowIdx, colIdx).data(
+                  col3_template.format(PCNEData[index]["unit"])
+                );
+                // console.log(table.row(thisTr));
               }
             },
           });
@@ -658,6 +685,7 @@ class='middle-input' />{0}</label>";
       }
     }
   });
+  
 
   $("input.drug-input").autocomplete({
     source: availableDrugs,
