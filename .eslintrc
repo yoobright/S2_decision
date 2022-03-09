@@ -63,6 +63,15 @@
           "balanced": true
         }
       }
+    ],
+    "no-irregular-whitespace": [
+      "error",
+      {
+        "skipStrings": true,
+        "skipComments": false,
+        "skipRegExps": true,
+        "skipTemplates": true
+      }
     ]
   }
 }

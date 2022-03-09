@@ -7,6 +7,15 @@ if (!String.prototype.format) {
   };
 }
 
+jQuery.fn.dataTable.Api.register( "responsive.redisplay()", function () {
+  var responsive = this.context[0].responsive;
+
+  if (responsive) {
+    responsive._redrawChildren();
+  }
+} );
+
+
 function getJsonSync(url) {
   var text = "";
   $.ajaxSetup({ async: false });
@@ -126,6 +135,29 @@ function updateBodySelected(bodyId, currentSelect, bodyPloygon) {
     console.log(updateNameList);
     $("#user_pain_part").text(updateNameList.join(", "));
     // console.log(list);
+  }
+}
+
+const col3_template =
+"<label><input name='dose' type='text' \
+class='middle-input' />{0}</label>";
+
+function changeDose(node) {
+  const value = $(node).val();
+  const index = availableDrugs.indexOf(value);
+
+  if (index !== -1) {
+    const table = $("#example").DataTable();
+    const thisTr = node.parentElement.parentElement;
+    const thisRowIdx = table.row(thisTr).index();
+    const colIdx = table.column("drug_dose:name").index();
+
+    table
+      .cell(thisRowIdx, colIdx)
+      .data(col3_template.format(PCNEData[index].unit));
+    // console.log(table.row(thisTr));
+
+    table.responsive.redisplay();
   }
 }
 
@@ -464,7 +496,7 @@ const availableAdverseReactionDrugs = PCNEData.filter(
           );
 
         painDocSelect
-          .select(selectStr)
+          .selectAll(selectStr)
           .selectAll("text").style("font-weight", "bold");
 
 
@@ -504,9 +536,7 @@ class='small-input'/>小时/次</label><br>\
 class='small-input'/>天/贴</label><br>\
 <label><input name='freq' type='radio' value='' />prn（必要时）</label><br>\
 <label><input name='freq' type='radio' value='' />每晚</label><br> ";
-  const col3_template =
-    "<label><input name='dose' type='text' \
-class='middle-input' />{0}</label>";
+
 
   const col4_template =
     "<label><input name='duration' type='radio' value='' />>7天</label><br>\
@@ -637,7 +667,7 @@ class='middle-input' />{0}</label>";
               "",
               col1_template,
               col2_template,
-              "",
+              "--          ",
               col4_template,
               // col5_template,
               // col6_template,
@@ -648,21 +678,12 @@ class='middle-input' />{0}</label>";
           $("input.drug-input").autocomplete({
             source: availableDrugs,
             change: function (event, ui) {
-              const val = $(this).val();
-              const index = availableDrugs.indexOf(val);
-
-              if (index !== -1) {
-                const table = $("#example").DataTable();
-                const thisTr = this.parentElement.parentElement;
-                const thisRowIdx = table.row(thisTr).index();
-                const colIdx = table.column("drug_dose:name").index();
-
-                table
-                  .cell(thisRowIdx, colIdx)
-                  .data(col3_template.format(PCNEData[index].unit));
-                // console.log(table.row(thisTr));
-              }
+              // changeDose(this);
+              // console.log($(this).val());
             },
+            select: function( event, ui ) {
+              changeDose(this);
+            }
           });
         },
       },
