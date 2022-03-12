@@ -681,7 +681,7 @@ class='small-input'/>天/贴</label><br>\
               changeDose(this);
               // console.log($(this).val());
             },
-            select: function( event, ui ) {
+            close: function( event, ui ) {
               changeDose(this);
             }
           });
