@@ -101,6 +101,7 @@ body {
   background: #222;
   position: relative;
   padding: 0px;
+  display: none;
 }
 
 .main {

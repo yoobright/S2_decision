@@ -678,7 +678,7 @@ class='small-input'/>天/贴</label><br>\
           $("input.drug-input").autocomplete({
             source: availableDrugs,
             change: function (event, ui) {
-              // changeDose(this);
+              changeDose(this);
               // console.log($(this).val());
             },
             select: function( event, ui ) {
@@ -746,4 +746,7 @@ class='small-input'/>天/贴</label><br>\
   //   minimumAge: 0,
   //   maximumAge: 120,
   // });
+
+  // end show
+  $("body").show();
 })(jQuery);
