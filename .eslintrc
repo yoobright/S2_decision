@@ -2,7 +2,8 @@
   "ignorePatterns": ["vendor/*.js", "vendor/*/*.js"],
   "globals": {
     "d3": "readonly",
-    "noUiSlider": "readonly"
+    "noUiSlider": "readonly",
+    "getJsonSync": "readonly"
   },
   "env": {
     "browser": true,
