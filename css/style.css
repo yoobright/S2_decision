@@ -116,6 +116,13 @@ body {
   background: #fff;
 }
 
+.result-container {
+  height: 800px;
+  margin: 40px 40px;
+  padding: 20px 100px;
+  background: #fff;
+}
+
 fieldset {
   padding: 0px;
   margin: 0px;
