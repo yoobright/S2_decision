@@ -110,7 +110,7 @@ function updateBodySelected(bodyId, currentSelect, bodyPloygon) {
   }
 }
 
-const col3_template =
+const col2_template =
 "<label><input name='dose' type='text' \
 class='middle-input' />{0}</label>";
 
@@ -119,14 +119,14 @@ function changeDose(node) {
   const index = availableDrugs.indexOf(value);
 
   if (index !== -1) {
-    const table = $("#example").DataTable();
+    const table = $(usedDrugTableID).DataTable();
     const thisTr = node.parentElement.parentElement;
     const thisRowIdx = table.row(thisTr).index();
     const colIdx = table.column("drug_dose:name").index();
 
     table
       .cell(thisRowIdx, colIdx)
-      .data(col3_template.format(PCNEData[index].unit));
+      .data(col2_template.format(PCNEData[index].unit));
     // console.log(table.row(thisTr));
 
     table.responsive.redisplay();
@@ -146,26 +146,14 @@ const availableAdverseReactionDrugs = PCNEData.filter(
     1
 ).map((v) => v.name + v.spec);
 
+const usedDrugTableID = "#used-drug-table";
 // console.log("availableAdverseReactionDrugs: " + availableAdverseReactionDrugs)
 
 // --------------------------------------------------------------------------
 
 // document ready
-(function ($) {
-  jQuery.extend(jQuery.validator.messages, {
-    required: "输入不能为空",
-    remote: "请修正此字段",
-    email: "请输入有效的电子邮件地址",
-    url: "请输入有效的网址",
-    date: "请输入有效的日期",
-    dateISO: "请输入有效的日期 (YYYY-MM-DD)",
-    number: "请输入有效的数字",
-    digits: "只能输入数字",
-    creditcard: "请输入有效的信用卡号码",
-    equalTo: "你的输入不相同",
-    max: $.validator.format("请输入不大于 {0} 的数值"),
-    min: $.validator.format("请输入不小于 {0} 的数值"),
-  });
+(($) => {
+  jQuery.extend(jQuery.validator.messages, validator_msg);
 
   // --------------------------------------------------------------------------
   // steps
@@ -274,7 +262,7 @@ const availableAdverseReactionDrugs = PCNEData.filter(
     },
     onStepChanged: function (event, currentIndex, priorIndex) {
       if (currentIndex === 2) {
-        const table = $("#example").DataTable();
+        const table = $(usedDrugTableID).DataTable();
         // table.draw();
         table.columns.adjust().responsive.recalc();
       }
@@ -499,7 +487,7 @@ const availableAdverseReactionDrugs = PCNEData.filter(
   // drug table
   const col1_template = "<input class='drug-input'>";
 
-  const col2_template =
+  const col3_template =
     "<label><input name='freq' type='radio' value='' />一天<input name='dose' type='text'\
   class='small-input'/>次</label><br>\
 <label><input name='freq' type='radio' value='' />每<input name='dose' type='text'\
@@ -526,38 +514,8 @@ class='small-input'/>天/贴</label><br>\
 
   //   const col6_template = "";
 
-  const table = $("#example").DataTable({
-    language: {
-      sProcessing: "处理中...",
-      sLengthMenu: "显示 _MENU_ 项结果",
-      sZeroRecords: "没有匹配结果",
-      sInfo: "显示第 _START_ 至 _END_ 项结果，共 _TOTAL_ 项",
-      sInfoEmpty: "显示第 0 至 0 项结果，共 0 项",
-      sInfoFiltered: "(由 _MAX_ 项结果过滤)",
-      sInfoPostFix: "",
-      sSearch: "搜索:",
-      sUrl: "",
-      sEmptyTable: "表中数据为空",
-      sLoadingRecords: "载入中...",
-      sInfoThousands: ",",
-      oPaginate: {
-        sFirst: "首页",
-        sPrevious: "上页",
-        sNext: "下页",
-        sLast: "末页",
-      },
-      oAria: {
-        sSortAscending: ": 以升序排列此列",
-        sSortDescending: ": 以降序排列此列",
-      },
-      select: {
-        rows: {
-          _: "选中%d行",
-          1: "选中1行",
-        },
-      },
-    },
-
+  const table = $(usedDrugTableID).DataTable({
+    language: table_language,
     paging: false,
     responsive: {
       details: {
@@ -592,12 +550,12 @@ class='small-input'/>天/贴</label><br>\
         targets: 1,
       },
       {
-        name: "drug_freq",
+        name: "drug_dose",
         orderable: false,
         targets: 2,
       },
       {
-        name: "drug_dose",
+        name: "drug_freq",
         orderable: false,
         targets: 3,
       },
@@ -638,8 +596,8 @@ class='small-input'/>天/贴</label><br>\
             .add([
               "",
               col1_template,
-              col2_template,
               "--          ",
+              col3_template,
               col4_template,
               // col5_template,
               // col6_template,
@@ -671,7 +629,7 @@ class='small-input'/>天/贴</label><br>\
     ],
   });
 
-  $("#example tbody").on("click", "tr", function (event) {
+  $("{0} tbody".format(usedDrugTableID)).on("click", "tr", function (event) {
     const isTd = $(event.target).is("td");
 
     if (isTd) {

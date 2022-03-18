@@ -3,7 +3,9 @@
   "globals": {
     "d3": "readonly",
     "noUiSlider": "readonly",
-    "getJsonSync": "readonly"
+    "getJsonSync": "readonly",
+    "table_language": "readonly",
+    "validator_msg": "readonly"
   },
   "env": {
     "browser": true,
