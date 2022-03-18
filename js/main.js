@@ -13,12 +13,7 @@ function addCheckBox(for_type, element_list, required = "") {
 
   if (UElement.is("div")) {
     const items = element_list.map((v, i) =>
-      template.format(
-        for_type,
-        (i + 1).toString(),
-        required,
-        v
-      )
+      template.format(for_type, (i + 1).toString(), required, v)
     );
 
     UElement.append(items);
@@ -40,12 +35,7 @@ function addRadio(for_type, element_list, required = "") {
 
   if (UElement.is("div")) {
     const items = element_list.map((v, i) =>
-      template.format(
-        for_type,
-        (i + 1).toString(),
-        required,
-        v
-      )
+      template.format(for_type, (i + 1).toString(), required, v)
     );
 
     UElement.append(items);
@@ -111,7 +101,7 @@ function updateBodySelected(bodyId, currentSelect, bodyPloygon) {
 }
 
 const col2_template =
-"<label><input name='dose' type='text' \
+  "<label><input name='dose' type='text' \
 class='middle-input' />{0}</label>";
 
 function changeDose(node) {
@@ -142,8 +132,7 @@ const availableDrugs = PCNEData.map((v) => v.name + v.spec);
 const adverseReactionRegex = /^(L).*/u;
 const availableAdverseReactionDrugs = PCNEData.filter(
   (v) =>
-    v.class.split("/").filter((v) => adverseReactionRegex.test(v)).length >=
-    1
+    v.class.split("/").filter((v) => adverseReactionRegex.test(v)).length >= 1
 ).map((v) => v.name + v.spec);
 
 const usedDrugTableID = "#used-drug-table";
@@ -379,6 +368,7 @@ const usedDrugTableID = "#used-drug-table";
     "与特定活动或事件相关联",
     "发生在按时给予镇痛药物的剂量间隔结束时",
     "控制不佳的持续性疼痛",
+    "无",
   ];
   const userPainBreakoutTypeTag = "user_pain_breakout_type";
 
@@ -450,15 +440,14 @@ const usedDrugTableID = "#used-drug-table";
         });
         painG.selectAll("text").style("font-weight", "normal");
 
-        const selectStr =
-          "#pain-desc-level{0}, #pain-label-level{0}".format(
-            value
-          );
+        const selectStr = "#pain-desc-level{0}, #pain-label-level{0}".format(
+          value
+        );
 
         painDocSelect
           .selectAll(selectStr)
-          .selectAll("text").style("font-weight", "bold");
-
+          .selectAll("text")
+          .style("font-weight", "bold");
 
         // flag
         const painFlag = painDocSelect.selectAll("g").filter(function () {
@@ -484,6 +473,16 @@ const usedDrugTableID = "#used-drug-table";
   // step 3
   // --------------------------------------------------------------------------
 
+  $("input[type=radio][name=used_drug]").change(function () {
+    if (this.value === "1") {
+      $("div.used-drug-content").css("display", "unset");
+      $("input[name^='user_compliance']").addClass("required");
+    } else if (this.value === "0") {
+      $("div.used-drug-content").css("display", "none");
+      $("input[name^='user_compliance']").removeClass("required");
+    }
+  });
+
   // drug table
   const col1_template = "<input class='drug-input'>";
 
@@ -496,7 +495,6 @@ class='small-input'/>小时/次</label><br>\
 class='small-input'/>天/贴</label><br>\
 <label><input name='freq' type='radio' value='' />prn（必要时）</label><br>\
 <label><input name='freq' type='radio' value='' />每晚</label><br> ";
-
 
   const col4_template =
     "<label><input name='duration' type='radio' value='' />>7天</label><br>\
@@ -611,9 +609,9 @@ class='small-input'/>天/贴</label><br>\
               changeDose(this);
               // console.log($(this).val());
             },
-            close: function( event, ui ) {
+            close: function (event, ui) {
               changeDose(this);
-            }
+            },
           });
         },
       },
