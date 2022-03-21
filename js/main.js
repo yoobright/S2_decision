@@ -247,7 +247,25 @@ const usedDrugTableID = "#used-drug-table";
       return form.valid();
     },
     onFinished: function (event, currentIndex) {
-      alert("Submited");
+      // alert("Submited");
+      // console.log($("input[type=radio][name=used_drug]").val());
+      if ($("input[type=radio][name=used_drug]:checked").val() === "0") {
+        const bodyDoc = document.getElementById("body-view-image").contentDocument;
+        const bodyPloygon = d3.select(bodyDoc).selectAll("polygon");
+        const bodySelect = bodyPloygon.filter("[data_selceted='true']");
+        const bodyList = bodySelect._groups[0].map((value) => {
+          return value.id.split("_")[2];
+        });
+
+        const chList = $("input[type=checkbox][name=user_pain_character]:checked")
+          .map(function() {return $(this).val();}).get();
+        const mostLevel  = document.getElementById("pain_leval_slider").noUiSlider.get();
+
+        console.log(bodyList);
+        console.log(chList);
+        console.log(mostLevel);
+        alert("Submited");
+      }
     },
     onStepChanged: function (event, currentIndex, priorIndex) {
       if (currentIndex === 2) {
