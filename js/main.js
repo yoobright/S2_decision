@@ -123,6 +123,38 @@ function changeDose(node) {
   }
 }
 
+const ch1_set = new Set([1, 3, 6, 8, 9, 12, 23, 24, 25]);
+const ch2_set = new Set([4, 5, 7, 10, 11, 17]);
+const ch3_set = new Set([2, 13, 14, 15, 16, 18, 19, 20, 21, 22]);
+
+
+const pp11_set = new Set([1, 2, 13, 14, 16, 18, 35]);
+const pp12_set = new Set([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35]);
+function extractS1Feat(mostLevel, bodyList, chList) {
+  var t;
+  var feat = [];
+
+  feat.push(mostLevel);
+
+  for (const set_n of [ch1_set, ch2_set, ch3_set]) {
+    t = (() => new Set(chList.filter(x => set_n.has(x))))();
+    feat.push(t.size >= 1 ? 1 : 0);
+    feat.push(t.size === 1 ? 1 : 0);
+    feat.push(t.size >= 2 ? 1 : 0);
+    feat.push(t.size === 2 ? 1 : 0);
+    feat.push(t.size >= 3 ? 1 : 0);
+  }
+
+  t = (() => new Set(bodyList.filter(x => pp11_set.has(x))))();
+  feat.push(t.size >= 1 ? 1 : 0);
+  t = (() => new Set(bodyList.filter(x => pp12_set.has(x))))();
+  feat.push(t.size >= 1 ? 1 : 0);
+
+  feat.push(chList.includes(6) ? 1 : 0);
+
+  return feat;
+}
+
 // --------------------------------------------------------------------------
 // Global Constant
 
@@ -247,23 +279,22 @@ const usedDrugTableID = "#used-drug-table";
       return form.valid();
     },
     onFinished: function (event, currentIndex) {
-      // alert("Submited");
-      // console.log($("input[type=radio][name=used_drug]").val());
+
       if ($("input[type=radio][name=used_drug]:checked").val() === "0") {
         const bodyDoc = document.getElementById("body-view-image").contentDocument;
         const bodyPloygon = d3.select(bodyDoc).selectAll("polygon");
         const bodySelect = bodyPloygon.filter("[data_selceted='true']");
         const bodyList = bodySelect._groups[0].map((value) => {
-          return value.id.split("_")[2];
+          return parseInt(value.id.split("_")[2]);
         });
 
         const chList = $("input[type=checkbox][name=user_pain_character]:checked")
-          .map(function() {return $(this).val();}).get();
-        const mostLevel  = document.getElementById("pain_leval_slider").noUiSlider.get();
+          .map(function() {return parseInt($(this).val());}).get();
+        const mostLevel  = parseInt(document.getElementById("pain_leval_slider")
+          .noUiSlider.get());
 
-        console.log(bodyList);
-        console.log(chList);
-        console.log(mostLevel);
+        const feat = extractS1Feat(mostLevel, bodyList, chList);
+        console.log(feat);
         alert("Submited");
       }
     },

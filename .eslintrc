@@ -5,7 +5,8 @@
     "noUiSlider": "readonly",
     "getJsonSync": "readonly",
     "table_language": "readonly",
-    "validator_msg": "readonly"
+    "validator_msg": "readonly",
+    "Set":"readonly"
   },
   "env": {
     "browser": true,
