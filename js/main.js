@@ -12,11 +12,17 @@ function addCheckBox(for_type, element_list, required = "") {
   const UElement = labelElement.next();
 
   if (UElement.is("div")) {
-    const items = element_list.map((v, i) =>
-      template.format(for_type, (i + 1).toString(), required, v)
-    );
-
-    UElement.append(items);
+    if (Array.isArray(element_list[0])) {
+      const items = element_list.map((v) =>
+        template.format(for_type, v[1].toString(), required, v[0])
+      );
+      UElement.append(items);
+    } else {
+      const items = element_list.map((v, i) =>
+        template.format(for_type, (i + 1).toString(), required, v)
+      );
+      UElement.append(items);
+    }
   }
 }
 
@@ -127,9 +133,11 @@ const ch1_set = new Set([1, 3, 6, 8, 9, 12, 23, 24, 25]);
 const ch2_set = new Set([4, 5, 7, 10, 11, 17]);
 const ch3_set = new Set([2, 13, 14, 15, 16, 18, 19, 20, 21, 22]);
 
-
 const pp11_set = new Set([1, 2, 13, 14, 16, 18, 35]);
-const pp12_set = new Set([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35]);
+const pp12_set = new Set([
+  1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34,
+  35,
+]);
 function extractS1Feat(mostLevel, bodyList, chList) {
   var t;
   var feat = [];
@@ -137,7 +145,7 @@ function extractS1Feat(mostLevel, bodyList, chList) {
   feat.push(mostLevel);
 
   for (const set_n of [ch1_set, ch2_set, ch3_set]) {
-    t = (() => new Set(chList.filter(x => set_n.has(x))))();
+    t = (() => new Set(chList.filter((x) => set_n.has(x))))();
     feat.push(t.size >= 1 ? 1 : 0);
     feat.push(t.size === 1 ? 1 : 0);
     feat.push(t.size >= 2 ? 1 : 0);
@@ -145,9 +153,9 @@ function extractS1Feat(mostLevel, bodyList, chList) {
     feat.push(t.size >= 3 ? 1 : 0);
   }
 
-  t = (() => new Set(bodyList.filter(x => pp11_set.has(x))))();
+  t = (() => new Set(bodyList.filter((x) => pp11_set.has(x))))();
   feat.push(t.size >= 1 ? 1 : 0);
-  t = (() => new Set(bodyList.filter(x => pp12_set.has(x))))();
+  t = (() => new Set(bodyList.filter((x) => pp12_set.has(x))))();
   feat.push(t.size >= 1 ? 1 : 0);
 
   feat.push(chList.includes(6) ? 1 : 0);
@@ -171,6 +179,41 @@ const usedDrugTableID = "#used-drug-table";
 // console.log("availableAdverseReactionDrugs: " + availableAdverseReactionDrugs)
 
 // --------------------------------------------------------------------------
+
+const model = {};
+model.done = false;
+
+async function initModel() {
+  // create a session
+  console.log("init onnx");
+  model.S1Session = await ort.InferenceSession.create("./assets/S1_model.onnx");
+  console.log("init done");
+}
+
+async function inferS1(feat) {
+  if (model.done === false) {
+    return;
+  }
+
+  // generate model input
+  const input0 = new ort.Tensor(
+    new Float32Array(feat) /* data */,
+    [1, 19] /* dims */
+  );
+
+  // execute the model
+  console.log("run S1");
+  const outputs = await model.S1Session.run({ input0: input0 });
+
+  // consume the output
+  const outputTensor = outputs.label;
+  console.log(`model output tensor: ${outputTensor.data}`);
+  return outputTensor.data;
+}
+
+initModel().then(() => {
+  model.done = true;
+});
 
 // document ready
 (($) => {
@@ -215,10 +258,11 @@ const usedDrugTableID = "#used-drug-table";
   form.children("div").steps({
     headerTag: "h3",
     bodyTag: "fieldset",
-    transitionEffect: "slideLeft",
+    transitionEffect: "fade",
+    transitionEffectSpeed: 400,
     stepsOrientation: "vertical",
     titleTemplate:
-      "<div class=\"title\"><span class=\"step-number\">#index#</span><span class=\"step-text\">#title#</span></div>",
+      "<div class='title'><span class='step-number'>#index#</span><span class='step-text'>#title#</span></div>",
     labels: {
       previous: "上一步",
       next: "下一步",
@@ -231,7 +275,7 @@ const usedDrugTableID = "#used-drug-table";
           .parent()
           .parent()
           .parent()
-          .append("<div class=\"footer footer-" + currentIndex + "\"></div>");
+          .append("<div class='footer footer-" + currentIndex + "'></div>");
       }
 
       if (currentIndex === 1) {
@@ -263,7 +307,7 @@ const usedDrugTableID = "#used-drug-table";
           .removeClass("footer-2")
           .addClass("footer-" + currentIndex + "");
       }
-      console.log(currentIndex);
+      // console.log(currentIndex);
       // if(currentIndex === 4) {
       //     form.parent().parent().parent().append('<div class="footer" style="height:752px;"></div>');
       // }
@@ -279,23 +323,33 @@ const usedDrugTableID = "#used-drug-table";
       return form.valid();
     },
     onFinished: function (event, currentIndex) {
-
       if ($("input[type=radio][name=used_drug]:checked").val() === "0") {
-        const bodyDoc = document.getElementById("body-view-image").contentDocument;
+        const bodyDoc =
+          document.getElementById("body-view-image").contentDocument;
         const bodyPloygon = d3.select(bodyDoc).selectAll("polygon");
         const bodySelect = bodyPloygon.filter("[data_selceted='true']");
         const bodyList = bodySelect._groups[0].map((value) => {
           return parseInt(value.id.split("_")[2]);
         });
 
-        const chList = $("input[type=checkbox][name=user_pain_character]:checked")
-          .map(function() {return parseInt($(this).val());}).get();
-        const mostLevel  = parseInt(document.getElementById("pain_leval_slider")
-          .noUiSlider.get());
+        const chList = $(
+          "input[type=checkbox][name=user_pain_character]:checked"
+        )
+          .map(function () {
+            return parseInt($(this).val());
+          })
+          .get();
+        const mostLevel = parseInt(
+          document.getElementById("pain_leval_slider").noUiSlider.get()
+        );
 
         const feat = extractS1Feat(mostLevel, bodyList, chList);
         console.log(feat);
-        alert("Submited");
+        inferS1(feat).then((res) => {
+          const strOut =
+            "most level: {0}\nbody list: {1}\nch list: {2}\ndecision: {3}\n";
+          alert(strOut.format(mostLevel, bodyList, chList, res[0]));
+        });
       }
     },
     onStepChanged: function (event, currentIndex, priorIndex) {
@@ -358,26 +412,26 @@ const usedDrugTableID = "#used-drug-table";
 
   // userPainCharacter
   const userPainCharacterList = [
-    "酸痛",
-    "刺痛",
-    "跳痛",
-    "钝痛",
-    "绞痛",
-    "胀痛",
-    "坠痛",
-    "钻顶样痛",
-    "爆裂样痛",
-    "撕裂样痛",
-    "牵拉样痛",
-    "压榨样痛",
-    "放电样痛",
-    "烧灼样痛",
-    "麻木样痛",
-    "刀割样痛",
-    "轻触痛",
-    "无名痛",
-    "隐痛",
-    "尖锐痛",
+    ["酸痛 1", 1],
+    ["刺痛 2", 2],
+    ["跳痛 3", 3],
+    ["钝痛 4", 4],
+    ["绞痛 5", 5],
+    ["胀痛 6", 6],
+    ["坠痛 7", 7],
+    ["钻顶样痛 8", 8],
+    ["爆裂样痛 9", 9],
+    ["撕裂样痛 10", 10],
+    ["牵拉样痛 11", 11],
+    ["压榨样痛 12", 12],
+    ["放电样痛 13", 13],
+    ["烧灼样痛 15", 15],
+    ["麻木样痛 16", 16],
+    ["刀割样痛 17", 17],
+    ["轻触痛 19", 19],
+    ["无名痛 23", 23],
+    ["隐痛 24", 24],
+    ["尖锐痛 25", 25],
   ];
   const userPainCharacterTag = "user_pain_character";
 
@@ -549,18 +603,6 @@ class='small-input'/>天/贴</label><br>\
     "<label><input name='duration' type='radio' value='' />>7天</label><br>\
 <label><input name='duration' type='radio' value='' />≤7天</label><br>";
 
-  //   const col5_template =
-  //     "<label><input name='duration' type='checkbox' value='' />无</label><br>\
-  // <label><input name='duration' type='checkbox' value='' />便秘</label><br>\
-  // <label><input name='duration' type='checkbox' value='' />恶心呕吐</label><br>\
-  // <label><input name='duration' type='checkbox' value='' />谵妄</label><br>\
-  // <label><input name='duration' type='checkbox' value='' />过度镇静</label><br>\
-  // <label><input name='duration' type='checkbox' value='' />皮肤瘙痒</label><br>\
-  // <label><input name='duration' type='checkbox' value='' />呼吸抑制</label><br>\
-  // <label><input name='duration' type='checkbox' value='' />其他</label><br>";
-
-  //   const col6_template = "";
-
   const table = $(usedDrugTableID).DataTable({
     language: table_language,
     paging: false,
@@ -646,9 +688,6 @@ class='small-input'/>天/贴</label><br>\
               "--          ",
               col3_template,
               col4_template,
-              // col5_template,
-              // col6_template,
-              // col7_template,
             ])
             .draw(false);
 
@@ -712,17 +751,6 @@ class='small-input'/>天/贴</label><br>\
   $("#user_adverse_reaction_drug").tagit({
     availableTags: availableAdverseReactionDrugs,
   });
-
-  // $.dobPicker({
-  //   daySelector: "#birth_date",
-  //   monthSelector: "#birth_month",
-  //   yearSelector: "#birth_year",
-  //   dayDefault: "",
-  //   monthDefault: "",
-  //   yearDefault: "",
-  //   minimumAge: 0,
-  //   maximumAge: 120,
-  // });
 
   // end show
   $("body").show();

@@ -6,11 +6,12 @@
     "getJsonSync": "readonly",
     "table_language": "readonly",
     "validator_msg": "readonly",
-    "Set":"readonly"
+    "ort": "readonly"
   },
   "env": {
     "browser": true,
-    "jquery": true
+    "jquery": true,
+    "es6": true
   },
   "parserOptions": {
     "ecmaVersion": 12
