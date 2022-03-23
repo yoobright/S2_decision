@@ -169,6 +169,202 @@ function extractS1Feat(mostLevel, bodyList, chList) {
   return feat;
 }
 
+function getDrugClassList(drugID) {
+  const drugInfo = PCNEData.find((v) => {
+    return v.id === drugID;
+  });
+  if (drugInfo) {
+    return drugInfo.class.split("/");
+  }
+
+  return undefined;
+}
+
+function isDrugTypeFromDrugClass(drugClassList, drugType) {
+  if (drugClassList) {
+    const typeRegex = new RegExp("^({0}).*".format(drugType), "u");
+
+    if (drugClassList.filter((v) => typeRegex.test(v)).length >= 1) {
+      return true;
+    }
+  }
+  return false;
+}
+
+// function isDrugType(drugID, drugType) {
+//   const drugClass = getDrugClassList(drugID);
+//   if (isDrugTypeFromDrugClass(drugClass, drugType)) {
+//     return true;
+//   }
+//   return false;
+// }
+
+function initTypeCounter() {
+  const counter = {};
+
+  painDrugTypeList.forEach((painDrugType) => {
+    counter[painDrugType] = 0;
+  });
+
+  return counter;
+}
+
+function genTypeCounter(drugIDList) {
+  const counter = initTypeCounter();
+  drugIDList.forEach((drugID) => {
+    const drugClassList = getDrugClassList(drugID);
+
+    painDrugTypeList.forEach((painDrugType) => {
+      if (isDrugTypeFromDrugClass(drugClassList, painDrugType)) {
+        counter[painDrugType] = counter[painDrugType] + 1;
+      }
+    });
+  });
+
+  return counter;
+}
+
+function getDecDrugTypeFromCounter(counter) {
+  // c,e
+  if (
+    counter.C > 0 &&
+    counter.D >= 0 &&
+    counter.E > 0 &&
+    counter.F >= 0
+  ) {
+    return 6;
+  }
+
+  // d,e
+  if (
+    counter.C === 0 &&
+    counter.D > 0 &&
+    counter.E > 0 &&
+    counter.F >= 0
+  ) {
+    return 7;
+  }
+
+  //  f,d
+  if (
+    counter.C === 0 &&
+    counter.D > 0 &&
+    counter.E === 0 &&
+    counter.F > 0
+  ) {
+    return 8;
+  }
+
+  // e,f
+  if (
+    counter.C === 0 &&
+    counter.D === 0 &&
+    counter.E > 0 &&
+    counter.F > 0
+  ) {
+    return 9;
+  }
+
+  // c,d
+  if (
+    counter.C > 0 &&
+    counter.D > 0 &&
+    counter.E === 0 &&
+    counter.F === 0
+  ) {
+    return 10;
+  }
+
+  // c,f
+  if (
+    counter.C > 0 &&
+    counter.D >= 0 &&
+    counter.E === 0 &&
+    counter.F > 0
+  ) {
+    return 11;
+  }
+
+  if (
+    counter.C > 1 &&
+    counter.D === 0 &&
+    counter.E === 0 &&
+    counter.F === 0
+  ) {
+    return 12;
+  }
+
+  if (
+    counter.C === 0 &&
+    counter.D === 0 &&
+    counter.E === 0 &&
+    counter.F > 1
+  ) {
+    return 13;
+  }
+
+  if (
+    counter.C === 0 &&
+    counter.D === 0 &&
+    counter.E > 1 &&
+    counter.F === 0
+  ) {
+    return 14;
+  }
+
+  // 1-5
+  if (
+    (counter.A > 0 || counter.B > 0) &&
+    counter.C === 0 &&
+    counter.D === 0 &&
+    counter.E === 0 &&
+    counter.F === 0
+  ) {
+    return 1;
+  }
+
+  if (
+    (counter.A > 0 ||
+      counter.B > 0 ||
+      (counter.F === 0 && counter.D === 0)) &&
+    counter.C === 1 &&
+    counter.E === 0
+  ) {
+    return 2;
+  }
+
+  if (
+    (counter.A >= 0 || counter.B >= 0) &&
+    counter.C === 0 &&
+    counter.D >= 1 &&
+    counter.E === 0 &&
+    counter.F === 0
+  ) {
+    return 3;
+  }
+
+  if (
+    (counter.A > 0 || counter.B > 0 || counter.F === 0) &&
+    counter.C === 0 &&
+    counter.D === 0 &&
+    counter.E === 1
+  ) {
+    return 4;
+  }
+
+  if (
+    (counter.A >= 0 || counter.B >= 0) &&
+    counter.C === 0 &&
+    counter.D === 0 &&
+    counter.E === 0 &&
+    counter.F === 1
+  ) {
+    return 5;
+  }
+
+  return undefined;
+}
+
 // --------------------------------------------------------------------------
 // Global Constant
 
@@ -181,9 +377,10 @@ const availableAdverseReactionDrugs = PCNEData.filter(
     v.class.split("/").filter((v) => adverseReactionRegex.test(v)).length >= 1
 ).map((v) => v.name + v.spec);
 
-const drugTypeList = ["A", "B", "C", "D", "E", "F"];
+const painDrugTypeList = ["A", "B", "C", "D", "E", "F"];
+
 const drugTypeSetDict = {};
-for (const t of drugTypeList) {
+for (const t of painDrugTypeList) {
   const typeRegex = new RegExp("^({0}).*".format(t), "u");
   const typeDrugID = PCNEData.filter(
     (v) => v.class.split("/").filter((v) => typeRegex.test(v)).length >= 1
