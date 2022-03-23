@@ -40,11 +40,17 @@ function addRadio(for_type, element_list, required = "") {
   const UElement = labelElement.next();
 
   if (UElement.is("div")) {
-    const items = element_list.map((v, i) =>
-      template.format(for_type, (i + 1).toString(), required, v)
-    );
-
-    UElement.append(items);
+    if (Array.isArray(element_list[0])) {
+      const items = element_list.map((v) =>
+        template.format(for_type, v[1].toString(), required, v[0])
+      );
+      UElement.append(items);
+    } else {
+      const items = element_list.map((v, i) =>
+        template.format(for_type, (i + 1).toString(), required, v)
+      );
+      UElement.append(items);
+    }
   }
 }
 
@@ -174,6 +180,22 @@ const availableAdverseReactionDrugs = PCNEData.filter(
   (v) =>
     v.class.split("/").filter((v) => adverseReactionRegex.test(v)).length >= 1
 ).map((v) => v.name + v.spec);
+
+const drugTypeList = ["A", "B", "C", "D", "E", "F"];
+const drugTypeSetDict = {};
+for (const t of drugTypeList) {
+  const typeRegex = new RegExp("^({0}).*".format(t), "u");
+  const typeDrugID = PCNEData.filter(
+    (v) => v.class.split("/").filter((v) => typeRegex.test(v)).length >= 1
+  )
+    .map((v) => v.id)
+    .sort((a, b) => {
+      return parseInt(a) < parseInt(b);
+    });
+  drugTypeSetDict[t] = typeDrugID;
+}
+
+console.log(drugTypeSetDict);
 
 const usedDrugTableID = "#used-drug-table";
 // console.log("availableAdverseReactionDrugs: " + availableAdverseReactionDrugs)
@@ -468,23 +490,23 @@ initModel().then(() => {
 
   // userPainBreakoutType
   const userPainBreakoutTypeList = [
-    "与特定活动或事件相关联",
-    "发生在按时给予镇痛药物的剂量间隔结束时",
-    "控制不佳的持续性疼痛",
-    "无",
+    ["与特定活动或事件相关联", 1],
+    ["发生在按时给予镇痛药物的剂量间隔结束时", 2],
+    ["控制不佳的持续性疼痛", 2],
+    ["无", 3],
   ];
   const userPainBreakoutTypeTag = "user_pain_breakout_type";
 
   addRadio(userPainBreakoutTypeTag, userPainBreakoutTypeList);
 
   // userPainBreakoutFreq
-  const userPainBreakoutFreqList = [" ＜3", "≥3"];
+  const userPainBreakoutFreqList = [" ＜3", "≥3", "无"];
   const userPainBreakoutFreqTag = "user_pain_breakout_freq";
 
   addRadio(userPainBreakoutFreqTag, userPainBreakoutFreqList);
 
   var marginSlider = document.getElementById("pain_leval_slider");
-  console.log(marginSlider);
+  // console.log(marginSlider);
   if (marginSlider !== undefined) {
     noUiSlider.create(marginSlider, {
       start: [0],
