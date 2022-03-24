@@ -365,12 +365,113 @@ function getDecDrugTypeFromCounter(counter) {
   return undefined;
 }
 
+
+function getFreqFromTd(td) {
+  const checked = $(td).find("input[type=radio]:checked");
+  const checkedLabel = checked.parent();
+  const res = {};
+  const inputV = checkedLabel.find("input.small-input");
+  // console.log(inputV);
+  if (checked.length === 0) {
+    return "";
+  }
+
+  if (inputV.length > 0) {
+    // console.log("!!!!!");
+    res.value = inputV.val().trim();
+    if (res.value === "") {
+      return "";
+    }
+  }
+  res.id = checked.val();
+  // console.log(res);
+  return res;
+}
+
+
+function getDoseFromTd(td) {
+  const doseVal = $(td).find("input").val().trim();
+  const doseUnit = $(td).find("label").text();
+  const res = {};
+
+  if (doseVal === "") {
+    return "";
+  }
+
+  res.value = doseVal;
+  res.unit = doseUnit;
+  // console.log(res);
+  return res;
+}
+
+
+function getDurtionFromTd(td) {
+  const checked = $(td).find("input[type=radio]:checked");
+  if (checked.length === 0) {
+    return "";
+  }
+  const val = checked.parent().text();
+  const id = checked.val();
+
+  return {
+    val: val,
+    id: id
+  };
+}
+
+function getNameFromTd(td) {
+  return $(td).children("input").val().trim();
+}
+
+function getAllUsedDrugs() {
+  const table = $(usedDrugTableID).DataTable();
+  const data = table.rows().nodes();
+  // console.log(data);
+  const res = [];
+  data.each( ( value, index ) => {
+    const td = $(value).children("td");
+
+    // console.log(td);
+    const name = getNameFromTd(td[1]);
+    // if (name === "") {
+    //   return;
+    // }
+    // console.log(name);
+
+
+
+    const dose = getDoseFromTd(td[2]);
+    // if (dose === "") {
+    //   return;
+    // }
+    // console.log(dose);
+
+
+    const freq = getFreqFromTd(td[3]);
+    // if (freq === "") {
+    //   return;
+    // }
+
+    // console.log(freq);
+
+    const durtion = getDurtionFromTd(td[4]);
+    // if (durtion === "") {
+    //   return;
+    // }
+    // console.log(durtion);
+    res.push([name, dose, freq, durtion]);
+    // console.log(res);
+  });
+  return res;
+}
 // --------------------------------------------------------------------------
 // Global Constant
 
 const bodyKV = getJsonSync("./assets/body_kv.json");
 const PCNEData = getJsonSync("./assets/PCNE_data.json");
 const availableDrugs = PCNEData.map((v) => v.name + v.spec);
+const availableDrugsDict = {};
+PCNEData.forEach((v) => { availableDrugsDict[v.name + v.spec] = v.id; });
 const adverseReactionRegex = /^(L).*/u;
 const availableAdverseReactionDrugs = PCNEData.filter(
   (v) =>
@@ -809,18 +910,18 @@ initModel().then(() => {
   const col1_template = "<input class='drug-input'>";
 
   const col3_template =
-    "<label><input name='freq' type='radio' value='' />一天<input name='dose' type='text'\
+    "<label><input name='freq' type='radio' value='1' />一天<input name='dose' type='text'\
   class='small-input'/>次</label><br>\
-<label><input name='freq' type='radio' value='' />每<input name='dose' type='text'\
+<label><input name='freq' type='radio' value='2' />每<input name='dose' type='text'\
 class='small-input'/>小时/次</label><br>\
-<label><input name='freq' type='radio' value='' /><input name='dose' type='text'\
+<label><input name='freq' type='radio' value='3' /><input name='dose' type='text'\
 class='small-input'/>天/贴</label><br>\
-<label><input name='freq' type='radio' value='' />prn（必要时）</label><br>\
-<label><input name='freq' type='radio' value='' />每晚</label><br> ";
+<label><input name='freq' type='radio' value='4' />prn（必要时）</label><br>\
+<label><input name='freq' type='radio' value='5' />每晚</label><br> ";
 
   const col4_template =
-    "<label><input name='duration' type='radio' value='' />>7天</label><br>\
-<label><input name='duration' type='radio' value='' />≤7天</label><br>";
+    "<label><input name='duration' type='radio' value='1' />>7天</label><br>\
+<label><input name='duration' type='radio' value='2' />≤7天</label><br>";
 
   const table = $(usedDrugTableID).DataTable({
     language: table_language,
