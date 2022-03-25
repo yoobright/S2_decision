@@ -226,89 +226,44 @@ function genTypeCounter(drugIDList) {
 
 function getDecDrugTypeFromCounter(counter) {
   // c,e
-  if (
-    counter.C > 0 &&
-    counter.D >= 0 &&
-    counter.E > 0 &&
-    counter.F >= 0
-  ) {
+  if (counter.C > 0 && counter.D >= 0 && counter.E > 0 && counter.F >= 0) {
     return 6;
   }
 
   // d,e
-  if (
-    counter.C === 0 &&
-    counter.D > 0 &&
-    counter.E > 0 &&
-    counter.F >= 0
-  ) {
+  if (counter.C === 0 && counter.D > 0 && counter.E > 0 && counter.F >= 0) {
     return 7;
   }
 
   //  f,d
-  if (
-    counter.C === 0 &&
-    counter.D > 0 &&
-    counter.E === 0 &&
-    counter.F > 0
-  ) {
+  if (counter.C === 0 && counter.D > 0 && counter.E === 0 && counter.F > 0) {
     return 8;
   }
 
   // e,f
-  if (
-    counter.C === 0 &&
-    counter.D === 0 &&
-    counter.E > 0 &&
-    counter.F > 0
-  ) {
+  if (counter.C === 0 && counter.D === 0 && counter.E > 0 && counter.F > 0) {
     return 9;
   }
 
   // c,d
-  if (
-    counter.C > 0 &&
-    counter.D > 0 &&
-    counter.E === 0 &&
-    counter.F === 0
-  ) {
+  if (counter.C > 0 && counter.D > 0 && counter.E === 0 && counter.F === 0) {
     return 10;
   }
 
   // c,f
-  if (
-    counter.C > 0 &&
-    counter.D >= 0 &&
-    counter.E === 0 &&
-    counter.F > 0
-  ) {
+  if (counter.C > 0 && counter.D >= 0 && counter.E === 0 && counter.F > 0) {
     return 11;
   }
 
-  if (
-    counter.C > 1 &&
-    counter.D === 0 &&
-    counter.E === 0 &&
-    counter.F === 0
-  ) {
+  if (counter.C > 1 && counter.D === 0 && counter.E === 0 && counter.F === 0) {
     return 12;
   }
 
-  if (
-    counter.C === 0 &&
-    counter.D === 0 &&
-    counter.E === 0 &&
-    counter.F > 1
-  ) {
+  if (counter.C === 0 && counter.D === 0 && counter.E === 0 && counter.F > 1) {
     return 13;
   }
 
-  if (
-    counter.C === 0 &&
-    counter.D === 0 &&
-    counter.E > 1 &&
-    counter.F === 0
-  ) {
+  if (counter.C === 0 && counter.D === 0 && counter.E > 1 && counter.F === 0) {
     return 14;
   }
 
@@ -324,9 +279,7 @@ function getDecDrugTypeFromCounter(counter) {
   }
 
   if (
-    (counter.A > 0 ||
-      counter.B > 0 ||
-      (counter.F === 0 && counter.D === 0)) &&
+    (counter.A > 0 || counter.B > 0 || (counter.F === 0 && counter.D === 0)) &&
     counter.C === 1 &&
     counter.E === 0
   ) {
@@ -365,7 +318,6 @@ function getDecDrugTypeFromCounter(counter) {
   return undefined;
 }
 
-
 function getFreqFromTd(td) {
   const checked = $(td).find("input[type=radio]:checked");
   const checkedLabel = checked.parent();
@@ -378,8 +330,8 @@ function getFreqFromTd(td) {
 
   if (inputV.length > 0) {
     // console.log("!!!!!");
-    res.value = inputV.val().trim();
-    if (res.value === "") {
+    res.val = inputV.val().trim();
+    if (res.val === "") {
       return "";
     }
   }
@@ -387,7 +339,6 @@ function getFreqFromTd(td) {
   // console.log(res);
   return res;
 }
-
 
 function getDoseFromTd(td) {
   const doseVal = $(td).find("input").val().trim();
@@ -398,12 +349,11 @@ function getDoseFromTd(td) {
     return "";
   }
 
-  res.value = doseVal;
+  res.val = doseVal;
   res.unit = doseUnit;
   // console.log(res);
   return res;
 }
-
 
 function getDurtionFromTd(td) {
   const checked = $(td).find("input[type=radio]:checked");
@@ -415,12 +365,18 @@ function getDurtionFromTd(td) {
 
   return {
     val: val,
-    id: id
+    id: id,
   };
 }
 
 function getNameFromTd(td) {
-  return $(td).children("input").val().trim();
+  const val = $(td).children("input").val().trim();
+  const id = availableDrugsDict[name];
+
+  return {
+    val: val,
+    id: id,
+  };
 }
 
 function getAllUsedDrugs() {
@@ -428,7 +384,7 @@ function getAllUsedDrugs() {
   const data = table.rows().nodes();
   // console.log(data);
   const res = [];
-  data.each( ( value, index ) => {
+  data.each((value, index) => {
     const td = $(value).children("td");
 
     // console.log(td);
@@ -438,14 +394,11 @@ function getAllUsedDrugs() {
     // }
     // console.log(name);
 
-
-
     const dose = getDoseFromTd(td[2]);
     // if (dose === "") {
     //   return;
     // }
     // console.log(dose);
-
 
     const freq = getFreqFromTd(td[3]);
     // if (freq === "") {
@@ -459,7 +412,7 @@ function getAllUsedDrugs() {
     //   return;
     // }
     // console.log(durtion);
-    res.push([name, dose, freq, durtion]);
+    res.push({ name: name, dose: dose, freq: freq, durtion: durtion });
     // console.log(res);
   });
   return res;
@@ -471,7 +424,9 @@ const bodyKV = getJsonSync("./assets/body_kv.json");
 const PCNEData = getJsonSync("./assets/PCNE_data.json");
 const availableDrugs = PCNEData.map((v) => v.name + v.spec);
 const availableDrugsDict = {};
-PCNEData.forEach((v) => { availableDrugsDict[v.name + v.spec] = v.id; });
+PCNEData.forEach((v) => {
+  availableDrugsDict[v.name + v.spec] = v.id;
+});
 const adverseReactionRegex = /^(L).*/u;
 const availableAdverseReactionDrugs = PCNEData.filter(
   (v) =>
@@ -507,22 +462,46 @@ async function initModel() {
   // create a session
   console.log("init onnx");
   model.S1Session = await ort.InferenceSession.create("./assets/S1_model.onnx");
-  console.log("init done");
+  console.log("init S1 done");
+  model.S2Session = await ort.InferenceSession.create("./assets/S2_model.onnx");
+  console.log("init S2 done");
 }
 
 async function inferS1(feat) {
   if (model.done === false) {
     return;
   }
-
+  const inputDim = [1, 19];
   // generate model input
   const input0 = new ort.Tensor(
     new Float32Array(feat) /* data */,
-    [1, 19] /* dims */
+    inputDim /* dims */
   );
 
   // execute the model
   console.log("run S1");
+  const outputs = await model.S1Session.run({ input0: input0 });
+
+  // consume the output
+  const outputTensor = outputs.label;
+  console.log(`model output tensor: ${outputTensor.data}`);
+  return outputTensor.data;
+}
+
+async function inferS2(feat) {
+  if (model.done === false) {
+    return;
+  }
+
+  const inputDim = [1, 5];
+  // generate model input
+  const input0 = new ort.Tensor(
+    new Float32Array(feat) /* data */,
+    inputDim /* dims */
+  );
+
+  // execute the model
+  console.log("run S2");
   const outputs = await model.S1Session.run({ input0: input0 });
 
   // consume the output
@@ -670,6 +649,8 @@ initModel().then(() => {
             "most level: {0}\nbody list: {1}\nch list: {2}\ndecision: {3}\n";
           alert(strOut.format(mostLevel, bodyList, chList, res[0]));
         });
+      } else if ($("input[type=radio][name=used_drug]:checked").val() === "1") {
+
       }
     },
     onStepChanged: function (event, currentIndex, priorIndex) {
