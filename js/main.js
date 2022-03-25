@@ -130,7 +130,7 @@ function changeDose(node) {
       .cell(thisRowIdx, colIdx)
       .data(col2_template.format(PCNEData[index].unit));
     // console.log(table.row(thisTr));
-
+    table.columns.adjust().responsive.recalc();
     table.responsive.redisplay();
   }
 }
@@ -371,7 +371,7 @@ function getDurtionFromTd(td) {
 
 function getNameFromTd(td) {
   const val = $(td).children("input").val().trim();
-  const id = availableDrugsDict[name];
+  const id = availableDrugsDict[val];
 
   return {
     val: val,
@@ -417,6 +417,108 @@ function getAllUsedDrugs() {
   });
   return res;
 }
+
+function getCompliance() {
+  const inputs = $("input[id^='user_compliance_q']:checked").get();
+  const scoreList = inputs.map((v) => parseInt($(v).val()));
+  const scoreSum = scoreList.reduce(
+    (previousVal, currentVal) => previousVal + currentVal,
+    0
+  );
+
+  if (scoreSum >= 3) {
+    return 1;
+  } else {
+    return 2;
+  }
+}
+
+function getMostLevel() {
+  return parseInt(
+    document.getElementById("pain_leval_slider").noUiSlider.get()
+  );
+}
+
+function getBreakOutType() {
+  return parseInt($("input#user_pain_breakout_type:checked").val());
+}
+
+function getBreakOutTimes() {
+  return parseInt($("input#user_pain_breakout_freq:checked").val());
+}
+
+function getChList() {
+  return $("input[type=checkbox][name=user_pain_character]:checked")
+    .map(function () {
+      return parseInt($(this).val());
+    })
+    .get();
+}
+
+function getBodyList() {
+  const bodyDoc = document.getElementById("body-view-image").contentDocument;
+  const bodyPloygon = d3.select(bodyDoc).selectAll("polygon");
+  const bodySelect = bodyPloygon.filter("[data_selceted='true']");
+  const bodyList = bodySelect._groups[0].map((value) => {
+    return parseInt(value.id.split("_")[2]);
+  });
+  return bodyList;
+}
+
+function processS1() {
+  const bodyList = getBodyList();
+  const chList = getChList();
+  const mostLevel = getMostLevel();
+  const feat = extractS1Feat(mostLevel, bodyList, chList);
+  console.log(feat);
+
+  inferS1(feat).then((res) => {
+    const strOut =
+      "most level: {0}\nbody list: {1}\nch list: {2}\ndecision: {3}\n";
+    alert(strOut.format(mostLevel, bodyList, chList, res[0]));
+  });
+}
+
+function processS2() {
+  const mostLevel = getMostLevel();
+  const breakOutType = getBreakOutType();
+  const breakOutTimes = getBreakOutTimes();
+  const allUsedDrugs = getAllUsedDrugs();
+  const allUsedDrugsID = allUsedDrugs.map((v) => v.name.id);
+  console.log("allUsedDrugsID: " + allUsedDrugsID);
+  const counter = genTypeCounter(allUsedDrugsID);
+  const decDrugType = getDecDrugTypeFromCounter(counter);
+  if (decDrugType === undefined) {
+    console.log("decDrugType undefined!!!");
+    return;
+  }
+  const compliance = getCompliance();
+  const feat = [
+    mostLevel,
+    breakOutType,
+    breakOutTimes,
+    decDrugType,
+    compliance,
+  ];
+
+  inferS2(feat).then((res) => {
+    const strOut = "most level: {0}\nbreak out type: {1}\n" +
+    "break out times: {2}\nall used Drugs id: {3}\n" +
+    "dec drug type: {4}\ncompliance: {5}\n" +
+    "decision: {6}\n";
+
+    alert(strOut.format(
+      mostLevel,
+      breakOutType,
+      breakOutTimes,
+      allUsedDrugsID,
+      decDrugType,
+      compliance,
+      res[0])
+    );
+  });
+}
+
 // --------------------------------------------------------------------------
 // Global Constant
 
@@ -502,7 +604,7 @@ async function inferS2(feat) {
 
   // execute the model
   console.log("run S2");
-  const outputs = await model.S1Session.run({ input0: input0 });
+  const outputs = await model.S2Session.run({ input0: input0 });
 
   // consume the output
   const outputTensor = outputs.label;
@@ -622,35 +724,14 @@ initModel().then(() => {
       return form.valid();
     },
     onFinished: function (event, currentIndex) {
-      if ($("input[type=radio][name=used_drug]:checked").val() === "0") {
-        const bodyDoc =
-          document.getElementById("body-view-image").contentDocument;
-        const bodyPloygon = d3.select(bodyDoc).selectAll("polygon");
-        const bodySelect = bodyPloygon.filter("[data_selceted='true']");
-        const bodyList = bodySelect._groups[0].map((value) => {
-          return parseInt(value.id.split("_")[2]);
-        });
+      const usedDrugCheck = $(
+        "input[type=radio][name=used_drug]:checked"
+      ).val();
 
-        const chList = $(
-          "input[type=checkbox][name=user_pain_character]:checked"
-        )
-          .map(function () {
-            return parseInt($(this).val());
-          })
-          .get();
-        const mostLevel = parseInt(
-          document.getElementById("pain_leval_slider").noUiSlider.get()
-        );
-
-        const feat = extractS1Feat(mostLevel, bodyList, chList);
-        console.log(feat);
-        inferS1(feat).then((res) => {
-          const strOut =
-            "most level: {0}\nbody list: {1}\nch list: {2}\ndecision: {3}\n";
-          alert(strOut.format(mostLevel, bodyList, chList, res[0]));
-        });
-      } else if ($("input[type=radio][name=used_drug]:checked").val() === "1") {
-
+      if (usedDrugCheck === "0") {
+        processS1();
+      } else if (usedDrugCheck === "1") {
+        processS2();
       }
     },
     onStepChanged: function (event, currentIndex, priorIndex) {
@@ -881,6 +962,9 @@ initModel().then(() => {
     if (this.value === "1") {
       $("div.used-drug-content").css("display", "unset");
       $("input[name^='user_compliance']").addClass("required");
+      const table = $(usedDrugTableID).DataTable();
+      // table.draw();
+      table.columns.adjust().responsive.recalc();
     } else if (this.value === "0") {
       $("div.used-drug-content").css("display", "none");
       $("input[name^='user_compliance']").removeClass("required");
@@ -986,7 +1070,7 @@ class='small-input'/>天/贴</label><br>\
             .add([
               "",
               col1_template,
-              "--          ",
+              "--",
               col3_template,
               col4_template,
             ])
