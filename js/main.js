@@ -618,6 +618,20 @@ initModel().then(() => {
 
 // document ready
 (($) => {
+  jQuery.validator.addMethod("stringtest", function(value, element) {
+    const length = value.length;
+    const name_p = /^([a-zA-Z+.?·?a-zA-Z+]{2,30}$|[\u4e00-\u9fa5+·?\u4e00-\u9fa5+]{2,30}$)/u;
+    return this.optional(element) || (length > 0 && name_p.test(value) );
+  }, "输入正确姓名格式");
+
+  // connect it to a css class
+  jQuery.validator.addClassRules({
+    "valid-name-check" : {
+      required: true,
+      stringtest : true
+    }
+  });
+
   jQuery.extend(jQuery.validator.messages, validator_msg);
 
   // --------------------------------------------------------------------------
