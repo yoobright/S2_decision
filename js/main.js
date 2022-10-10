@@ -1151,6 +1151,23 @@ class='small-input'/>天/贴</label><br>\
     availableTags: availableAdverseReactionDrugs,
   });
 
+  function setHealth() {
+    $("#user_tumor").val("无");
+    $("#user_liver_function").val("1");
+    $("#user_kidney_function").val("1");
+    $("#user_cardiac_function").val("1");
+    $("#user_allergy").val("无");
+    $("#user_physical").val("0");
+  }
+
+  $("input[name='user_health']").change(() => {
+    if ($("input[name='user_health']:checked").val() === "1") {
+      console.log("user_health: 1");
+      setHealth();
+    }
+  });
+
+
   // end show
   $("body").show();
 })(jQuery);

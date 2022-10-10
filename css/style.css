@@ -580,10 +580,17 @@ input.error {
   font-weight: bold;
 }
 
-@media screen and (max-width: 1200px) {
+@media screen and (min-width: 1024px) {
   .vertical .content,
   .vertical .actions {
-    width: 1000px;
+    width: calc(100% - 200px);
+  }
+}
+
+@media screen and (min-width: 1600px) {
+  .vertical .content,
+  .vertical .actions {
+    width: 1200px;
   }
 }
 
