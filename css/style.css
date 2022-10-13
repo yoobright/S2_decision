@@ -589,6 +589,9 @@ div.fieldset-content {
 
 
 @media screen and (min-width: 1024px) {
+  .vertical .content {
+    height: calc(100vh - 160px);;
+  }
   .vertical .content,
   .vertical .actions {
     width: calc(100% - 200px);
@@ -608,9 +611,9 @@ div.fieldset-content {
 }
 
 @media screen and (min-width: 1600px) {
-  .vertical .content {
+  /* .vertical .content {
     height: calc(100vh - 160px);;
-  }
+  } */
   .vertical .content,
   .vertical .actions {
     width: 1200px;
