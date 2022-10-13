@@ -41,11 +41,18 @@
       type="text/css"
       href="https://cdn.datatables.net/fixedheader/3.2.1/css/fixedHeader.dataTables.min.css"
     /> -->
-    <link
+    <!-- <link
       rel="stylesheet"
       type="text/css"
       href="https://cdn.datatables.net/v/dt/dt-1.11.5/b-2.2.2/fh-3.2.2/r-2.2.9/sl-1.3.4/datatables.min.css"
-    />
+    /> -->
+
+    <link
+    rel="stylesheet"
+    type="text/css"
+    href="css/datatables.min.css"
+  />
+
     <!-- Main css -->
     <link rel="stylesheet" href="css/style.css" />
   </head>
@@ -144,9 +151,9 @@
                 </div>
                 <div class="form-group">
                   <label for="user_edu" class="form-label"
-                    >受教育程度<span style="color: crimson">*</span></label
+                    >受教育程度</label
                   >
-                  <select name="user_edu" id="user_edu" class="required">
+                  <select name="user_edu" id="user_edu">
                     <option
                       value=""
                       style="color: gray"
@@ -383,7 +390,7 @@
                       3分：生活仅能部分自理，日间一半以上时间卧床或坐轮椅
                     </option>
                     <option value="4">4分：卧床不起，生活不能自理</option>
-                    <option value="5">5分：死亡</option>
+                    <!-- <option value="5">5分：死亡</option> -->
                   </select>
                   <span class="text-input"></span>
                 </div>
@@ -701,10 +708,14 @@
       type="text/javascript"
       src="https://cdn.datatables.net/fixedheader/3.2.1/js/dataTables.fixedHeader.min.js"
     ></script>-->
-    <script
+    <!-- <script
       type="text/javascript"
       src="https://cdn.datatables.net/v/dt/dt-1.11.5/b-2.2.2/fh-3.2.2/r-2.2.9/sl-1.3.4/datatables.min.js"
-    ></script>
+    ></script> -->
+    <script
+    type="text/javascript"
+    src="vendor/datatables.min.js"
+  ></script>
     <script
       type="text/javascript"
       src="https://cdn.staticfile.org/onnxruntime-web/1.10.0/ort.min.js"
