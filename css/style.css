@@ -580,6 +580,14 @@ input.error {
   font-weight: bold;
 }
 
+
+div.fieldset-content {
+  padding-left: 30px;
+  padding-right: 30px;
+  max-height: 420px;
+}
+
+
 @media screen and (min-width: 1024px) {
   .vertical .content,
   .vertical .actions {
@@ -587,10 +595,29 @@ input.error {
   }
 }
 
+@media screen and (min-width: 1400px) {
+  .actions {
+    padding-bottom: 30px;
+  }
+  fieldset {
+    padding-bottom: 0px;
+  }
+  div.fieldset-content {
+    max-height: 440px;
+  }
+}
+
 @media screen and (min-width: 1600px) {
+  .vertical .content {
+    height: calc(100vh - 160px);;
+  }
   .vertical .content,
   .vertical .actions {
     width: 1200px;
+  }
+
+  div.fieldset-content {
+    max-height: 640px;
   }
 }
 
@@ -606,12 +633,6 @@ div.input-textarea textarea {
   font-size: 16px;
   max-height: 110px;
   padding: 5px 10px;
-}
-
-div.fieldset-content {
-  padding-left: 30px;
-  padding-right: 30px;
-  max-height: 420px;
 }
 
 @media screen and (min-width: 1200px) {
@@ -635,17 +656,6 @@ div.fieldset-content {
   }
 }
 
-@media screen and (min-width: 1400px) {
-  .actions {
-    padding-bottom: 30px;
-  }
-  fieldset {
-    padding-bottom: 0px;
-  }
-  div.fieldset-content {
-    max-height: 440px;
-  }
-}
 
 @media screen and (max-width: 1024px) {
   .container {

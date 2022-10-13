@@ -874,7 +874,7 @@ initModel().then(() => {
   addRadio(userPainBreakoutTypeTag, userPainBreakoutTypeList);
 
   // userPainBreakoutFreq
-  const userPainBreakoutFreqList = [" ＜3", "≥3", "无"];
+  const userPainBreakoutFreqList = [" ＜3", "≥3"];
   const userPainBreakoutFreqTag = "user_pain_breakout_freq";
 
   addRadio(userPainBreakoutFreqTag, userPainBreakoutFreqList);
