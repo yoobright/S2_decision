@@ -503,9 +503,9 @@ function processS2() {
 
   inferS2(feat).then((res) => {
     const strOut = "most level: {0}\nbreak out type: {1}\n" +
-    "break out times: {2}\nall used Drugs id: {3}\n" +
-    "dec drug type: {4}\ncompliance: {5}\n" +
-    "decision: {6}\n";
+      "break out times: {2}\nall used Drugs id: {3}\n" +
+      "dec drug type: {4}\ncompliance: {5}\n" +
+      "decision: {6}\n";
 
     alert(strOut.format(
       mostLevel,
@@ -618,17 +618,17 @@ initModel().then(() => {
 
 // document ready
 (($) => {
-  jQuery.validator.addMethod("stringtest", function(value, element) {
+  jQuery.validator.addMethod("stringtest", function (value, element) {
     const length = value.length;
     const name_p = /^([a-zA-Z+.?·?a-zA-Z+]{2,30}$|[\u4e00-\u9fa5+·?\u4e00-\u9fa5+]{2,30}$)/u;
-    return this.optional(element) || (length > 0 && name_p.test(value) );
+    return this.optional(element) || (length > 0 && name_p.test(value));
   }, "输入正确姓名格式");
 
   // connect it to a css class
   jQuery.validator.addClassRules({
-    "valid-name-check" : {
+    "valid-name-check": {
       required: true,
-      stringtest : true
+      stringtest: true
     }
   });
 
@@ -758,7 +758,7 @@ initModel().then(() => {
       return true;
     },
 
-    onInit: function (event, currentIndex) {},
+    onInit: function (event, currentIndex) { },
   });
 
   // --------------------------------------------------------------------------
@@ -987,20 +987,43 @@ initModel().then(() => {
 
   // drug table
   const col1_template = "<input class='drug-input'>";
+  const col3_dict = {
+    "1": "一天<input name='dose' type='text' class='small-input'/>次",
+    "2": "每<input name='dose' type='text' class='small-input'/>小时/次",
+    "3": "<input name='dose' type='text' class='small-input'/>天/贴",
+    "4": "prn（必要时）",
+    "5": "每晚",
+  };
 
-  const col3_template =
-    "<label><input name='freq' type='radio' value='1' />一天<input name='dose' type='text'\
-  class='small-input'/>次</label><br>\
-<label><input name='freq' type='radio' value='2' />每<input name='dose' type='text'\
-class='small-input'/>小时/次</label><br>\
-<label><input name='freq' type='radio' value='3' /><input name='dose' type='text'\
-class='small-input'/>天/贴</label><br>\
-<label><input name='freq' type='radio' value='4' />prn（必要时）</label><br>\
-<label><input name='freq' type='radio' value='5' />每晚</label><br> ";
+  //   const col3_template =
+  //     "<label><input name='freq' type='radio' value='1' />一天<input name='dose' type='text'\
+  //   class='small-input'/>次</label><br>\
+  // <label><input name='freq' type='radio' value='2' />每<input name='dose' type='text'\
+  // class='small-input'/>小时/次</label><br>\
+  // <label><input name='freq' type='radio' value='3' /><input name='dose' type='text'\
+  // class='small-input'/>天/贴</label><br>\
+  // <label><input name='freq' type='radio' value='4' />prn（必要时）</label><br>\
+  // <label><input name='freq' type='radio' value='5' />每晚</label><br> ";
+
+  const col3_template = `
+
+    <label style="display: inline;"></label>
+    <div style="margin-left: 16px; margin-right: 16px;" class="dropdown">
+    <a class="dropbtn"><span class="ui-icon ui-icon-triangle-1-s"></span></a>
+    <div align="left" class="dropdown-content">
+      <a value='1'>一天X次</a>
+      <a value='2'>每X小时/次</a>
+      <a value='3'>X天/贴</a>
+      <a value='4'>prn（必要时）</a>
+      <a value='5'>每晚</a>
+    </div>
+
+  </div>`;
+
 
   const col4_template =
-    "<label><input name='duration' type='radio' value='1' />>7天</label><br>\
-<label><input name='duration' type='radio' value='2' />≤7天</label><br>";
+    "<label style='margin-right: 16px;'><input name='duration' type='radio' value='1' />>7天</label>\
+<label style='margin-right: 16px;'><input name='duration' type='radio' value='2' />≤7天</label><br>";
 
   const table = $(usedDrugTableID).DataTable({
     language: table_language,
@@ -1100,6 +1123,17 @@ class='small-input'/>天/贴</label><br>\
               changeDose(this);
             },
           });
+
+          // jquery dropdown click
+          $(".dropdown-content a").click(function () {
+            // console.log("click");
+            // console.log($(this).attr("value"));
+            const value = $(this).attr("value");
+            const elem = $(this).parent().parent().prev();
+            $(elem).attr("value", value);
+            $(elem).html(col3_dict[value]);
+          });
+
         },
       },
 
@@ -1166,6 +1200,7 @@ class='small-input'/>天/贴</label><br>\
       setHealth();
     }
   });
+
 
 
   // end show
