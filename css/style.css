@@ -1014,7 +1014,7 @@ div.input-group {
   padding: 2px 8px;
   text-decoration: none;
   display: block;
-  cursor: default;
+  cursor: pointer;
 }
 
 /* Change color of dropdown links on hover */
@@ -1029,3 +1029,6 @@ div.input-group {
   background-color: rgba(0, 0, 0, 0.1);
   background: linear-gradient(to bottom, rgba(153, 153, 153, 0.1) 0%, rgba(0, 0, 0, 0.1) 100%);
 }
+
+.dropbtn .ui-icon{background-image:url("images/ui-icons_777777_256x240.png")}
+.dropdown:hover .dropbtn .ui-icon{background-image:url("images/ui-icons_444444_256x240.png")}
