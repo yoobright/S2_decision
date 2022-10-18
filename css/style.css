@@ -1030,5 +1030,5 @@ div.input-group {
   background: linear-gradient(to bottom, rgba(153, 153, 153, 0.1) 0%, rgba(0, 0, 0, 0.1) 100%);
 }
 
-.dropbtn .ui-icon{background-image:url("images/ui-icons_777777_256x240.png")}
-.dropdown:hover .dropbtn .ui-icon{background-image:url("images/ui-icons_444444_256x240.png")}
+.dropbtn .ui-icon{background-image:url("../css/images/ui-icons_777777_256x240.png")}
+.dropdown:hover .dropbtn .ui-icon{background-image:url("../css/images/ui-icons_444444_256x240.png")}
