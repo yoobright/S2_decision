@@ -79,7 +79,7 @@ function updateBodySelected(bodyId, currentSelect, bodyPloygon) {
       return value.id.split("_")[2];
     });
 
-    console.log(selectIDList);
+    // console.log(selectIDList);
     const selectNameList = selectIDList.map((id) => {
       return bodyKV[id];
     });
@@ -90,13 +90,13 @@ function updateBodySelected(bodyId, currentSelect, bodyPloygon) {
       .split(", ")
       .filter((v) => v !== "");
 
-    console.log("select: " + selectNameList);
-    console.log("current: " + currentNameList);
+    // console.log("select: " + selectNameList);
+    // console.log("current: " + currentNameList);
 
     const updateNameList = (function (current, select) {
       if (current.length < select.length) {
         const addNameList = select.filter((v) => current.indexOf(v) === -1);
-        console.log("add: " + addNameList);
+        // console.log("add: " + addNameList);
 
         return current.concat(addNameList);
       } else if (current.length > select.length) {
@@ -793,7 +793,7 @@ initModel().then(() => {
       .on("click", function () {
         const bodyID = d3.select(this).text().trim();
         const idName = "#part_x5F_".concat(bodyID);
-        console.log(idName);
+        // console.log(idName);
         const p = d3.select(this.parentNode.parentNode).select(idName);
 
         updateBodySelected(bodyID, p, bodyPloygon);
