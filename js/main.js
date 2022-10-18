@@ -550,7 +550,7 @@ for (const t of painDrugTypeList) {
   drugTypeSetDict[t] = typeDrugID;
 }
 
-console.log(drugTypeSetDict);
+// console.log(drugTypeSetDict);
 
 const usedDrugTableID = "#used-drug-table";
 // console.log("availableAdverseReactionDrugs: " + availableAdverseReactionDrugs)
@@ -924,7 +924,7 @@ initModel().then(() => {
     ];
 
     marginSlider.noUiSlider.on("update", (values, handle) => {
-      console.log(values);
+      // console.log(values);
       const value = values[0];
       $("#pain_leval_slider .noUi-connect").css(
         "background",
@@ -1012,7 +1012,7 @@ initModel().then(() => {
     <label style="display: inline;"></label>
     <div style="margin-left: 16px; margin-right: 16px;" class="dropdown">
     <a class="dropbtn"><span class="ui-icon ui-icon-triangle-1-s"></span></a>
-    <div align="left" class="dropdown-content">
+    <div class="dropdown-content">
       <a value='1'>一天X次</a>
       <a value='2'>每X小时/次</a>
       <a value='3'>X天/贴</a>
@@ -1026,6 +1026,8 @@ initModel().then(() => {
   const col4_template =
     "<label style='margin-right: 16px;'><input name='duration' type='radio' value='1' />>7天</label>\
 <label style='margin-right: 16px;'><input name='duration' type='radio' value='2' />≤7天</label><br>";
+
+  const col5_template = "<a class='tablebtn'>测试</a>";
 
   const table = $(usedDrugTableID).DataTable({
     language: table_language,
@@ -1077,6 +1079,11 @@ initModel().then(() => {
         orderable: false,
         targets: 4,
       },
+      {
+        name: "ops",
+        orderable: false,
+        targets: 5,
+      },
     ],
     // rowsGroup: [
     //   7
@@ -1112,10 +1119,11 @@ initModel().then(() => {
               "--",
               col3_template,
               col4_template,
+              col5_template
             ])
             .draw(false);
 
-          $("input.drug-input").autocomplete({
+          $("#used-drug-table input.drug-input").autocomplete({
             source: availableDrugs,
             change: function (event, ui) {
               changeDose(this);
@@ -1127,7 +1135,7 @@ initModel().then(() => {
           });
 
           // jquery dropdown click
-          $(".dropdown-content a").click(function () {
+          $("#used-drug-table .dropdown-content a").click(function () {
             // console.log("click");
             // console.log($(this).attr("value"));
             const value = $(this).attr("value");
@@ -1135,6 +1143,8 @@ initModel().then(() => {
             $(elem).attr("value", value);
             $(elem).html(col3_dict[value]);
           });
+
+          addDialogTragger();
 
         },
       },
@@ -1202,6 +1212,68 @@ initModel().then(() => {
       setHealth();
     }
   });
+
+  // jquery dropdown click
+  $(".m-dialog .dropdown-content a").click(function () {
+    console.log("click");
+    // console.log($(this).attr("value"));
+    const value = $(this).attr("value");
+    const elem = $(this).parent().parent().prev();
+    $(elem).attr("value", value);
+    $(elem).html(col3_dict[value]);
+  });
+
+  // --------------------------------------------------------------------------
+  // dialog
+
+  // on class table btn click
+
+  function addDialogTragger() {
+    const dialog = $("#dialog");
+
+    $(".tablebtn").click(() => {
+      dialog.dialog({
+        buttons: {
+          "确定": function () {
+            $(this).dialog("close");
+          },
+          "取消": function () {
+            $(this).dialog("close");
+          },
+        },
+        open: function () {
+          $(this).parent().find("button:nth-child(2)").focus();
+        }
+      });
+    });
+
+    const dialogDrugInput = $("input#dialog-drug-input", dialog);
+    $("#dialog .ui-autocomplete.ui-widget").css("fontSize", "12px");
+
+
+    dialogDrugInput.autocomplete({
+      source: availableDrugs,
+      change: function (event, ui) {
+        // changeDose(this);
+        console.log($(this).val());
+      },
+      close: function (event, ui) {
+        // changeDose(this);
+        console.log($(this).val());
+      },
+    }).focus(function (event) {
+
+      console.log("focus", event.target);
+      $(this).data("uiAutocomplete").search($(this).val());
+    });
+
+    const autoCompleteW = dialogDrugInput.autocomplete("widget");
+    autoCompleteW.insertAfter(dialog.parent());
+
+  }
+
+
+  // --------------------------------------------------------------------------
 
 
 
