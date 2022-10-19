@@ -1029,6 +1029,43 @@ initModel().then(() => {
 
   const col5_template = "<a class='tablebtn'>测试</a>";
 
+  function genFreqCol(freq) {
+    if (freq === "") {
+      return "";
+    }
+    if (freq.id === "1") {
+      return `一天${freq.val}次`;
+    }
+    if (freq.id === "2") {
+      return `每${freq.val}小时/次`;
+    }
+    if (freq.id === "3") {
+      return `${freq.val}天/贴`;
+    }
+    if (freq.id === "4") {
+      return "prn（必要时）";
+    }
+    if (freq.id === "5") {
+      return "每晚";
+    }
+
+    return "";
+  }
+
+
+  function addRowFromData(table, data) {
+    const row = table.row.add([
+      "",
+      data.name === "" ? "" : data.name.val,
+      data.dose === "" ? "" : data.dose.val + data.dose.unit,
+      genFreqCol(data.freq),
+      data.duration === "" ? "" : data.duration.val,
+      col5_template,
+    ]).draw(false).node();
+
+    return row;
+  }
+
   const table = $(usedDrugTableID).DataTable({
     language: table_language,
     paging: false,
@@ -1068,21 +1105,25 @@ initModel().then(() => {
         name: "drug_dose",
         orderable: false,
         targets: 2,
+        className: "dt-body-center",
       },
       {
         name: "drug_freq",
         orderable: false,
         targets: 3,
+        className: "dt-body-center",
       },
       {
         name: "drug_durtion",
         orderable: false,
         targets: 4,
+        className: "dt-body-center",
       },
       {
         name: "ops",
         orderable: false,
         targets: 5,
+        className: "dt-body-center",
       },
     ],
     // rowsGroup: [
@@ -1112,39 +1153,42 @@ initModel().then(() => {
         titleAttr: "增加用药",
         action: function (e, dt, node, config) {
           console.log("add!!!");
-          table.row
-            .add([
-              "",
-              col1_template,
-              "--",
-              col3_template,
-              col4_template,
-              col5_template
-            ])
-            .draw(false);
+          // const row = table.row
+          //   .add([
+          //     "",
+          //     col1_template,
+          //     "--",
+          //     col3_template,
+          //     col4_template,
+          //     col5_template
+          //   ])
+          //   .draw(false);
 
-          $("#used-drug-table input.drug-input").autocomplete({
-            source: availableDrugs,
-            change: function (event, ui) {
-              changeDose(this);
-              // console.log($(this).val());
-            },
-            close: function (event, ui) {
-              changeDose(this);
-            },
-          });
+          // const rowNode = row.node();
+          // console.log(rowNode);
 
-          // jquery dropdown click
-          $("#used-drug-table .dropdown-content a").click(function () {
-            // console.log("click");
-            // console.log($(this).attr("value"));
-            const value = $(this).attr("value");
-            const elem = $(this).parent().parent().prev();
-            $(elem).attr("value", value);
-            $(elem).html(col3_dict[value]);
-          });
+          // $("input.drug-input", $(rowNode)).autocomplete({
+          //   source: availableDrugs,
+          //   change: function (event, ui) {
+          //     changeDose(this);
+          //     // console.log($(this).val());
+          //   },
+          //   close: function (event, ui) {
+          //     changeDose(this);
+          //   },
+          // });
 
-          addDialogTragger();
+          // // jquery dropdown click
+          // $(".dropdown-content a", $(rowNode)).click(function () {
+          //   // console.log("click");
+          //   // console.log($(this).attr("value"));
+          //   const value = $(this).attr("value");
+          //   const elem = $(this).parent().parent().prev();
+          //   $(elem).attr("value", value);
+          //   $(elem).html(col3_dict[value]);
+          // });
+
+          addDrugRow(table, addRowFromData);
 
         },
       },
@@ -1213,6 +1257,14 @@ initModel().then(() => {
     }
   });
 
+  const freqInput = {
+    "1": "一天<input name='freq' type='text' class='small-input'/>次",
+    "2": "每<input name='freq' type='text' class='small-input'/>小时/次",
+    "3": "<input name='freq' type='text' class='small-input'/>天/贴",
+    "4": "prn（必要时）",
+    "5": "每晚",
+  };
+
   // jquery dropdown click
   $(".m-dialog .dropdown-content a").click(function () {
     console.log("click");
@@ -1220,55 +1272,182 @@ initModel().then(() => {
     const value = $(this).attr("value");
     const elem = $(this).parent().parent().prev();
     $(elem).attr("value", value);
-    $(elem).html(col3_dict[value]);
+    $(elem).html(freqInput[value]);
   });
 
   // --------------------------------------------------------------------------
   // dialog
 
   // on class table btn click
+  const dialog = $("#used-durg-add-dialog");
+  console.log("ready", dialog);
 
-  function addDialogTragger() {
-    const dialog = $("#dialog");
+  function getDataFromDialog(dialog) {
 
-    $(".tablebtn").click(() => {
-      dialog.dialog({
-        buttons: {
-          "确定": function () {
-            $(this).dialog("close");
-          },
-          "取消": function () {
-            $(this).dialog("close");
-          },
+    const nameVal = $("input[name='name']", dialog).val().trim();
+    const name = nameVal === "" ? "" : {
+      id: availableDrugsDict[nameVal],
+      val: nameVal,
+    };
+
+    const doseInput = $("input[name='dose']", dialog);
+    const dose = doseInput.length > 0 && doseInput.val().trim() ? {
+      val: doseInput.val().trim(),
+      unit: $("label[name='unit']", dialog).text(),
+    } : "";
+
+
+    const freqId = $("div[name='freq-id']", dialog).attr("value");
+    const freqInput = $("input[name='freq']", dialog);
+    const freq = freqId && freqInput.length && freqInput.val().trim() ? {
+      id: freqId,
+      val: freqInput.val().trim(),
+    } : "";
+
+    const checked = $("input[name='duration']:checked", dialog);
+    const duration = checked.length === 0 ? "" : {
+      id: checked.val(),
+      val: checked.parent().text()
+    };
+
+    const data = {
+      "name": name,
+      "dose": dose,
+      "freq": freq,
+      "duration": duration,
+    };
+
+    return data;
+  }
+
+  function changeDoseInDialog(node, dialog) {
+    const value = $(node).val();
+    const index = availableDrugs.indexOf(value);
+    console.log(value, index);
+    if (index !== -1) {
+      const unit = PCNEData[index].unit;
+      console.log(unit);
+      $("div[name='dose-div']", dialog).html(
+        `<label name='unit'><input name='dose' type='text' class='small-input' />${unit}</label>`
+      );
+    }
+  }
+
+
+  // stop autofoucs in dialog
+  $.ui.dialog.prototype._focusTabbable = $.noop;
+
+
+  $(".tablebtn",).click(() => {
+    dialog.dialog({
+      buttons: {
+        "确定": function () {
+          console.log($(this));
+          const dialog = $(this);
+          dialog.dialog("close");
+
+          const data = getDataFromDialog(dialog);
+          console.log(data);
+
         },
-        open: function () {
-          $(this).parent().find("button:nth-child(2)").focus();
-        }
-      });
-    });
-
-    const dialogDrugInput = $("input#dialog-drug-input", dialog);
-    $("#dialog .ui-autocomplete.ui-widget").css("fontSize", "12px");
-
-
-    dialogDrugInput.autocomplete({
-      source: availableDrugs,
-      change: function (event, ui) {
-        // changeDose(this);
-        console.log($(this).val());
+        "取消": function () {
+          $(this).dialog("close");
+        },
       },
-      close: function (event, ui) {
-        // changeDose(this);
-        console.log($(this).val());
-      },
-    }).focus(function (event) {
+      open: function () {
+        console.log("open", $(this));
+        const dialog = $(this);
 
-      console.log("focus", event.target);
-      $(this).data("uiAutocomplete").search($(this).val());
+        const dialogDrugInput = $("input.dialog-drug-name-input", dialog);
+
+        dialogDrugInput.autocomplete({
+          source: availableDrugs,
+          appendTo: "#used-durg-add-dialog",
+          change: function (event, ui) {
+            // if (!ui.item) {
+            //   $(this).val("");
+            // }
+            changeDoseInDialog(this, dialog);
+            console.log($(this).val());
+          },
+          close: function (event, ui) {
+            // if (!ui.item) {
+            //   $(this).val("");
+            // }
+            changeDoseInDialog(this, dialog);
+            console.log($(this).val());
+          },
+        });
+        // .focus(function (event) {
+        //   // search on refocus
+        //   $(this).data("uiAutocomplete").search($(this).val());
+        // });
+
+        // fix autoCompleteWidget show issue
+        // const autoCompleteWidget = dialogDrugInput.autocomplete("widget");
+        // autoCompleteWidget.insertAfter(dialog.parent());
+
+        // dialog.parent().find("button:nth-child(2)").focus();
+
+      }
     });
+  });
 
-    const autoCompleteW = dialogDrugInput.autocomplete("widget");
-    autoCompleteW.insertAfter(dialog.parent());
+  // const dialogDrugInput = $("input#dialog-drug-input", dialog);
+  // $("#dialog .ui-autocomplete.ui-widget").css("fontSize", "12px");
+
+
+
+  function addDrugRow(table, callback) {
+    const dialog = $("#used-durg-add-dialog");
+    const dialogDrugInput = $("input.dialog-drug-name-input", dialog);
+
+    dialog.dialog({
+      buttons: {
+        "确定": function () {
+          console.log($(this));
+          const dialog = $(this);
+          dialog.dialog("close");
+
+          const data = getDataFromDialog(dialog);
+          console.log(data);
+          callback(table, data);
+
+        },
+        "取消": function () {
+          $(this).dialog("close");
+        },
+      },
+      open: function () {
+        console.log("open", $(this));
+        const dialog = $(this);
+
+        dialogDrugInput.autocomplete({
+          source: availableDrugs,
+          appendTo: "#used-durg-add-dialog",
+          change: function (event, ui) {
+            if (!ui.item) {
+              $(this).val("");
+            }
+            changeDoseInDialog(this, dialog);
+            console.log($(this).val());
+          },
+          close: function (event, ui) {
+            changeDoseInDialog(this, dialog);
+            console.log($(this).val());
+          },
+        }).focus(function (event) {
+          // search on refocus
+          $(this).data("uiAutocomplete").search($(this).val());
+        });
+
+        // fix autoCompleteWidget show issue
+
+
+        dialog.parent().find("button:nth-child(2)").focus();
+
+      }
+    });
 
   }
 

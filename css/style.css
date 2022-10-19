@@ -1078,7 +1078,7 @@ div.input-group {
   font-weight: bold;
 }
 .m-dialog-gp {
-  margin-top: 5px;
+  margin-top: 8px;
 }
 .m-dialog-div {
   min-height: 40px;
@@ -1088,19 +1088,31 @@ div.input-group {
 }
 
 div.m-dialog input.small-input {
-  max-width: 40px;
+  max-width: 60px;
+  text-align: right;
   /* height: 20px; */
   display: inline;
   margin: 0px 5px;
 }
 
-ul.ui-autocomplete {
+/* ul.ui-autocomplete {
   z-index: 1100;
-}
+} */
 
-.ui-autocomplete {
-  max-height: 380px;
+/* .ui-autocomplete
+    {
+        position:absolute;
+        cursor:default;
+        z-index:4000 !important
+    } */
+
+.ui-dialog-content .ui-autocomplete {
+  max-height: 200px;
   overflow-y: auto;   /* prevent horizontal scrollbar */
   overflow-x: hidden; /* add padding to account for vertical scrollbar */
+}
+
+.ui-dialog-content .ui-autocomplete.ui-widget {
+  font-size: 12px;
 }
 
