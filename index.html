@@ -47,11 +47,7 @@
       href="https://cdn.datatables.net/v/dt/dt-1.11.5/b-2.2.2/fh-3.2.2/r-2.2.9/sl-1.3.4/datatables.min.css"
     /> -->
 
-    <link
-    rel="stylesheet"
-    type="text/css"
-    href="css/datatables.min.css"
-  />
+    <link rel="stylesheet" type="text/css" href="css/datatables.min.css" />
 
     <!-- Main css -->
     <link rel="stylesheet" href="css/style.css" />
@@ -86,7 +82,12 @@
 
                 <div class="form-group">
                   <label for="user_id" class="form-label">ID</label>
-                  <input type="text" name="user_id" id="user_id" placeholder="请填入手机号"/>
+                  <input
+                    type="text"
+                    name="user_id"
+                    id="user_id"
+                    placeholder="请填入手机号"
+                  />
                   <span class="text-input"></span>
                 </div>
                 <div class="form-group">
@@ -153,9 +154,7 @@
                   <span class="text-input"></span>
                 </div>
                 <div class="form-group">
-                  <label for="user_edu" class="form-label"
-                    >受教育程度</label
-                  >
+                  <label for="user_edu" class="form-label">受教育程度</label>
                   <select name="user_edu" id="user_edu">
                     <option
                       value=""
@@ -530,7 +529,6 @@
                   <label type="radio-label">否</label>
                 </div>
 
-               
                 <div class="used-drug-content" style="display: none">
                   <div class="tab-content">
                     <table
@@ -683,77 +681,104 @@
       </div>
     </div>
 
-    <div class="m-dialog" id="used-durg-add-dialog" title="增加用药" style="display: none">
+    <div
+      class="m-dialog"
+      id="used-durg-add-dialog"
+      title="增加用药"
+      style="display: none"
+    >
       <div class="m-dialog-gp">
         <label class="m-dialog-label">用药名称</label>
-        <input type="text" class="dialog-drug-name-input" name="name"/>
+        <input type="text" class="dialog-drug-name-input" name="name" />
       </div>
       <div class="m-dialog-gp">
         <label class="m-dialog-label">单次用药剂量</label>
-        <div class="m-dialog-div"name="dose-div"></div> 
+        <div class="m-dialog-div" name="dose-div">
+          <label name="unit" style="display: none"
+            ><input name="dose" type="text" class="small-input"
+          /></label>
+        </div>
       </div>
       <div class="m-dialog-gp">
         <label class="m-dialog-label">用药频次</label>
         <div class="m-dialog-div">
-          <div style="display: inline;" name="freq-id"></div>
-          <div style="margin-left: 8px; margin-right: 8px;" class="dropdown">
-            <a class="dropbtn"><span class="ui-icon ui-icon-triangle-1-s"></span></a>
-            <div class="dropdown-content ">
-              <a value='1'>一天X次</a>
-              <a value='2'>每X小时/次</a>
-              <a value='3'>X天/贴</a>
-              <a value='4'>prn（必要时）</a>
-              <a value='5'>每晚</a>
+          <div style="display: inline" name="freq-div"></div>
+          <div style="margin-left: 8px; margin-right: 8px" class="dropdown">
+            <a class="dropbtn"
+              ><span class="ui-icon ui-icon-triangle-1-s"></span
+            ></a>
+            <div class="dropdown-content">
+              <a value="1">一天X次</a>
+              <a value="2">每X小时/次</a>
+              <a value="3">X天/贴</a>
+              <a value="4">prn（必要时）</a>
+              <a value="5">每晚</a>
             </div>
+          </div>
         </div>
       </div>
       <div class="m-dialog-gp">
         <label class="m-dialog-label">用药起止时长</label>
         <div class="m-dialog-div">
-
-          <label style='margin-right: 16px;'><input name='duration' type='radio' value='1' />>7天</label>
-          <label style='margin-right: 16px;'><input name='duration' type='radio' value='2' />≤7天</label>
+          <label style="margin-right: 16px"
+            ><input name="duration" type="radio" value="1" />>7天</label
+          >
+          <label style="margin-right: 16px"
+            ><input name="duration" type="radio" value="2" />≤7天</label
+          >
         </div>
-
       </div>
-      <div style="height: 30px;"></div>
+      <div style="height: 30px"></div>
     </div>
 
-
-    <div class="m-dialog" id="used-durg-edit-dialog" title="编辑用药" style="display: none">
+    <div
+      class="m-dialog"
+      id="used-durg-edit-dialog"
+      title="编辑用药"
+      style="display: none"
+    >
       <div class="m-dialog-gp">
         <label class="m-dialog-label">用药名称</label>
-        <input type="text" class="dialog-drug-name-input" name="name"/>
+        <input type="text" class="dialog-drug-name-input" name="name" />
       </div>
       <div class="m-dialog-gp">
         <label class="m-dialog-label">单次用药剂量</label>
-        <input type="text" name="dose"/>
+        <div class="m-dialog-div" name="dose-div">
+          <label name="unit" style="display: none"
+            ><input name="dose" type="text" class="small-input"
+          /></label>
+        </div>
       </div>
       <div class="m-dialog-gp">
         <label class="m-dialog-label">用药频次</label>
         <div class="m-dialog-div">
-          <div style="display: inline;"></div>
-          <div style="margin-left: 8px; margin-right: 8px;" class="dropdown">
-            <a class="dropbtn"><span class="ui-icon ui-icon-triangle-1-s"></span></a>
-            <div class="dropdown-content ">
-              <a value='1'>一天X次</a>
-              <a value='2'>每X小时/次</a>
-              <a value='3'>X天/贴</a>
-              <a value='4'>prn（必要时）</a>
-              <a value='5'>每晚</a>
+          <div style="display: inline" name="freq-div"></div>
+          <div style="margin-left: 8px; margin-right: 8px" class="dropdown">
+            <a class="dropbtn"
+              ><span class="ui-icon ui-icon-triangle-1-s"></span
+            ></a>
+            <div class="dropdown-content">
+              <a value="1">一天X次</a>
+              <a value="2">每X小时/次</a>
+              <a value="3">X天/贴</a>
+              <a value="4">prn（必要时）</a>
+              <a value="5">每晚</a>
             </div>
+          </div>
         </div>
       </div>
       <div class="m-dialog-gp">
         <label class="m-dialog-label">用药起止时长</label>
         <div class="m-dialog-div">
-
-          <label style='margin-right: 16px;'><input name='duration' type='radio' value='1' />>7天</label>
-          <label style='margin-right: 16px;'><input name='duration' type='radio' value='2' />≤7天</label>
+          <label style="margin-right: 16px"
+            ><input name="duration" type="radio" value="1" />>7天</label
+          >
+          <label style="margin-right: 16px"
+            ><input name="duration" type="radio" value="2" />≤7天</label
+          >
         </div>
-
       </div>
-      <div style="height: 30px;"></div>
+      <div style="height: 30px"></div>
     </div>
 
     <!-- JS -->
@@ -792,10 +817,7 @@
       type="text/javascript"
       src="https://cdn.datatables.net/v/dt/dt-1.11.5/b-2.2.2/fh-3.2.2/r-2.2.9/sl-1.3.4/datatables.min.js"
     ></script> -->
-    <script
-    type="text/javascript"
-    src="vendor/datatables.min.js"
-  ></script>
+    <script type="text/javascript" src="vendor/datatables.min.js"></script>
     <script
       type="text/javascript"
       src="https://cdn.staticfile.org/onnxruntime-web/1.10.0/ort.min.js"
@@ -804,6 +826,5 @@
     <!-- <script src="vendor/wnumb/wNumb.js"></script> -->
     <script src="js/utils.js"></script>
     <script src="js/main.js"></script>
-
   </body>
 </html>

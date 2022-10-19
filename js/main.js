@@ -1027,43 +1027,48 @@ initModel().then(() => {
     "<label style='margin-right: 16px;'><input name='duration' type='radio' value='1' />>7天</label>\
 <label style='margin-right: 16px;'><input name='duration' type='radio' value='2' />≤7天</label><br>";
 
-  const col5_template = "<a class='tablebtn'>测试</a>";
+  const col5_template = "<a class='tablebtn table-edit-btn'>编辑</a>";
 
   function genFreqCol(freq) {
     if (freq === "") {
       return "";
     }
     if (freq.id === "1") {
-      return `一天${freq.val}次`;
+      return `<div data='${freq.id}#${freq.val}'>一天${freq.val}次</div>`;
     }
     if (freq.id === "2") {
-      return `每${freq.val}小时/次`;
+      return `<div data='${freq.id}#${freq.val}'>每${freq.val}小时/次</div>`;
     }
     if (freq.id === "3") {
-      return `${freq.val}天/贴`;
+      return `<div data='${freq.id}#${freq.val}'>${freq.val}天/贴</div>`;
     }
     if (freq.id === "4") {
-      return "prn（必要时）";
+      return `<div data='${freq.id}#'>prn（必要时）</div>`;
     }
     if (freq.id === "5") {
-      return "每晚";
+      return `<div data='${freq.id}#'>每晚</div>`;
     }
 
     return "";
   }
 
+  function addEidtBtnEvent(row) {
+    $(".table-edit-btn", $(row)).on("click", () => {
+      console.log("edit");
+    });
+  }
 
   function addRowFromData(table, data) {
-    const row = table.row.add([
+    table.row.add([
       "",
-      data.name === "" ? "" : data.name.val,
-      data.dose === "" ? "" : data.dose.val + data.dose.unit,
+      data.name === "" ? "" : `<div data='${data.name.id}'>${data.name.val}<div>`,
+      data.dose === "" ? "" : `<div data='${data.dose.val}#${data.dose.unit}'>
+        ${data.dose.val + data.dose.unit}<div>`,
       genFreqCol(data.freq),
-      data.duration === "" ? "" : data.duration.val,
+      data.duration === "" ? "" : `<div data='${data.duration.id}#${data.duration.val}'>
+        ${data.duration.val}<div>`,
       col5_template,
     ]).draw(false).node();
-
-    return row;
   }
 
   const table = $(usedDrugTableID).DataTable({
@@ -1217,6 +1222,137 @@ initModel().then(() => {
     }
   });
 
+  function genDataFromRowData(tableData) {
+    console.log(tableData);
+    const name = tableData[1] === "" ? "" :
+      {id: $(tableData[1]).attr("data"), val: $(tableData[1]).text()};
+    const dose = tableData[2] === "" ? "" :
+      {
+        val: $(tableData[2]).attr("data").split("#")[0],
+        unit: $(tableData[2]).attr("data").split("#")[1]
+      };
+    const freq = tableData[3] === "" ? "" :
+      {
+        id: $(tableData[3]).attr("data").split("#")[0],
+        val: $(tableData[3]).attr("data").split("#")[1]
+      };
+
+    const duration = tableData[4] === "" ? "" :
+      {
+        id: $(tableData[4]).attr("data").split("#")[0],
+        val: $(tableData[4]).attr("data").split("#")[1]
+      };
+
+    const data = {
+      "name": name,
+      "dose": dose,
+      "freq": freq,
+      "duration": duration,
+    };
+    console.log(data);
+
+    return data;
+
+  }
+
+  // edit button event
+  $("{0} tbody".format(usedDrugTableID)).on("click", ".table-edit-btn", function (event) {
+    console.log("edit");
+    const tableData = table.row($(this).parents("tr")).data();
+    const drugData = genDataFromRowData(tableData);
+
+
+    const dialogId = "#used-durg-edit-dialog";
+    const dialog = $(dialogId);
+    const dialogDrugInput = $("input.dialog-drug-name-input", dialog);
+
+    dialog.dialog({
+      autoOpen: false,
+      buttons: {
+        "确定": function () {
+          console.log($(this));
+          const dialog = $(this);
+          dialog.dialog("close");
+
+          // const data = getDataFromDialog(dialog);
+          // console.log("add", data);
+          // callback(table, data);
+
+        },
+        "取消": function () {
+          $(this).dialog("close");
+        },
+      },
+      open: function () {
+        console.log("open", $(this));
+        const dialog = $(this);
+
+        dialogDrugInput.autocomplete({
+          source: availableDrugs,
+          appendTo: dialogId,
+          change: function (event, ui) {
+            if (!ui.item) {
+              $(this).val("");
+            }
+            // changeDoseInDialog(this, dialog);
+            console.log($(this).val());
+          },
+          close: function (event, ui) {
+            changeDoseInDialog(this, dialog);
+            // console.log($(this).val());
+          },
+        }).focus(function (event) {
+          // search on refocus
+          $(this).data("uiAutocomplete").search($(this).val());
+        });
+
+        const data = dialog.data("param");
+        console.log(data);
+        // set name
+        if (data.name !== "") {
+          dialogDrugInput.val(data.name.val);
+          // dialogDrugInput.attr("data", data.name.id);
+        }
+
+        if (data.dose !== "") {
+          $("div[name='dose-div']", dialog).html(
+            `<label name='unit'>
+              <input name='dose' type='text' class='small-input' value='${data.dose.val}'/>
+              ${data.dose.unit}</label>`
+          );
+        }
+
+        if (data.freq !== "") {
+          let elem = "";
+          if(data.freq.id === "1"){
+            elem = `一天<input name='freq' type='text' class='small-input' value='${data.freq.val}'/>次`;
+          } else if (data.freq.id === "2"){
+            elem = `每<input name='freq' type='text' class='small-input' value='${data.freq.val}'/>小时/次`;
+          } else if (data.freq.id === "3"){
+            elem = `<input name='freq' type='text' class='small-input' value='${data.freq.val}'/>天/贴`;
+          } else if (data.freq.id === "4"){
+            elem = "prn（必要时）";
+          } else if (data.freq.id === "5"){
+            elem = "每晚";
+          }
+          $("div[name='freq-div']", dialog).html(elem);
+        }
+
+        if (data.duration !== "") {
+          $(`input[name='duration'][value='${data.duration.id}']`, dialog)
+            .attr("checked", "checked");
+        }
+
+        dialog.parent().find("button:nth-child(2)").focus();
+
+      }
+    });
+
+    dialog.data("param", drugData).dialog("open");
+
+
+  });
+
   $("input.drug-input").autocomplete({
     source: availableDrugs,
   });
@@ -1297,11 +1433,12 @@ initModel().then(() => {
     } : "";
 
 
-    const freqId = $("div[name='freq-id']", dialog).attr("value");
+    const freqId = $("div[name='freq-div']", dialog).attr("value");
     const freqInput = $("input[name='freq']", dialog);
-    const freq = freqId && freqInput.length && freqInput.val().trim() ? {
+    const freqVal = freqInput.length ? freqInput.val().trim() : "";
+    const freq = freqId ? {
       id: freqId,
-      val: freqInput.val().trim(),
+      val: freqVal,
     } : "";
 
     const checked = $("input[name='duration']:checked", dialog);
@@ -1328,6 +1465,7 @@ initModel().then(() => {
       const unit = PCNEData[index].unit;
       console.log(unit);
       $("div[name='dose-div']", dialog).html(
+        // "<input/>"
         `<label name='unit'><input name='dose' type='text' class='small-input' />${unit}</label>`
       );
     }
@@ -1364,10 +1502,10 @@ initModel().then(() => {
           source: availableDrugs,
           appendTo: "#used-durg-add-dialog",
           change: function (event, ui) {
-            // if (!ui.item) {
-            //   $(this).val("");
-            // }
-            changeDoseInDialog(this, dialog);
+            if (!ui.item) {
+              $(this).val("");
+            }
+            // changeDoseInDialog(this, dialog);
             console.log($(this).val());
           },
           close: function (event, ui) {
@@ -1375,7 +1513,7 @@ initModel().then(() => {
             //   $(this).val("");
             // }
             changeDoseInDialog(this, dialog);
-            console.log($(this).val());
+            // console.log($(this).val());
           },
         });
         // .focus(function (event) {
@@ -1410,7 +1548,7 @@ initModel().then(() => {
           dialog.dialog("close");
 
           const data = getDataFromDialog(dialog);
-          console.log(data);
+          console.log("add", data);
           callback(table, data);
 
         },
@@ -1429,12 +1567,12 @@ initModel().then(() => {
             if (!ui.item) {
               $(this).val("");
             }
-            changeDoseInDialog(this, dialog);
+            // changeDoseInDialog(this, dialog);
             console.log($(this).val());
           },
           close: function (event, ui) {
             changeDoseInDialog(this, dialog);
-            console.log($(this).val());
+            // console.log($(this).val());
           },
         }).focus(function (event) {
           // search on refocus
