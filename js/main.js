@@ -1052,14 +1052,8 @@ initModel().then(() => {
     return "";
   }
 
-  function addEidtBtnEvent(row) {
-    $(".table-edit-btn", $(row)).on("click", () => {
-      console.log("edit");
-    });
-  }
-
-  function addRowFromData(table, data) {
-    table.row.add([
+  function genRowData(data) {
+    return [
       "",
       data.name === "" ? "" : `<div data='${data.name.id}'>${data.name.val}<div>`,
       data.dose === "" ? "" : `<div data='${data.dose.val}#${data.dose.unit}'>
@@ -1068,7 +1062,11 @@ initModel().then(() => {
       data.duration === "" ? "" : `<div data='${data.duration.id}#${data.duration.val}'>
         ${data.duration.val}<div>`,
       col5_template,
-    ]).draw(false).node();
+    ];
+  }
+
+  function addRowFromData(table, data) {
+    table.row.add(genRowData(data)).draw(false);
   }
 
   const table = $(usedDrugTableID).DataTable({
@@ -1225,7 +1223,7 @@ initModel().then(() => {
   function genDataFromRowData(tableData) {
     console.log(tableData);
     const name = tableData[1] === "" ? "" :
-      {id: $(tableData[1]).attr("data"), val: $(tableData[1]).text()};
+      { id: $(tableData[1]).attr("data"), val: $(tableData[1]).text() };
     const dose = tableData[2] === "" ? "" :
       {
         val: $(tableData[2]).attr("data").split("#")[0],
@@ -1255,10 +1253,16 @@ initModel().then(() => {
 
   }
 
+  // update row data
+  function updateRowData(tableRow, data) {
+    tableRow.data(genRowData(data)).draw(false);
+  }
+
   // edit button event
   $("{0} tbody".format(usedDrugTableID)).on("click", ".table-edit-btn", function (event) {
     console.log("edit");
-    const tableData = table.row($(this).parents("tr")).data();
+    const tableRow = table.row($(this).parents("tr"));
+    const tableData = tableRow.data();
     const drugData = genDataFromRowData(tableData);
 
 
@@ -1274,8 +1278,9 @@ initModel().then(() => {
           const dialog = $(this);
           dialog.dialog("close");
 
-          // const data = getDataFromDialog(dialog);
-          // console.log("add", data);
+          const data = getDataFromDialog(dialog);
+          console.log("edit", data);
+          updateRowData(tableRow, data);
           // callback(table, data);
 
         },
@@ -1324,23 +1329,26 @@ initModel().then(() => {
 
         if (data.freq !== "") {
           let elem = "";
-          if(data.freq.id === "1"){
+          if (data.freq.id === "1") {
             elem = `一天<input name='freq' type='text' class='small-input' value='${data.freq.val}'/>次`;
-          } else if (data.freq.id === "2"){
+          } else if (data.freq.id === "2") {
             elem = `每<input name='freq' type='text' class='small-input' value='${data.freq.val}'/>小时/次`;
-          } else if (data.freq.id === "3"){
+          } else if (data.freq.id === "3") {
             elem = `<input name='freq' type='text' class='small-input' value='${data.freq.val}'/>天/贴`;
-          } else if (data.freq.id === "4"){
+          } else if (data.freq.id === "4") {
             elem = "prn（必要时）";
-          } else if (data.freq.id === "5"){
+          } else if (data.freq.id === "5") {
             elem = "每晚";
           }
-          $("div[name='freq-div']", dialog).html(elem);
+          const freqDiv = $("div[name='freq-div']", dialog);
+          freqDiv.html(elem);
+          freqDiv.attr("value", data.freq.id);
+
         }
 
         if (data.duration !== "") {
-          $(`input[name='duration'][value='${data.duration.id}']`, dialog)
-            .attr("checked", "checked");
+          $(`input[name = 'duration'][value = '${data.duration.id}']`, dialog)
+            .prop("checked", true);
         }
 
         dialog.parent().find("button:nth-child(2)").focus();
@@ -1521,24 +1529,39 @@ initModel().then(() => {
         //   $(this).data("uiAutocomplete").search($(this).val());
         // });
 
-        // fix autoCompleteWidget show issue
-        // const autoCompleteWidget = dialogDrugInput.autocomplete("widget");
-        // autoCompleteWidget.insertAfter(dialog.parent());
-
-        // dialog.parent().find("button:nth-child(2)").focus();
 
       }
     });
   });
 
-  // const dialogDrugInput = $("input#dialog-drug-input", dialog);
-  // $("#dialog .ui-autocomplete.ui-widget").css("fontSize", "12px");
+  function setDialogAutoComplete(dialogId) {
+    const dialog = $(dialogId);
+    const dialogDrugInput = $("input.dialog-drug-name-input", dialog);
+    dialogDrugInput.autocomplete({
+      source: availableDrugs,
+      appendTo: dialogId,
+      change: function (event, ui) {
+        if (!ui.item) {
+          $(this).val("");
+        }
+        // changeDoseInDialog(this, dialog);
+        console.log($(this).val());
+      },
+      close: function (event, ui) {
+        changeDoseInDialog(this, dialog);
+        // console.log($(this).val());
+      },
+    }).focus(function (event) {
+      // search on refocus
+      $(this).data("uiAutocomplete").search($(this).val());
+    });
+  }
 
 
 
   function addDrugRow(table, callback) {
-    const dialog = $("#used-durg-add-dialog");
-    const dialogDrugInput = $("input.dialog-drug-name-input", dialog);
+    const dialogId = "#used-durg-add-dialog";
+    const dialog = $(dialogId);
 
     dialog.dialog({
       buttons: {
@@ -1559,29 +1582,7 @@ initModel().then(() => {
       open: function () {
         console.log("open", $(this));
         const dialog = $(this);
-
-        dialogDrugInput.autocomplete({
-          source: availableDrugs,
-          appendTo: "#used-durg-add-dialog",
-          change: function (event, ui) {
-            if (!ui.item) {
-              $(this).val("");
-            }
-            // changeDoseInDialog(this, dialog);
-            console.log($(this).val());
-          },
-          close: function (event, ui) {
-            changeDoseInDialog(this, dialog);
-            // console.log($(this).val());
-          },
-        }).focus(function (event) {
-          // search on refocus
-          $(this).data("uiAutocomplete").search($(this).val());
-        });
-
-        // fix autoCompleteWidget show issue
-
-
+        setDialogAutoComplete(dialogId);
         dialog.parent().find("button:nth-child(2)").focus();
 
       }
