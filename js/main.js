@@ -1096,13 +1096,13 @@ initModel().then(() => {
   function genRowData(data) {
     return [
       "",
-      data.name === "" ? "" : `<div data='${data.name.id}'>${data.name.val}<div>`,
+      data.name === "" ? "" : `<div class='row-name' data='${data.name.id}'>${data.name.val}<div>`,
       data.dose === "" ? "" : `<div data='${data.dose.val}#${data.dose.unit}'>
         ${data.dose.val + data.dose.unit}<div>`,
       genFreqCol(data.freq),
       data.duration === "" ? "" : `<div data='${data.duration.id}#${data.duration.val}'>
         ${data.duration.val}<div>`,
-      "<a class='tablebtn table-edit-btn'>编辑</a>",
+      "<a class='tablebtn table-edit-btn'>编辑</a><a class='tablebtn table-del-btn'>删除</a>",
     ];
   }
 
@@ -1214,9 +1214,8 @@ initModel().then(() => {
   });
 
   $("{0} tbody".format(usedDrugTableID)).on("click", "tr", function (event) {
-    const isTd = $(event.target).is("td");
-
-    if (isTd) {
+    const flag = $(event.target).hasClass("row-name");
+    if (flag) {
       if ($(this).hasClass("selected")) {
         $(this).removeClass("selected");
       } else {
@@ -1320,6 +1319,13 @@ initModel().then(() => {
     }
   }
 
+  // delete button event
+  $("{0} tbody".format(usedDrugTableID)).on("click", ".table-del-btn", function (event) {
+    console.log("del");
+    const tableRow = table.row($(this).parents("tr"));
+    tableRow.remove().draw(false);
+  });
+
   // edit button event
   $("{0} tbody".format(usedDrugTableID)).on("click", ".table-edit-btn", function (event) {
     console.log("edit");
@@ -1355,25 +1361,6 @@ initModel().then(() => {
         const dialog = $(this);
 
         setDialogAutoComplete(dialogId);
-        // dialogDrugInput.autocomplete({
-        //   source: availableDrugs,
-        //   appendTo: dialogId,
-        //   change: function (event, ui) {
-        //     if (!ui.item) {
-        //       $(this).val("");
-        //     }
-        //     // changeDoseInDialog(this, dialog);
-        //     console.log($(this).val());
-        //   },
-        //   close: function (event, ui) {
-        //     changeDoseInDialog(this, dialog);
-        //     // console.log($(this).val());
-        //   },
-        // }).focus(function (event) {
-        //   // search on refocus
-        //   $(this).data("uiAutocomplete").search($(this).val());
-        // });
-
         const data = dialog.data("param");
         console.log(data);
         setDialogData(data, dialog);
