@@ -112,28 +112,68 @@ function updateBodySelected(bodyId, currentSelect, bodyPloygon) {
   }
 }
 
-const col2_template =
-  "<label><input name='dose' type='text' \
-class='middle-input' />{0}</label>";
+function getShortPinyin(wordStr) {
+  var idx = -1;
+  var MAP = "ABCDEFGHJKLMNOPQRSTWXYZ";
+  var boundaryChar = "驁簿錯鵽樲鰒餜靃攟鬠纙鞪黁漚曝裠鶸蜶籜鶩鑂韻糳";
 
-function changeDose(node) {
-  const value = $(node).val();
-  const index = availableDrugs.indexOf(value);
-
-  if (index !== -1) {
-    const table = $(usedDrugTableID).DataTable();
-    const thisTr = node.parentElement.parentElement;
-    const thisRowIdx = table.row(thisTr).index();
-    const colIdx = table.column("drug_dose:name").index();
-
-    table
-      .cell(thisRowIdx, colIdx)
-      .data(col2_template.format(PCNEData[index].unit));
-    // console.log(table.row(thisTr));
-    table.columns.adjust().responsive.recalc();
-    table.responsive.redisplay();
+  if (!String.prototype.localeCompare) {
+    throw Error("String.prototype.localeCompare not supported.");
   }
+
+  var wordSplit = [...wordStr];
+  let res = "";
+  for (const w of wordSplit) {
+    if (/[\u4e00-\u9fa5]/u.test(w)) {
+      for (var i = 0; i < boundaryChar.length; i++) {
+        if (boundaryChar[i].localeCompare(w, "zh-CN-u-co-pinyin") >= 0) {
+          idx = i;
+          break;
+        }
+      }
+      res += MAP[idx];
+    }
+  }
+
+  return res;
 }
+
+// return wordSplit.map((c) => {
+//   if (/[^\u4e00-\u9fa5]/u.test(c)) {
+//     return c;
+//   }
+//   for (var i = 0; i < boundaryChar.length; i++) {
+//     if (boundaryChar[i].localeCompare(c, "zh-CN-u-co-pinyin") >= 0) {
+//       idx = i;
+//       break;
+//     }
+//   }
+//   return MAP[idx];
+// }).value().join("");
+// }
+
+// const col2_template =
+//   "<label><input name='dose' type='text' \
+// class='middle-input' />{0}</label>";
+
+// function changeDose(node) {
+//   const value = $(node).val();
+//   const index = availableDrugs.indexOf(value);
+
+//   if (index !== -1) {
+//     const table = $(usedDrugTableID).DataTable();
+//     const thisTr = node.parentElement.parentElement;
+//     const thisRowIdx = table.row(thisTr).index();
+//     const colIdx = table.column("drug_dose:name").index();
+
+//     table
+//       .cell(thisRowIdx, colIdx)
+//       .data(col2_template.format(PCNEData[index].unit));
+//     // console.log(table.row(thisTr));
+//     table.columns.adjust().responsive.recalc();
+//     table.responsive.redisplay();
+//   }
+// }
 
 const ch1_set = new Set([1, 3, 6, 8, 9, 12, 23, 24, 25]);
 const ch2_set = new Set([4, 5, 7, 10, 11, 17]);
@@ -525,6 +565,7 @@ function processS2() {
 const bodyKV = getJsonSync("./assets/body_kv.json");
 const PCNEData = getJsonSync("./assets/PCNE_data.json");
 const availableDrugs = PCNEData.map((v) => v.name + v.spec);
+const availableDrugsPinYin = PCNEData.map((v) => getShortPinyin(v.name));
 const availableDrugsDict = {};
 PCNEData.forEach((v) => {
   availableDrugsDict[v.name + v.spec] = v.id;
@@ -988,14 +1029,14 @@ initModel().then(() => {
   });
 
   // drug table
-  const col1_template = "<input class='drug-input'>";
-  const col3_dict = {
-    "1": "一天<input name='dose' type='text' class='small-input'/>次",
-    "2": "每<input name='dose' type='text' class='small-input'/>小时/次",
-    "3": "<input name='dose' type='text' class='small-input'/>天/贴",
-    "4": "prn（必要时）",
-    "5": "每晚",
-  };
+  // const col1_template = "<input class='drug-input'>";
+  // const col3_dict = {
+  //   "1": "一天<input name='dose' type='text' class='small-input'/>次",
+  //   "2": "每<input name='dose' type='text' class='small-input'/>小时/次",
+  //   "3": "<input name='dose' type='text' class='small-input'/>天/贴",
+  //   "4": "prn（必要时）",
+  //   "5": "每晚",
+  // };
 
   //   const col3_template =
   //     "<label><input name='freq' type='radio' value='1' />一天<input name='dose' type='text'\
@@ -1007,27 +1048,27 @@ initModel().then(() => {
   // <label><input name='freq' type='radio' value='4' />prn（必要时）</label><br>\
   // <label><input name='freq' type='radio' value='5' />每晚</label><br> ";
 
-  const col3_template = `
+  //   const col3_template = `
 
-    <label style="display: inline;"></label>
-    <div style="margin-left: 16px; margin-right: 16px;" class="dropdown">
-    <a class="dropbtn"><span class="ui-icon ui-icon-triangle-1-s"></span></a>
-    <div class="dropdown-content">
-      <a value='1'>一天X次</a>
-      <a value='2'>每X小时/次</a>
-      <a value='3'>X天/贴</a>
-      <a value='4'>prn（必要时）</a>
-      <a value='5'>每晚</a>
-    </div>
+  //     <label style="display: inline;"></label>
+  //     <div style="margin-left: 16px; margin-right: 16px;" class="dropdown">
+  //     <a class="dropbtn"><span class="ui-icon ui-icon-triangle-1-s"></span></a>
+  //     <div class="dropdown-content">
+  //       <a value='1'>一天X次</a>
+  //       <a value='2'>每X小时/次</a>
+  //       <a value='3'>X天/贴</a>
+  //       <a value='4'>prn（必要时）</a>
+  //       <a value='5'>每晚</a>
+  //     </div>
 
-  </div>`;
+  //   </div>`;
 
 
-  const col4_template =
-    "<label style='margin-right: 16px;'><input name='duration' type='radio' value='1' />>7天</label>\
-<label style='margin-right: 16px;'><input name='duration' type='radio' value='2' />≤7天</label><br>";
+  //   const col4_template =
+  //     "<label style='margin-right: 16px;'><input name='duration' type='radio' value='1' />>7天</label>\
+  // <label style='margin-right: 16px;'><input name='duration' type='radio' value='2' />≤7天</label><br>";
 
-  const col5_template = "<a class='tablebtn table-edit-btn'>编辑</a>";
+  //   const col5_template = "<a class='tablebtn table-edit-btn'>编辑</a>";
 
   function genFreqCol(freq) {
     if (freq === "") {
@@ -1061,7 +1102,7 @@ initModel().then(() => {
       genFreqCol(data.freq),
       data.duration === "" ? "" : `<div data='${data.duration.id}#${data.duration.val}'>
         ${data.duration.val}<div>`,
-      col5_template,
+      "<a class='tablebtn table-edit-btn'>编辑</a>",
     ];
   }
 
@@ -1156,41 +1197,6 @@ initModel().then(() => {
         titleAttr: "增加用药",
         action: function (e, dt, node, config) {
           console.log("add!!!");
-          // const row = table.row
-          //   .add([
-          //     "",
-          //     col1_template,
-          //     "--",
-          //     col3_template,
-          //     col4_template,
-          //     col5_template
-          //   ])
-          //   .draw(false);
-
-          // const rowNode = row.node();
-          // console.log(rowNode);
-
-          // $("input.drug-input", $(rowNode)).autocomplete({
-          //   source: availableDrugs,
-          //   change: function (event, ui) {
-          //     changeDose(this);
-          //     // console.log($(this).val());
-          //   },
-          //   close: function (event, ui) {
-          //     changeDose(this);
-          //   },
-          // });
-
-          // // jquery dropdown click
-          // $(".dropdown-content a", $(rowNode)).click(function () {
-          //   // console.log("click");
-          //   // console.log($(this).attr("value"));
-          //   const value = $(this).attr("value");
-          //   const elem = $(this).parent().parent().prev();
-          //   $(elem).attr("value", value);
-          //   $(elem).html(col3_dict[value]);
-          // });
-
           addDrugRow(table, addRowFromData);
 
         },
@@ -1258,6 +1264,62 @@ initModel().then(() => {
     tableRow.data(genRowData(data)).draw(false);
   }
 
+  function setDialogData(data, dialog) {
+
+    const dialogDrugInput = $("input.dialog-drug-name-input", dialog);
+    const doseDiv = $("div[name='dose-div']", dialog);
+    const freqDiv = $("div[name='freq-div']", dialog);
+    const durationInput = $("input[name = 'duration']", dialog);
+
+    // clear input
+    dialogDrugInput.val("");
+    doseDiv.html("");
+    freqDiv.html("");
+    durationInput.prop("checked", false);
+
+    if (data === "") {
+      return;
+    }
+
+
+    if (data.name !== "") {
+      dialogDrugInput.val(data.name.val);
+      // dialogDrugInput.attr("data", data.name.id);
+    }
+
+    if (data.dose !== "") {
+      doseDiv.html(
+        `<label name='unit'>
+        <input name='dose' type='text' class='small-input' value='${data.dose.val}'/>
+        ${data.dose.unit}</label>`
+      );
+    }
+
+    if (data.freq !== "") {
+      let elem = "";
+      if (data.freq.id === "1") {
+        elem = `一天<input name='freq' type='text' class='small-input' value='${data.freq.val}'/>次`;
+      } else if (data.freq.id === "2") {
+        elem = `每<input name='freq' type='text' class='small-input' value='${data.freq.val}'/>小时/次`;
+      } else if (data.freq.id === "3") {
+        elem = `<input name='freq' type='text' class='small-input' value='${data.freq.val}'/>天/贴`;
+      } else if (data.freq.id === "4") {
+        elem = "prn（必要时）";
+      } else if (data.freq.id === "5") {
+        elem = "每晚";
+      }
+
+      freqDiv.html(elem);
+      freqDiv.attr("value", data.freq.id);
+
+    }
+
+    if (data.duration !== "") {
+      durationInput.filter(`[value='${data.duration.id}']`)
+        .prop("checked", true);
+    }
+  }
+
   // edit button event
   $("{0} tbody".format(usedDrugTableID)).on("click", ".table-edit-btn", function (event) {
     console.log("edit");
@@ -1268,7 +1330,7 @@ initModel().then(() => {
 
     const dialogId = "#used-durg-edit-dialog";
     const dialog = $(dialogId);
-    const dialogDrugInput = $("input.dialog-drug-name-input", dialog);
+    // const dialogDrugInput = $("input.dialog-drug-name-input", dialog);
 
     dialog.dialog({
       autoOpen: false,
@@ -1289,67 +1351,32 @@ initModel().then(() => {
         },
       },
       open: function () {
-        console.log("open", $(this));
+        // console.log("open", $(this));
         const dialog = $(this);
 
-        dialogDrugInput.autocomplete({
-          source: availableDrugs,
-          appendTo: dialogId,
-          change: function (event, ui) {
-            if (!ui.item) {
-              $(this).val("");
-            }
-            // changeDoseInDialog(this, dialog);
-            console.log($(this).val());
-          },
-          close: function (event, ui) {
-            changeDoseInDialog(this, dialog);
-            // console.log($(this).val());
-          },
-        }).focus(function (event) {
-          // search on refocus
-          $(this).data("uiAutocomplete").search($(this).val());
-        });
+        setDialogAutoComplete(dialogId);
+        // dialogDrugInput.autocomplete({
+        //   source: availableDrugs,
+        //   appendTo: dialogId,
+        //   change: function (event, ui) {
+        //     if (!ui.item) {
+        //       $(this).val("");
+        //     }
+        //     // changeDoseInDialog(this, dialog);
+        //     console.log($(this).val());
+        //   },
+        //   close: function (event, ui) {
+        //     changeDoseInDialog(this, dialog);
+        //     // console.log($(this).val());
+        //   },
+        // }).focus(function (event) {
+        //   // search on refocus
+        //   $(this).data("uiAutocomplete").search($(this).val());
+        // });
 
         const data = dialog.data("param");
         console.log(data);
-        // set name
-        if (data.name !== "") {
-          dialogDrugInput.val(data.name.val);
-          // dialogDrugInput.attr("data", data.name.id);
-        }
-
-        if (data.dose !== "") {
-          $("div[name='dose-div']", dialog).html(
-            `<label name='unit'>
-              <input name='dose' type='text' class='small-input' value='${data.dose.val}'/>
-              ${data.dose.unit}</label>`
-          );
-        }
-
-        if (data.freq !== "") {
-          let elem = "";
-          if (data.freq.id === "1") {
-            elem = `一天<input name='freq' type='text' class='small-input' value='${data.freq.val}'/>次`;
-          } else if (data.freq.id === "2") {
-            elem = `每<input name='freq' type='text' class='small-input' value='${data.freq.val}'/>小时/次`;
-          } else if (data.freq.id === "3") {
-            elem = `<input name='freq' type='text' class='small-input' value='${data.freq.val}'/>天/贴`;
-          } else if (data.freq.id === "4") {
-            elem = "prn（必要时）";
-          } else if (data.freq.id === "5") {
-            elem = "每晚";
-          }
-          const freqDiv = $("div[name='freq-div']", dialog);
-          freqDiv.html(elem);
-          freqDiv.attr("value", data.freq.id);
-
-        }
-
-        if (data.duration !== "") {
-          $(`input[name = 'duration'][value = '${data.duration.id}']`, dialog)
-            .prop("checked", true);
-        }
+        setDialogData(data, dialog);
 
         dialog.parent().find("button:nth-child(2)").focus();
 
@@ -1411,7 +1438,7 @@ initModel().then(() => {
 
   // jquery dropdown click
   $(".m-dialog .dropdown-content a").click(function () {
-    console.log("click");
+    // console.log("click");
     // console.log($(this).attr("value"));
     const value = $(this).attr("value");
     const elem = $(this).parent().parent().prev();
@@ -1468,7 +1495,7 @@ initModel().then(() => {
   function changeDoseInDialog(node, dialog) {
     const value = $(node).val();
     const index = availableDrugs.indexOf(value);
-    console.log(value, index);
+    // console.log(value, index);
     if (index !== -1) {
       const unit = PCNEData[index].unit;
       console.log(unit);
@@ -1501,7 +1528,7 @@ initModel().then(() => {
         },
       },
       open: function () {
-        console.log("open", $(this));
+        // console.log("open", $(this));
         const dialog = $(this);
 
         const dialogDrugInput = $("input.dialog-drug-name-input", dialog);
@@ -1534,12 +1561,28 @@ initModel().then(() => {
     });
   });
 
+
+
+
+
   function setDialogAutoComplete(dialogId) {
     const dialog = $(dialogId);
     const dialogDrugInput = $("input.dialog-drug-name-input", dialog);
     dialogDrugInput.autocomplete({
-      source: availableDrugs,
+      // source: availableDrugs,
       appendTo: dialogId,
+      source: function (req, responseFn) {
+        const re = $.ui.autocomplete.escapeRegex(req.term);
+        const matcher = new RegExp(re, "iu");
+        const a = $.grep(availableDrugs, (item, index) => {
+          const matchVal = matcher.test(item);
+          const itemPinYin = availableDrugsPinYin[index];
+          const matchPY = itemPinYin === "" ? false :
+            matcher.test(itemPinYin);
+          return matchVal || matchPY;
+        });
+        responseFn(a);
+      },
       change: function (event, ui) {
         if (!ui.item) {
           $(this).val("");
@@ -1566,7 +1609,7 @@ initModel().then(() => {
     dialog.dialog({
       buttons: {
         "确定": function () {
-          console.log($(this));
+          // console.log($(this));
           const dialog = $(this);
           dialog.dialog("close");
 
@@ -1580,9 +1623,10 @@ initModel().then(() => {
         },
       },
       open: function () {
-        console.log("open", $(this));
+        // console.log("open", $(this));
         const dialog = $(this);
         setDialogAutoComplete(dialogId);
+        setDialogData("", dialog);
         dialog.parent().find("button:nth-child(2)").focus();
 
       }
