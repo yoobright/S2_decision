@@ -606,7 +606,18 @@ async function initModel() {
   console.log("init onnx");
   model.S1Session = await ort.InferenceSession.create("./assets/S1_model.onnx");
   console.log("init S1 done");
-  model.S2Session = await ort.InferenceSession.create("./assets/S2_model.onnx");
+  const response = await axios({
+    method: "get",
+    url: "./assets/S2_model.zip",
+    responseType: "arraybuffer"
+  });
+
+  // jszip extract file S2_model.onnx from response.data
+  const zipFile = await JSZip.loadAsync(response.data);
+  const onnxFile = await zipFile.file("S2_model.onnx").async("arraybuffer");
+
+  model.S2Session = await ort.InferenceSession.create(onnxFile);
+  // model.S2Session = await ort.InferenceSession.create("./assets/S2_model.onnx");
   console.log("init S2 done");
 }
 

@@ -6,7 +6,9 @@
     "getJsonSync": "readonly",
     "table_language": "readonly",
     "validator_msg": "readonly",
-    "ort": "readonly"
+    "ort": "readonly",
+    "axios": "readonly",
+    "JSZip": "readonly"
   },
   "env": {
     "browser": true,
