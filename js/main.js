@@ -358,101 +358,137 @@ function getDecDrugTypeFromCounter(counter) {
   return undefined;
 }
 
-function getFreqFromTd(td) {
-  const checked = $(td).find("input[type=radio]:checked");
-  const checkedLabel = checked.parent();
-  const res = {};
-  const inputV = checkedLabel.find("input.small-input");
-  // console.log(inputV);
-  if (checked.length === 0) {
-    return "";
-  }
+// function getFreqFromTd(td) {
+//   const checked = $(td).find("input[type=radio]:checked");
+//   const checkedLabel = checked.parent();
+//   const res = {};
+//   const inputV = checkedLabel.find("input.small-input");
+//   // console.log(inputV);
+//   if (checked.length === 0) {
+//     return "";
+//   }
 
-  if (inputV.length > 0) {
-    // console.log("!!!!!");
-    res.val = inputV.val().trim();
-    if (res.val === "") {
-      return "";
-    }
-  }
-  res.id = checked.val();
-  // console.log(res);
-  return res;
-}
+//   if (inputV.length > 0) {
+//     // console.log("!!!!!");
+//     res.val = inputV.val().trim();
+//     if (res.val === "") {
+//       return "";
+//     }
+//   }
+//   res.id = checked.val();
+//   // console.log(res);
+//   return res;
+// }
 
-function getDoseFromTd(td) {
-  const doseVal = $(td).find("input").val().trim();
-  const doseUnit = $(td).find("label").text();
-  const res = {};
+// function getDoseFromTd(td) {
+//   const doseVal = $(td).find("input").val().trim();
+//   const doseUnit = $(td).find("label").text();
+//   const res = {};
 
-  if (doseVal === "") {
-    return "";
-  }
+//   if (doseVal === "") {
+//     return "";
+//   }
 
-  res.val = doseVal;
-  res.unit = doseUnit;
-  // console.log(res);
-  return res;
-}
+//   res.val = doseVal;
+//   res.unit = doseUnit;
+//   // console.log(res);
+//   return res;
+// }
 
-function getDurtionFromTd(td) {
-  const checked = $(td).find("input[type=radio]:checked");
-  if (checked.length === 0) {
-    return "";
-  }
-  const val = checked.parent().text();
-  const id = checked.val();
+// function getDurtionFromTd(td) {
+//   const checked = $(td).find("input[type=radio]:checked");
+//   if (checked.length === 0) {
+//     return "";
+//   }
+//   const val = checked.parent().text();
+//   const id = checked.val();
 
-  return {
-    val: val,
-    id: id,
+//   return {
+//     val: val,
+//     id: id,
+//   };
+// }
+
+// function getNameFromTd(td) {
+//   const nameDiv =  $(td).children("div");
+//   const val = nameDiv.val().trim();
+//   const id = nameDiv.attr("data");
+
+//   return {
+//     val: val,
+//     id: id,
+//   };
+// }
+
+function genDataFromRowData(tableData) {
+  console.log(tableData);
+  const name = tableData.drug_name === "" ? "" :
+    { id: $(tableData.drug_name).attr("data"), val: $(tableData.drug_name).text() };
+  const dose = tableData.drug_name === "" ? "" :
+    {
+      val: $(tableData.drug_dose).attr("data").split("#")[0],
+      unit: $(tableData.drug_dose).attr("data").split("#")[1]
+    };
+  const freq = tableData.drug_freq === "" ? "" :
+    {
+      id: $(tableData.drug_freq).attr("data").split("#")[0],
+      val: $(tableData.drug_freq).attr("data").split("#")[1]
+    };
+
+  const duration = tableData.drug_durtion === "" ? "" :
+    {
+      id: $(tableData.drug_durtion).attr("data").split("#")[0],
+      val: $(tableData.drug_durtion).attr("data").split("#")[1]
+    };
+
+  const data = {
+    "name": name,
+    "dose": dose,
+    "freq": freq,
+    "duration": duration,
   };
-}
+  // console.log(data);
 
-function getNameFromTd(td) {
-  const val = $(td).children("input").val().trim();
-  const id = availableDrugsDict[val];
+  return data;
 
-  return {
-    val: val,
-    id: id,
-  };
 }
 
 function getAllUsedDrugs() {
   const table = $(usedDrugTableID).DataTable();
-  const data = table.rows().nodes();
+  const tableData = table.data();
   // console.log(data);
   const res = [];
-  data.each((value, index) => {
-    const td = $(value).children("td");
+
+  tableData.each((value, index) => {
+    const drugData = genDataFromRowData(value);
+    // const td = $(value).children("td");
 
     // console.log(td);
-    const name = getNameFromTd(td[1]);
+    // const name = getNameFromTd(td[1]);
     // if (name === "") {
     //   return;
     // }
     // console.log(name);
 
-    const dose = getDoseFromTd(td[2]);
+    // const dose = getDoseFromTd(td[2]);
     // if (dose === "") {
     //   return;
     // }
     // console.log(dose);
 
-    const freq = getFreqFromTd(td[3]);
+    // const freq = getFreqFromTd(td[3]);
     // if (freq === "") {
     //   return;
     // }
 
     // console.log(freq);
 
-    const durtion = getDurtionFromTd(td[4]);
+    // const durtion = getDurtionFromTd(td[4]);
     // if (durtion === "") {
     //   return;
     // }
     // console.log(durtion);
-    res.push({ name: name, dose: dose, freq: freq, durtion: durtion });
+    res.push(drugData);
     // console.log(res);
   });
   return res;
@@ -1105,16 +1141,27 @@ initModel().then(() => {
   }
 
   function genRowData(data) {
-    return [
-      "",
-      data.name === "" ? "" : `<div class='row-name' data='${data.name.id}'>${data.name.val}<div>`,
-      data.dose === "" ? "" : `<div data='${data.dose.val}#${data.dose.unit}'>
+    return {
+      "foo": "",
+      "drug_name": data.name === "" ? "" : `<div class='row-name' data='${data.name.id}'>${data.name.val}<div>`,
+
+      "drug_dose": data.dose === "" ? "" : `<div data='${data.dose.val}#${data.dose.unit}'>
         ${data.dose.val + data.dose.unit}<div>`,
-      genFreqCol(data.freq),
-      data.duration === "" ? "" : `<div data='${data.duration.id}#${data.duration.val}'>
+      "drug_freq": genFreqCol(data.freq),
+      "drug_durtion": data.duration === "" ? "" : `<div data='${data.duration.id}#${data.duration.val}'>
         ${data.duration.val}<div>`,
-      "<a class='tablebtn table-edit-btn'>编辑</a><a class='tablebtn table-del-btn'>删除</a>",
-    ];
+      "ops": null,
+    };
+    //   "",
+    //   data.name === "" ? "" : `<div class='row-name' data='${data.name.id}'>${data.name.val}<div>`,
+    //   data.dose === "" ? "" : `<div data='${data.dose.val}#${data.dose.unit}'>
+    //     ${data.dose.val + data.dose.unit}<div>`,
+    //   genFreqCol(data.freq),
+    //   data.duration === "" ? "" : `<div data='${data.duration.id}#${data.duration.val}'>
+    //     ${data.duration.val}<div>`,
+    //   null,
+    //   // "<a class='tablebtn table-edit-btn'>编辑</a><a class='tablebtn table-del-btn'>删除</a>",
+    // ];
   }
 
   function addRowFromData(table, data) {
@@ -1147,38 +1194,45 @@ initModel().then(() => {
     columnDefs: [
       {
         name: "foo",
+        data: "foo",
         className: "dtr-control",
         orderable: false,
         targets: 0,
       },
       {
         name: "drug_name",
+        data: "drug_name",
         orderable: true,
         targets: 1,
       },
       {
         name: "drug_dose",
+        data: "drug_dose",
         orderable: false,
         targets: 2,
         className: "dt-body-center",
       },
       {
         name: "drug_freq",
+        data: "drug_freq",
         orderable: false,
         targets: 3,
         className: "dt-body-center",
       },
       {
         name: "drug_durtion",
+        data: "drug_durtion",
         orderable: false,
         targets: 4,
         className: "dt-body-center",
       },
       {
         name: "ops",
+        data: null,
         orderable: false,
-        targets: 5,
+        targets: -1,
         className: "dt-body-center",
+        defaultContent: "<a class='tablebtn table-edit-btn'>编辑</a><a class='tablebtn table-del-btn'>删除</a>",
       },
     ],
     // rowsGroup: [
@@ -1236,38 +1290,6 @@ initModel().then(() => {
     }
   });
 
-  function genDataFromRowData(tableData) {
-    console.log(tableData);
-    const name = tableData[1] === "" ? "" :
-      { id: $(tableData[1]).attr("data"), val: $(tableData[1]).text() };
-    const dose = tableData[2] === "" ? "" :
-      {
-        val: $(tableData[2]).attr("data").split("#")[0],
-        unit: $(tableData[2]).attr("data").split("#")[1]
-      };
-    const freq = tableData[3] === "" ? "" :
-      {
-        id: $(tableData[3]).attr("data").split("#")[0],
-        val: $(tableData[3]).attr("data").split("#")[1]
-      };
-
-    const duration = tableData[4] === "" ? "" :
-      {
-        id: $(tableData[4]).attr("data").split("#")[0],
-        val: $(tableData[4]).attr("data").split("#")[1]
-      };
-
-    const data = {
-      "name": name,
-      "dose": dose,
-      "freq": freq,
-      "duration": duration,
-    };
-    console.log(data);
-
-    return data;
-
-  }
 
   // update row data
   function updateRowData(tableRow, data) {
@@ -1333,14 +1355,14 @@ initModel().then(() => {
   // delete button event
   $("{0} tbody".format(usedDrugTableID)).on("click", ".table-del-btn", function (event) {
     console.log("del");
-    const tableRow = table.row($(this).parents("tr"));
-    tableRow.remove().draw(false);
+    const index = table.row(this).index();
+    table.rows(index).remove().draw(false);
   });
 
   // edit button event
   $("{0} tbody".format(usedDrugTableID)).on("click", ".table-edit-btn", function (event) {
     console.log("edit");
-    const tableRow = table.row($(this).parents("tr"));
+    const tableRow = table.row(this);
     const tableData = tableRow.data();
     const drugData = genDataFromRowData(tableData);
 
