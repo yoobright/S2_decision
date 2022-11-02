@@ -424,7 +424,7 @@ function genDataFromRowData(tableData) {
   console.log(tableData);
   const name = tableData.drug_name === "" ? "" :
     { id: $(tableData.drug_name).attr("data"), val: $(tableData.drug_name).text() };
-  const dose = tableData.drug_name === "" ? "" :
+  const dose = tableData.drug_dose === "" ? "" :
     {
       val: $(tableData.drug_dose).attr("data").split("#")[0],
       unit: $(tableData.drug_dose).attr("data").split("#")[1]
@@ -1355,14 +1355,14 @@ initModel().then(() => {
   // delete button event
   $("{0} tbody".format(usedDrugTableID)).on("click", ".table-del-btn", function (event) {
     console.log("del");
-    const index = table.row(this).index();
+    const index = table.row($(this).parents("li, tr")).index();
     table.rows(index).remove().draw(false);
   });
 
   // edit button event
   $("{0} tbody".format(usedDrugTableID)).on("click", ".table-edit-btn", function (event) {
     console.log("edit");
-    const tableRow = table.row(this);
+    const tableRow = table.row($(this).parents("li, tr"));
     const tableData = tableRow.data();
     const drugData = genDataFromRowData(tableData);
 
@@ -1370,8 +1370,10 @@ initModel().then(() => {
     const dialogId = "#used-durg-edit-dialog";
     const dialog = $(dialogId);
     // const dialogDrugInput = $("input.dialog-drug-name-input", dialog);
-
+    // edit dialog
     dialog.dialog({
+      modal: true,
+      maxWidth: $(window).width(),
       autoOpen: false,
       buttons: {
         "确定": function () {
@@ -1531,55 +1533,58 @@ initModel().then(() => {
   $.ui.dialog.prototype._focusTabbable = $.noop;
 
 
-  $(".tablebtn",).click(() => {
-    dialog.dialog({
-      buttons: {
-        "确定": function () {
-          console.log($(this));
-          const dialog = $(this);
-          dialog.dialog("close");
+  // $(".tablebtn",).click(() => {
 
-          const data = getDataFromDialog(dialog);
-          console.log(data);
+  //   dialog.dialog({
+  //     modal: true,
+  //     maxWidth: $(window).width(),
+  //     buttons: {
+  //       "确定": function () {
+  //         console.log($(this));
+  //         const dialog = $(this);
+  //         dialog.dialog("close");
 
-        },
-        "取消": function () {
-          $(this).dialog("close");
-        },
-      },
-      open: function () {
-        // console.log("open", $(this));
-        const dialog = $(this);
+  //         const data = getDataFromDialog(dialog);
+  //         console.log(data);
 
-        const dialogDrugInput = $("input.dialog-drug-name-input", dialog);
+  //       },
+  //       "取消": function () {
+  //         $(this).dialog("close");
+  //       },
+  //     },
+  //     open: function () {
+  //       // console.log("open", $(this));
+  //       const dialog = $(this);
 
-        dialogDrugInput.autocomplete({
-          source: availableDrugs,
-          appendTo: "#used-durg-add-dialog",
-          change: function (event, ui) {
-            if (!ui.item) {
-              $(this).val("");
-            }
-            // changeDoseInDialog(this, dialog);
-            console.log($(this).val());
-          },
-          close: function (event, ui) {
-            // if (!ui.item) {
-            //   $(this).val("");
-            // }
-            changeDoseInDialog(this, dialog);
-            // console.log($(this).val());
-          },
-        });
-        // .focus(function (event) {
-        //   // search on refocus
-        //   $(this).data("uiAutocomplete").search($(this).val());
-        // });
+  //       const dialogDrugInput = $("input.dialog-drug-name-input", dialog);
+
+  //       dialogDrugInput.autocomplete({
+  //         source: availableDrugs,
+  //         appendTo: "#used-durg-add-dialog",
+  //         change: function (event, ui) {
+  //           if (!ui.item) {
+  //             $(this).val("");
+  //           }
+  //           // changeDoseInDialog(this, dialog);
+  //           console.log($(this).val());
+  //         },
+  //         close: function (event, ui) {
+  //           // if (!ui.item) {
+  //           //   $(this).val("");
+  //           // }
+  //           changeDoseInDialog(this, dialog);
+  //           // console.log($(this).val());
+  //         },
+  //       });
+  //       // .focus(function (event) {
+  //       //   // search on refocus
+  //       //   $(this).data("uiAutocomplete").search($(this).val());
+  //       // });
 
 
-      }
-    });
-  });
+  //     }
+  //   });
+  // });
 
 
 
@@ -1626,7 +1631,10 @@ initModel().then(() => {
     const dialogId = "#used-durg-add-dialog";
     const dialog = $(dialogId);
 
+    // add dialog
     dialog.dialog({
+      modal: true,
+      maxWidth: $(window).width(),
       buttons: {
         "确定": function () {
           // console.log($(this));
