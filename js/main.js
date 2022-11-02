@@ -421,7 +421,7 @@ function getDecDrugTypeFromCounter(counter) {
 // }
 
 function genDataFromRowData(tableData) {
-  console.log(tableData);
+  // console.log(tableData);
   const name = tableData.drug_name === "" ? "" :
     { id: $(tableData.drug_name).attr("data"), val: $(tableData.drug_name).text() };
   const dose = tableData.drug_dose === "" ? "" :
@@ -531,6 +531,38 @@ function getChList() {
     .get();
 }
 
+function showResult(decisionType, decisionId) {
+  const dialogId = "#result-dialog";
+  const dialog = $(dialogId);
+
+  dialog.dialog({
+    modal: true,
+    maxWidth: $(window).width(),
+    autoOpen: false,
+    buttons: {
+      "确定": function () {
+        console.log($(this));
+        dialog.dialog("close");
+        // callback(table, data);
+
+      },
+      "取消": function () {
+        $(this).dialog("close");
+      },
+    },
+    open: function () {
+      if (decisionId) {
+        console.log(decsionText[decisionType][decisionId]);
+        $("#drug-recommend-text").text(decsionText[decisionType][decisionId]);
+      } else {
+        $("#drug-recommend-text").text("");
+      }
+    }
+  });
+
+  dialog.dialog("open");
+}
+
 function getBodyList() {
   const bodyDoc = document.getElementById("body-view-image").contentDocument;
   const bodyPloygon = d3.select(bodyDoc).selectAll("polygon");
@@ -552,6 +584,8 @@ function processS1() {
     const strOut =
       "most level: {0}\nbody list: {1}\nch list: {2}\ndecision: {3}\n";
     alert(strOut.format(mostLevel, bodyList, chList, res[0]));
+    showResult("s1", res[0]);
+
   });
 }
 
@@ -592,6 +626,8 @@ function processS2() {
       compliance,
       res[0])
     );
+
+    showResult("s2", res[0]);
   });
 }
 
@@ -1661,6 +1697,7 @@ initModel().then(() => {
     });
 
   }
+
 
 
   // --------------------------------------------------------------------------

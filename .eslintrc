@@ -5,6 +5,7 @@
     "noUiSlider": "readonly",
     "getJsonSync": "readonly",
     "table_language": "readonly",
+    "decsionText": "readonly",
     "validator_msg": "readonly",
     "ort": "readonly",
     "axios": "readonly",
