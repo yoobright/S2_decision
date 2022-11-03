@@ -531,7 +531,7 @@ function getChList() {
     .get();
 }
 
-function showResult(decisionType, decisionId) {
+function showResult(decisionType, decisionId, drugIssueInfo="") {
   const dialogId = "#result-dialog";
   const dialog = $(dialogId);
 
@@ -551,11 +551,15 @@ function showResult(decisionType, decisionId) {
       },
     },
     open: function () {
+      $("#drug-recommend-text").text("");
       if (decisionId) {
         console.log(decsionText[decisionType][decisionId]);
         $("#drug-recommend-text").text(decsionText[decisionType][decisionId]);
-      } else {
-        $("#drug-recommend-text").text("");
+      }
+
+      $("#drug-issue-text").text("无");
+      if (drugIssueInfo !== "") {
+        $("#drug-issue-text").text(drugIssueInfo);
       }
     }
   });
@@ -589,6 +593,76 @@ function processS1() {
   });
 }
 
+
+function getFreqTimesPreDay(freq) {
+
+  if (freq.id === "" || freq.val === "") {
+    return null;
+  }
+
+  if (freq.id === "1") {
+    return parseFloat(freq.val);
+  }
+  if (freq.id === "2") {
+    return 24. / parseFloat(freq.val);
+  }
+  if (freq.id === "3") {
+    return 1. / parseFloat(freq.val);
+  }
+  if (freq.id === "5") {
+    return 1.;
+  }
+
+  return null;
+}
+
+function getHighFreqTimesPreDay(strData) {
+  const regexp = /([0-9]*)次\/d/ug;
+  const matches = strData.matchAll(regexp);
+  console.log(matches);
+  for (const match of matches) {
+    if (match[1] !== "") {
+      return parseInt(match[1]);
+    }
+  }
+  return null;
+}
+
+function drugOverdoseCheck(allDrugs) {
+
+}
+
+
+function drugHighFreqCheck(allDrugs) {
+  const res = [];
+  for (const drug of allDrugs) {
+    const drugName = drug.name.val;
+    const index = availableDrugs.indexOf(drugName);
+    if (index !== -1) {
+      const drugInfo = PCNEData[index];
+      const highFreqTimesPreDay = getHighFreqTimesPreDay(drugInfo.exce_freq);
+      const freqTimesPreDay = getFreqTimesPreDay(drug.freq);
+      if (freqTimesPreDay === null || highFreqTimesPreDay === null) {
+        continue;
+      }
+
+      if (freqTimesPreDay > highFreqTimesPreDay) {
+        res.push(drugName);
+      }
+    }
+  }
+
+  return res;
+}
+
+function genDrugIssueInfo(drugHighFreqList) {
+  if (drugHighFreqList.length > 0) {
+    return previousIssueText["C3.4"];
+  }
+  return "";
+}
+
+
 function processS2() {
   const mostLevel = getMostLevel();
   const breakOutType = getBreakOutType();
@@ -596,6 +670,10 @@ function processS2() {
   const allUsedDrugs = getAllUsedDrugs();
   const allUsedDrugsID = allUsedDrugs.map((v) => v.name.id);
   console.log("allUsedDrugsID: " + allUsedDrugsID);
+
+  const drugHighFreqList = drugHighFreqCheck(allUsedDrugs);
+  console.log("drugHighFreqList: " + drugHighFreqList);
+  const drugIssueInfo = genDrugIssueInfo(drugHighFreqList);
   const counter = genTypeCounter(allUsedDrugsID);
   const decDrugType = getDecDrugTypeFromCounter(counter);
   if (decDrugType === undefined) {
@@ -627,7 +705,7 @@ function processS2() {
       res[0])
     );
 
-    showResult("s2", res[0]);
+    showResult("s2", res[0], drugIssueInfo);
   });
 }
 
