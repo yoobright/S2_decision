@@ -6,6 +6,7 @@
     "getJsonSync": "readonly",
     "table_language": "readonly",
     "decsionText": "readonly",
+    "previousIssueText": "readonly",
     "validator_msg": "readonly",
     "ort": "readonly",
     "axios": "readonly",

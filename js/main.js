@@ -395,7 +395,7 @@ function getDecDrugTypeFromCounter(counter) {
 //   return res;
 // }
 
-// function getDurtionFromTd(td) {
+// function getdurationFromTd(td) {
 //   const checked = $(td).find("input[type=radio]:checked");
 //   if (checked.length === 0) {
 //     return "";
@@ -435,10 +435,10 @@ function genDataFromRowData(tableData) {
       val: $(tableData.drug_freq).attr("data").split("#")[1]
     };
 
-  const duration = tableData.drug_durtion === "" ? "" :
+  const duration = tableData.drug_duration === "" ? "" :
     {
-      id: $(tableData.drug_durtion).attr("data").split("#")[0],
-      val: $(tableData.drug_durtion).attr("data").split("#")[1]
+      id: $(tableData.drug_duration).attr("data").split("#")[0],
+      val: $(tableData.drug_duration).attr("data").split("#")[1]
     };
 
   const data = {
@@ -483,11 +483,11 @@ function getAllUsedDrugs() {
 
     // console.log(freq);
 
-    // const durtion = getDurtionFromTd(td[4]);
-    // if (durtion === "") {
+    // const duration = getdurationFromTd(td[4]);
+    // if (duration === "") {
     //   return;
     // }
-    // console.log(durtion);
+    // console.log(duration);
     res.push(drugData);
     // console.log(res);
   });
@@ -662,12 +662,33 @@ function genDrugIssueInfo(drugHighFreqList) {
   return "";
 }
 
+function usedDrugInputCheck(allDrugs) {
+  for (const drug of allDrugs) {
+    const drugName = drug.name;
+    const drugDose = drug.dose;
+    const drugFreq = drug.freq;
+    const drugDuration = drug.duration;
+    if (drugName === "" || drugDose === "" || drugFreq === "" ||
+      drugDuration === "" || drugFreq.val === "") {
+      return false;
+    }
+  }
+
+  return true;
+
+}
+
 
 function processS2() {
   const mostLevel = getMostLevel();
   const breakOutType = getBreakOutType();
   const breakOutTimes = getBreakOutTimes();
   const allUsedDrugs = getAllUsedDrugs();
+
+  if (!usedDrugInputCheck(allUsedDrugs)) {
+    alert("请填写完整用药信息");
+    return;
+  }
   const allUsedDrugsID = allUsedDrugs.map((v) => v.name.id);
   console.log("allUsedDrugsID: " + allUsedDrugsID);
 
@@ -865,6 +886,9 @@ initModel().then(() => {
       user_pain_breakout_freq: {
         required: true,
       },
+      user_adverse_reaction: {
+        required: true,
+      },
     },
 
     onfocusout: function (element) {
@@ -936,7 +960,7 @@ initModel().then(() => {
       return form.valid();
     },
     onFinishing: function (event, currentIndex) {
-      form.validate().settings.ignore = ":disabled";
+      form.validate().settings.ignore = ":disabled,:hidden";
       return form.valid();
     },
     onFinished: function (event, currentIndex) {
@@ -1262,7 +1286,7 @@ initModel().then(() => {
       "drug_dose": data.dose === "" ? "" : `<div data='${data.dose.val}#${data.dose.unit}'>
         ${data.dose.val + data.dose.unit}<div>`,
       "drug_freq": genFreqCol(data.freq),
-      "drug_durtion": data.duration === "" ? "" : `<div data='${data.duration.id}#${data.duration.val}'>
+      "drug_duration": data.duration === "" ? "" : `<div data='${data.duration.id}#${data.duration.val}'>
         ${data.duration.val}<div>`,
       "ops": null,
     };
@@ -1334,8 +1358,8 @@ initModel().then(() => {
         className: "dt-body-center",
       },
       {
-        name: "drug_durtion",
-        data: "drug_durtion",
+        name: "drug_duration",
+        data: "drug_duration",
         orderable: false,
         targets: 4,
         className: "dt-body-center",
