@@ -149,6 +149,10 @@ p.desc {
   font-weight: bold;
 }
 
+.question-label {
+  font-size: 16px;
+}
+
 .text-input {
   font-size: 12px;
   color: #999;
@@ -175,6 +179,7 @@ input {
 
 #steps-uid-0-p-0 .form-row,
 #steps-uid-0-p-0 .form-group,
+#steps-uid-0-p-1 .form-group,
 #steps-uid-0-p-0 .form-date {
   width: 680px;
 }
@@ -695,6 +700,7 @@ div.input-textarea textarea {
 @media screen and (max-width: 768px) {
   #steps-uid-0-p-0 .form-row,
   #steps-uid-0-p-0 .form-group,
+  #steps-uid-0-p-1 .form-group,
   #steps-uid-0-p-0 .form-date {
     width: 100%;
   }

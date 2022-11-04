@@ -1030,6 +1030,43 @@ initModel().then(() => {
   // --------------------------------------------------------------------------
   // step 1
   // --------------------------------------------------------------------------
+  const physicalLevelKV = [
+    [0, 0, 0.099, 0.246],
+    [0, 0, 0.105, 0.208],
+    [0, 0, 0.074, 0.193],
+    [0, 0, 0.092, 0.236],
+    [0, 0, 0.086, 0.205],
+  ];
+
+
+
+  $("[id^=user_physical_q]" ).on("change", () => {
+    const selected = $("select[id^=user_physical_q] option")
+      .filter(":selected");
+
+    const values = selected.map(function () {
+      return parseInt($(this).val());
+    }).get().filter((v) => v > 0);
+
+    console.log(values);
+
+    if (values.length === 5) {
+
+      const N3 = values.includes(3) ? 0.22 : 0;
+      const constParam = 0.039;
+      const q1 = physicalLevelKV[0][values[0]];
+      const q2 = physicalLevelKV[1][values[1]];
+      const q3 = physicalLevelKV[2][values[2]];
+      const q4 = physicalLevelKV[3][values[3]];
+      const q5 = physicalLevelKV[4][values[4]];
+
+      // console.log(q1, q2, q3, q4, q5);
+      const result = 1. - N3 - constParam - (q1 + q2 + q3 + q4 + q5);
+      // console.log(result);
+      $("#user_physical_score").text(result.toFixed(3));
+    }
+
+  });
 
   // --------------------------------------------------------------------------
   // step 2

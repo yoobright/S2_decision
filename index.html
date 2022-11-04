@@ -378,9 +378,130 @@
                 <div class="form-group">
                   <label for="user_physical" class="form-label"
                     >身体状况<span style="color: crimson">*</span>
-                    （PS评分）</label
+                    （评分）</label
                   >
+                  <label
+                    for="user_physical_q1"
+                    class="question-label"
+                    style="display: block"
+                    >行动
+                  </label>
                   <select
+                    name="user_physical_q1"
+                    id="user_physical_q1"
+                    class="required"
+                  >
+                    <option
+                      value=""
+                      style="color: gray"
+                      selected
+                      disabled
+                      hidden
+                    ></option>
+                    <option value="1">我可以四处走动，没有任何困难</option>
+                    <option value="2">我行动有些不方便</option>
+                    <option value="3">我不能下床活动</option>
+                  </select>
+                  <span class="text-input" style="height: 10px"></span>
+
+                  <label
+                    for="user_physical_q2"
+                    class="question-label"
+                    style="display: block"
+                    >自己照顾自己
+                  </label>
+                  <select
+                    name="user_physical_q2"
+                    id="user_physical_q2"
+                    class="required"
+                  >
+                    <option
+                      value=""
+                      style="color: gray"
+                      selected
+                      disabled
+                      hidden
+                    ></option>
+                    <option value="1">我能自己照顾自己，没有任何困难</option>
+                    <option value="2">我在洗脸、刷牙、洗澡或穿衣方面有些困难</option>
+                    <option value="3">我无法自己洗脸、刷牙、洗澡或穿衣</option>
+                  </select>
+
+                  <span class="text-input" style="height: 10px"></span>
+
+                  <label
+                  for="user_physical_q3"
+                  class="question-label"
+                  style="display: block"
+                  >日常活动（如工作，学习，家务事，家庭或休闲活动）
+                </label>
+                <select
+                  name="user_physical_q3"
+                  id="user_physical_q3"
+                  class="required"
+                >
+                  <option
+                    value=""
+                    style="color: gray"
+                    selected
+                    disabled
+                    hidden
+                  ></option>
+                  <option value="1">我能进行日常活动，没有任何困难</option>
+                  <option value="2">我在进行日常活动方面有些困难</option>
+                  <option value="3">我无法进行日常活动</option>
+                </select>
+
+                <span class="text-input" style="height: 10px"></span>
+
+                  <label
+                    for="user_physical_q4"
+                    class="question-label"
+                    style="display: block"
+                    >疼痛/不舒服
+                  </label>
+                  <select
+                    name="user_physical_q4"
+                    id="user_physical_q4"
+                    class="required"
+                  >
+                    <option
+                      value=""
+                      style="color: gray"
+                      selected
+                      disabled
+                      hidden
+                    ></option>
+                    <option value="1">我没有任何疼痛或不舒服</option>
+                    <option value="2">我觉得中度疼痛或者不舒服</option>
+                    <option value="3">我觉得极度疼痛或不舒服</option>
+                  </select>
+
+                  <span class="text-input" style="height: 10px"></span>
+
+                  <label
+                    for="user_physical_q5"
+                    class="question-label"
+                    style="display: block"
+                    >焦虑（如紧张、担心、不安等等）/抑郁（如做事情缺乏兴趣、没乐趣、提不起精神等）
+                  </label>
+                  <select
+                    name="user_physical_q5"
+                    id="user_physical_q5"
+                    class="required"
+                  >
+                    <option
+                      value=""
+                      style="color: gray"
+                      selected
+                      disabled
+                      hidden
+                    ></option>
+                    <option value="1">我不觉得焦虑或抑郁</option>
+                    <option value="2">我觉得中度焦虑或抑郁</option>
+                    <option value="3">我觉得极度焦虑或者抑郁</option>
+                  </select>
+                  <!-- <select
                     name="user_physical"
                     id="user_physical"
                     class="required"
@@ -405,9 +526,12 @@
                       3分：生活仅能部分自理，日间一半以上时间卧床或坐轮椅
                     </option>
                     <option value="4">4分：卧床不起，生活不能自理</option>
-                    <!-- <option value="5">5分：死亡</option> -->
-                  </select>
+                    <option value="5">5分：死亡</option>
+                  </select> -->
                   <span class="text-input"></span>
+                  <div class="question-label">
+                    身体评分：<div id="user_physical_score" style="display: inline;"></div>
+                  </div>
                 </div>
               </div>
             </fieldset>
@@ -425,7 +549,7 @@
                   >
                   <div class="chceckbox-div input-group"></div>
                 </div>
-                <div class="form-group">
+                <div class="form-group" style="width: 100%">
                   <label for="user_pain_part" class="form-label"
                     >疼痛部位<span style="color: crimson">*</span></label
                   >
@@ -445,6 +569,18 @@
                       readonly
                     ></textarea>
                   </div>
+                </div>
+
+                <div class="form-group" style="max-width: 600px">
+                  <label for="user_pain_extra" class="form-label"
+                    >其他疼痛说明</label
+                  >
+                  <input
+                    type="text"
+                    name="user_pain_extra"
+                    id="user_pain_extra"
+                  />
+                  <span class="text-input"></span>
                 </div>
 
                 <div class="form-group">
