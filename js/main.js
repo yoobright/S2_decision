@@ -531,7 +531,7 @@ function getChList() {
     .get();
 }
 
-function showResult(decisionType, decisionId, drugIssueInfo="") {
+function showResult(decisionType, decisionId, drugIssueInfo = "") {
   const dialogId = "#result-dialog";
   const dialog = $(dialogId);
 
@@ -566,6 +566,7 @@ function showResult(decisionType, decisionId, drugIssueInfo="") {
 
   dialog.dialog("open");
 }
+
 
 function getBodyList() {
   const bodyDoc = document.getElementById("body-view-image").contentDocument;
@@ -730,6 +731,30 @@ function processS2() {
   });
 }
 
+
+function openFeedbackDialog() {
+  const dialogId = "#feedback-dialog";
+  const dialog = $(dialogId);
+
+  // add dialog
+  dialog.dialog({
+    modal: true,
+    maxWidth: $(window).width(),
+    buttons: {
+      "确定": function () {
+        dialog.dialog("close");
+      },
+      "取消": function () {
+        $(this).dialog("close");
+      },
+    },
+    open: function () {
+      // add some function
+    }
+  });
+
+}
+
 // --------------------------------------------------------------------------
 // Global Constant
 
@@ -742,10 +767,16 @@ PCNEData.forEach((v) => {
   availableDrugsDict[v.name + v.spec] = v.id;
 });
 const adverseReactionRegex = /^(L).*/u;
-const availableAdverseReactionDrugs = PCNEData.filter(
+
+const availableAdverseReactionDrugsData = PCNEData.filter(
   (v) =>
     v.class.split("/").filter((v) => adverseReactionRegex.test(v)).length >= 1
-).map((v) => v.name + v.spec);
+);
+const availableAdverseReactionDrugs = availableAdverseReactionDrugsData
+  .map((v) => v.name + v.spec);
+
+const availableAdverseReactionDrugsPinYin = availableAdverseReactionDrugsData
+  .map((v) => getShortPinyin(v.name));
 
 const painDrugTypeList = ["A", "B", "C", "D", "E", "F"];
 
@@ -1570,6 +1601,26 @@ initModel().then(() => {
   // userAdverseReactionDrug
   $("#user_adverse_reaction_drug").tagit({
     availableTags: availableAdverseReactionDrugs,
+    afterTagAdded: function (event, ui) {
+      if (!availableAdverseReactionDrugs.includes(ui.tagLabel)) {
+        console.log(ui.tagLabel);
+        $(this).tagit("removeTagByLabel", ui.tagLabel);
+      }
+    },
+    autocomplete: {
+      source: function (req, responseFn) {
+        const re = $.ui.autocomplete.escapeRegex(req.term);
+        const matcher = new RegExp(re, "iu");
+        const a = $.grep(availableAdverseReactionDrugs, (item, index) => {
+          const matchVal = matcher.test(item);
+          const itemPinYin = availableAdverseReactionDrugsPinYin[index];
+          const matchPY = itemPinYin === "" ? false :
+            matcher.test(itemPinYin);
+          return matchVal || matchPY;
+        });
+        responseFn(a);
+      }
+    }
   });
 
   function setHealth() {
@@ -1800,7 +1851,9 @@ initModel().then(() => {
 
   }
 
-
+  $("#feedback-rating").barrating({
+    theme: "css-stars"
+  });
 
   // --------------------------------------------------------------------------
 

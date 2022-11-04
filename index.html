@@ -12,6 +12,8 @@
     <link rel="stylesheet" href="css/jquery-ui.min.css" />
     <link href="css/jquery.tagit.css" rel="stylesheet" />
     <link href="css/tagit.ui-zendesk.css" rel="stylesheet" />
+    <!-- <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/font-awesome/latest/css/font-awesome.min.css"> -->
+    <link href="vendor/jquery-bar-rating/themes/css-stars.css" rel="stylesheet" />
     <!-- <link rel="stylesheet" href="css/datatables.css" /> -->
     <!-- <link rel="stylesheet" href="css/jquery.dataTables.min.css" />
     <link rel="stylesheet" href="css/responsive.dataTables.min.css" /> -->
@@ -796,6 +798,28 @@
       <div class="result-text" id="drug-recommend-text"></div>
     </div>
 
+    <div class="m-dialog"
+      id="feedback-dialog"
+      title="用户使用评价调查表"
+      style="display: none"
+    >
+      <label for="feedback-rating" class="m-dialog-label">您对该系统此次的推荐用药方案是否认可？</label>
+      <select id="feedback-rating">
+        <option value="1">1</option>
+        <option value="2">2</option>
+        <option value="3">3</option>
+        <option value="4">4</option>
+        <option value="5">5</option>
+      </select>
+      <ul style="padding-inline-start: 20px;">
+        <li>5分：非常认可</li>
+        <li>4分：认可</li>
+        <li>3分：一般</li>
+        <li>2分：不认可</li>
+        <li>1分：非常不认可</li>
+      </ul>
+    </div>
+
     <!-- JS -->
     <script src="vendor/jquery/jquery.min.js"></script>
     <script src="vendor/jquery/jquery-ui.min.js"></script>
@@ -806,6 +830,7 @@
     <!-- <script src="vendor/minimalist-picker/dobpicker.js"></script> -->
 
     <script src="vendor/nouislider/nouislider.min.js"></script>
+    <script src="vendor/jquery-bar-rating/jquery.barrating.min.js"></script>
     <script src="vendor/d3.v5.min.js"></script>
     <!-- use jquery.dataTables dataTables.buttons dataTables.responsive.js dataTables.select dataTables.fixedHeader-->
     <!-- <script
