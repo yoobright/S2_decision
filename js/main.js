@@ -541,9 +541,9 @@ function showResult(decisionType, decisionId, drugIssueInfo = "") {
     autoOpen: false,
     buttons: {
       "确定": function () {
-        console.log($(this));
+        // console.log($(this));
         dialog.dialog("close");
-        // callback(table, data);
+        openFeedbackDialog();
 
       },
       "取消": function () {
@@ -749,7 +749,11 @@ function openFeedbackDialog() {
       },
     },
     open: function () {
-      // add some function
+      $("#feedback-rating").barrating({
+        theme: "css-stars",
+        initialRating: 3,
+      });
+      $("#feedback-rating").barrating("set", 3);
     }
   });
 
@@ -1058,7 +1062,12 @@ initModel().then(() => {
   });
 
   // userReason
-  const userReasonList = ["肿瘤", "肿瘤治疗", "非肿瘤相关性"];
+  const userReasonList = [
+    ["肿瘤", 1],
+    ["肿瘤治疗", 2],
+    ["非肿瘤相关性", 3],
+    ["未知", -1],
+  ];
   const userPainReasonTag = "user_pain_reason";
 
   addCheckBox(userPainReasonTag, userReasonList);
@@ -1851,9 +1860,6 @@ initModel().then(() => {
 
   }
 
-  $("#feedback-rating").barrating({
-    theme: "css-stars"
-  });
 
   // --------------------------------------------------------------------------
 
