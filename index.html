@@ -13,7 +13,10 @@
     <link href="css/jquery.tagit.css" rel="stylesheet" />
     <link href="css/tagit.ui-zendesk.css" rel="stylesheet" />
     <!-- <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/font-awesome/latest/css/font-awesome.min.css"> -->
-    <link href="vendor/jquery-bar-rating/themes/css-stars.css" rel="stylesheet" />
+    <link
+      href="vendor/jquery-bar-rating/themes/css-stars.css"
+      rel="stylesheet"
+    />
     <!-- <link rel="stylesheet" href="css/datatables.css" /> -->
     <!-- <link rel="stylesheet" href="css/jquery.dataTables.min.css" />
     <link rel="stylesheet" href="css/responsive.dataTables.min.css" /> -->
@@ -96,22 +99,26 @@
                   <label for="user_gender" class="form-label"
                     >性别<span style="color: crimson">*</span></label
                   >
-                  <input
-                    type="radio"
-                    name="user_gender"
-                    id="user_gender"
-                    value="1"
-                    class="required"
-                  />
-                  <label type="radio-label">男</label>
-                  <input
-                    type="radio"
-                    name="user_gender"
-                    id="user_gender"
-                    value="2"
-                    class="required"
-                  />
-                  <label type="radio-label">女</label>
+                  <label type="radio-label">
+                    <input
+                      type="radio"
+                      name="user_gender"
+                      id="user_gender"
+                      value="1"
+                      class="required"
+                    />
+                    男
+                  </label>
+                  <label type="radio-label">
+                    <input
+                      type="radio"
+                      name="user_gender"
+                      id="user_gender"
+                      value="2"
+                      class="required"
+                    />
+                    女
+                  </label>
                   <span class="text-input"></span>
                 </div>
                 <div class="form-group">
@@ -449,7 +456,9 @@
                 </div>
                 <div class="form-group">
                   <label for="user_pain_level" class="form-label"
-                    >疼痛强度（过去24小时平均疼痛）<span style="color: crimson">*</span></label
+                    >疼痛强度（过去24小时平均疼痛）<span style="color: crimson"
+                      >*</span
+                    ></label
                   >
                   <!-- </div style="height: 200px;"> -->
                   <!-- <div id="pain_leval_slider"></div> -->
@@ -494,7 +503,9 @@
                 </div>
                 <div class="form-group">
                   <label for="user_pain_breakout_freq" class="form-label"
-                    >疼痛爆发次数（每天）<span style="color: crimson">*</span></label
+                    >疼痛爆发次数（每天）<span style="color: crimson"
+                      >*</span
+                    ></label
                   >
                   <div class="radio-div input-group"></div>
                 </div>
@@ -517,22 +528,26 @@
                       >*</span
                     ></label
                   >
-                  <input
-                    type="radio"
-                    name="used_drug"
-                    id="used_drug"
-                    value="1"
-                    class="required"
-                  />
-                  <label type="radio-label">是</label>
-                  <input
-                    type="radio"
-                    name="used_drug"
-                    id="used_drug"
-                    value="0"
-                    class="required"
-                  />
-                  <label type="radio-label">否</label>
+                  <label type="radio-label">
+                    <input
+                      type="radio"
+                      name="used_drug"
+                      id="used_drug"
+                      value="1"
+                      class="required"
+                    />
+                    是
+                  </label>
+                  <label type="radio-label">
+                    <input
+                      type="radio"
+                      name="used_drug"
+                      id="used_drug"
+                      value="0"
+                      class="required"
+                    />
+                    否
+                  </label>
                 </div>
 
                 <div class="used-drug-content" style="display: none">
@@ -604,80 +619,96 @@
                       style="display: block"
                       >您是否有时会忘记服药？</label
                     >
-                    <input
-                      type="radio"
-                      name="user_compliance_q1"
-                      id="user_compliance_q1"
-                      value="0"
-                    />
-                    <label type="radio-label">是</label>
-                    <input
-                      type="radio"
-                      name="user_compliance_q1"
-                      id="user_compliance_q1"
-                      value="1"
-                    />
-                    <label type="radio-label">否</label>
+                    <label type="radio-label">
+                      <input
+                        type="radio"
+                        name="user_compliance_q1"
+                        id="user_compliance_q1"
+                        value="0"
+                      />
+                      是
+                    </label>
+                    <label type="radio-label">
+                      <input
+                        type="radio"
+                        name="user_compliance_q1"
+                        id="user_compliance_q1"
+                        value="1"
+                      />
+                      否
+                    </label>
                     <label
                       for="user_compliance_q2"
                       class="question-label"
                       style="display: block"
                       >您是否有时不注意服药？</label
                     >
-                    <input
-                      type="radio"
-                      name="user_compliance_q2"
-                      id="user_compliance_q2"
-                      value="0"
-                    />
-                    <label type="radio-label">是</label>
-                    <input
-                      type="radio"
-                      name="user_compliance_q2"
-                      id="user_compliance_q2"
-                      value="1"
-                    />
-                    <label type="radio-label">否</label>
+                    <label type="radio-label">
+                      <input
+                        type="radio"
+                        name="user_compliance_q2"
+                        id="user_compliance_q2"
+                        value="0"
+                      />
+                      是</label
+                    >
+                    <label type="radio-label">
+                      <input
+                        type="radio"
+                        name="user_compliance_q2"
+                        id="user_compliance_q2"
+                        value="1"
+                      />
+                      否
+                    </label>
                     <label
                       for="user_compliance_q3"
                       class="question-label"
                       style="display: block"
                       >您自觉症状好转时是否会自行停药？</label
                     >
-                    <input
-                      type="radio"
-                      name="user_compliance_q3"
-                      id="user_compliance_q3"
-                      value="0"
-                    />
-                    <label type="radio-label">是</label>
-                    <input
-                      type="radio"
-                      name="user_compliance_q3"
-                      id="user_compliance_q3"
-                      value="1"
-                    />
-                    <label type="radio-label">否</label>
+                    <label type="radio-label">
+                      <input
+                        type="radio"
+                        name="user_compliance_q3"
+                        id="user_compliance_q3"
+                        value="0"
+                      />
+                      是
+                    </label>
+                    <label type="radio-label">
+                      <input
+                        type="radio"
+                        name="user_compliance_q3"
+                        id="user_compliance_q3"
+                        value="1"
+                      />
+                      否
+                    </label>
                     <label
                       for="user_compliance_q4"
                       class="question-label"
                       style="display: block"
                       >您服药后自觉症状更糟时是否曾停止服药？</label
                     >
-                    <input
-                      type="radio"
-                      name="user_compliance_q4"
-                      id="user_compliance_q4"
-                      value="0"
-                    />
-                    <label type="radio-label">是</label>
-                    <input
-                      type="radio"
-                      name="user_compliance_q4"
-                      id="user_compliance_q4"
-                      value="1"
-                    />
-                    <label type="radio-label">否</label>
+                    <label type="radio-label">
+                      <input
+                        type="radio"
+                        name="user_compliance_q4"
+                        id="user_compliance_q4"
+                        value="0"
+                      />
+                      是
+                    </label>
+                    <label type="radio-label">
+                      <input
+                        type="radio"
+                        name="user_compliance_q4"
+                        id="user_compliance_q4"
+                        value="1"
+                      />
+                      否
+                    </label>
                   </div>
                 </div>
               </div>
@@ -787,23 +818,35 @@
       <div style="height: 30px"></div>
     </div>
 
-    <div class="dialog-result-container"
+    <div
+      class="dialog-result-container"
       id="result-dialog"
       title="辅助决策结果"
       style="display: none"
     >
-      <label for="drug_issue" class="m-dialog-label">既往用药存在问题及原因</label>
+      <label for="drug_issue" class="m-dialog-label"
+        >既往用药存在问题及原因</label
+      >
       <div class="result-text" id="drug-issue-text"></div>
-      <label for="drug_recommend" class="m-dialog-label">系统用药决策方案推荐</label>
-      <div class="result-text" id="drug-recommend-text"></div>
+      <label for="drug_recommend" class="m-dialog-label"
+        >系统用药决策方案推荐</label
+      >
+      <div
+        class="result-text"
+        id="drug-recommend-text"
+        style="color: crimson"
+      ></div>
     </div>
 
-    <div class="m-dialog"
+    <div
+      class="m-dialog"
       id="feedback-dialog"
       title="用户使用评价调查表"
       style="display: none"
     >
-      <label for="feedback-rating" class="m-dialog-label">您对该系统此次的推荐用药方案是否认可？</label>
+      <label for="feedback-rating" class="m-dialog-label"
+        >您对该系统此次的推荐用药方案是否认可？</label
+      >
       <select id="feedback-rating">
         <option value="1">1</option>
         <option value="2">2</option>
@@ -811,12 +854,12 @@
         <option value="4">4</option>
         <option value="5">5</option>
       </select>
-      <ul style="padding-inline-start: 20px;">
-        <li>5分：非常认可</li>
-        <li>4分：认可</li>
-        <li>3分：一般</li>
-        <li>2分：不认可</li>
-        <li>1分：非常不认可</li>
+      <ul style="padding-inline-start: 20px">
+        <li id="feedback-tag5">5分：非常认可</li>
+        <li id="feedback-tag4">4分：认可</li>
+        <li id="feedback-tag3">3分：一般</li>
+        <li id="feedback-tag2">2分：不认可</li>
+        <li id="feedback-tag1">1分：非常不认可</li>
       </ul>
     </div>
 

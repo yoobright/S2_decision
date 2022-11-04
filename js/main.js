@@ -752,6 +752,11 @@ function openFeedbackDialog() {
       $("#feedback-rating").barrating({
         theme: "css-stars",
         initialRating: 3,
+        onSelect: function(value, text, event) {
+          const tag = `#feedback-tag${value}`;
+          $("[id^='feedback-tag']").css("font-weight", "");
+          $(tag).css("font-weight", "bold");
+        }
       });
       $("#feedback-rating").barrating("set", 3);
     }
