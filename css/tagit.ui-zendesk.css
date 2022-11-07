@@ -8,6 +8,9 @@ ul.tagit {
     border-color: #C6C6C6;
     /* background: inherit; */
 }
+.ui-widget.ui-widget-content.tagit {
+    border: 1px solid rgb(235, 235, 235);
+}
 ul.tagit li.tagit-choice {
     -moz-border-radius: 6px;
     border-radius: 6px;
