@@ -548,6 +548,7 @@ function showResult(decisionType, decisionId, drugIssueInfo = "") {
       },
       "取消": function () {
         $(this).dialog("close");
+        openFeedbackDialog();
       },
     },
     open: function () {
@@ -586,9 +587,9 @@ function processS1() {
   console.log(feat);
 
   inferS1(feat).then((res) => {
-    const strOut =
-      "most level: {0}\nbody list: {1}\nch list: {2}\ndecision: {3}\n";
-    alert(strOut.format(mostLevel, bodyList, chList, res[0]));
+    // const strOut =
+    //   "most level: {0}\nbody list: {1}\nch list: {2}\ndecision: {3}\n";
+    // alert(strOut.format(mostLevel, bodyList, chList, res[0]));
     showResult("s1", res[0]);
 
   });
@@ -712,20 +713,20 @@ function processS2() {
   ];
 
   inferS2(feat).then((res) => {
-    const strOut = "most level: {0}\nbreak out type: {1}\n" +
-      "break out times: {2}\nall used Drugs id: {3}\n" +
-      "dec drug type: {4}\ncompliance: {5}\n" +
-      "decision: {6}\n";
+    // const strOut = "most level: {0}\nbreak out type: {1}\n" +
+    //   "break out times: {2}\nall used Drugs id: {3}\n" +
+    //   "dec drug type: {4}\ncompliance: {5}\n" +
+    //   "decision: {6}\n";
 
-    alert(strOut.format(
-      mostLevel,
-      breakOutType,
-      breakOutTimes,
-      allUsedDrugsID,
-      decDrugType,
-      compliance,
-      res[0])
-    );
+    // alert(strOut.format(
+    //   mostLevel,
+    //   breakOutType,
+    //   breakOutTimes,
+    //   allUsedDrugsID,
+    //   decDrugType,
+    //   compliance,
+    //   res[0])
+    // );
 
     showResult("s2", res[0], drugIssueInfo);
   });
@@ -752,7 +753,7 @@ function openFeedbackDialog() {
       $("#feedback-rating").barrating({
         theme: "css-stars",
         initialRating: 3,
-        onSelect: function(value, text, event) {
+        onSelect: function (value, text, event) {
           const tag = `#feedback-tag${value}`;
           $("[id^='feedback-tag']").css("font-weight", "");
           $(tag).css("font-weight", "bold");
@@ -786,6 +787,19 @@ const availableAdverseReactionDrugs = availableAdverseReactionDrugsData
 
 const availableAdverseReactionDrugsPinYin = availableAdverseReactionDrugsData
   .map((v) => getShortPinyin(v.name));
+
+
+const availableIllenss = [
+  "糖尿病",
+  "高血压",
+  "心脑血管疾病",
+  "呼吸系统疾病",
+  "不详"
+];
+
+const availableIllenssPinYin = availableIllenss
+  .map((v) => getShortPinyin(v));
+
 
 const painDrugTypeList = ["A", "B", "C", "D", "E", "F"];
 
@@ -1030,6 +1044,31 @@ initModel().then(() => {
   // --------------------------------------------------------------------------
   // step 1
   // --------------------------------------------------------------------------
+
+  $("#user_illness").tagit({
+    availableTags: availableIllenss,
+    afterTagAdded: function (event, ui) {
+      if (!availableIllenss.includes(ui.tagLabel)) {
+        console.log(ui.tagLabel);
+        $(this).tagit("removeTagByLabel", ui.tagLabel);
+      }
+    },
+    autocomplete: {
+      source: function (req, responseFn) {
+        const re = $.ui.autocomplete.escapeRegex(req.term);
+        const matcher = new RegExp(re, "iu");
+        const a = $.grep(availableIllenss, (item, index) => {
+          const matchVal = matcher.test(item);
+          const itemPinYin = availableIllenssPinYin[index];
+          const matchPY = itemPinYin === "" ? false :
+            matcher.test(itemPinYin);
+          return matchVal || matchPY;
+        });
+        responseFn(a);
+      }
+    }
+  });
+
   const physicalLevelKV = [
     [0, 0, 0.099, 0.246],
     [0, 0, 0.105, 0.208],
@@ -1040,7 +1079,7 @@ initModel().then(() => {
 
 
 
-  $("[id^=user_physical_q]" ).on("change", () => {
+  $("[id^=user_physical_q]").on("change", () => {
     const selected = $("select[id^=user_physical_q] option")
       .filter(":selected");
 
@@ -1296,47 +1335,6 @@ initModel().then(() => {
   });
 
   // drug table
-  // const col1_template = "<input class='drug-input'>";
-  // const col3_dict = {
-  //   "1": "一天<input name='dose' type='text' class='small-input'/>次",
-  //   "2": "每<input name='dose' type='text' class='small-input'/>小时/次",
-  //   "3": "<input name='dose' type='text' class='small-input'/>天/贴",
-  //   "4": "prn（必要时）",
-  //   "5": "每晚",
-  // };
-
-  //   const col3_template =
-  //     "<label><input name='freq' type='radio' value='1' />一天<input name='dose' type='text'\
-  //   class='small-input'/>次</label><br>\
-  // <label><input name='freq' type='radio' value='2' />每<input name='dose' type='text'\
-  // class='small-input'/>小时/次</label><br>\
-  // <label><input name='freq' type='radio' value='3' /><input name='dose' type='text'\
-  // class='small-input'/>天/贴</label><br>\
-  // <label><input name='freq' type='radio' value='4' />prn（必要时）</label><br>\
-  // <label><input name='freq' type='radio' value='5' />每晚</label><br> ";
-
-  //   const col3_template = `
-
-  //     <label style="display: inline;"></label>
-  //     <div style="margin-left: 16px; margin-right: 16px;" class="dropdown">
-  //     <a class="dropbtn"><span class="ui-icon ui-icon-triangle-1-s"></span></a>
-  //     <div class="dropdown-content">
-  //       <a value='1'>一天X次</a>
-  //       <a value='2'>每X小时/次</a>
-  //       <a value='3'>X天/贴</a>
-  //       <a value='4'>prn（必要时）</a>
-  //       <a value='5'>每晚</a>
-  //     </div>
-
-  //   </div>`;
-
-
-  //   const col4_template =
-  //     "<label style='margin-right: 16px;'><input name='duration' type='radio' value='1' />>7天</label>\
-  // <label style='margin-right: 16px;'><input name='duration' type='radio' value='2' />≤7天</label><br>";
-
-  //   const col5_template = "<a class='tablebtn table-edit-btn'>编辑</a>";
-
   function genFreqCol(freq) {
     if (freq === "") {
       return "";
@@ -1542,7 +1540,7 @@ initModel().then(() => {
     if (data.dose !== "") {
       doseDiv.html(
         `<label name='unit'>
-        <input name='dose' type='text' class='small-input' value='${data.dose.val}'/>
+        <input name='dose' type='number' class='small-input' value='${data.dose.val}'/>
         ${data.dose.unit}</label>`
       );
     }
@@ -1550,11 +1548,11 @@ initModel().then(() => {
     if (data.freq !== "") {
       let elem = "";
       if (data.freq.id === "1") {
-        elem = `一天<input name='freq' type='text' class='small-input' value='${data.freq.val}'/>次`;
+        elem = `一天<input name='freq' type='number' class='small-input' value='${data.freq.val}'/>次`;
       } else if (data.freq.id === "2") {
-        elem = `每<input name='freq' type='text' class='small-input' value='${data.freq.val}'/>小时/次`;
+        elem = `每<input name='freq' type='number' class='small-input' value='${data.freq.val}'/>小时/次`;
       } else if (data.freq.id === "3") {
-        elem = `<input name='freq' type='text' class='small-input' value='${data.freq.val}'/>天/贴`;
+        elem = `<input name='freq' type='number' class='small-input' value='${data.freq.val}'/>天/贴`;
       } else if (data.freq.id === "4") {
         elem = "prn（必要时）";
       } else if (data.freq.id === "5") {
@@ -1649,7 +1647,7 @@ initModel().then(() => {
 
   addCheckBox(userAdverseReactionTag, userAdverseReactionList);
 
-  // userAdverseReactionDrug
+  // userAdverseReactionDrug input
   $("#user_adverse_reaction_drug").tagit({
     availableTags: availableAdverseReactionDrugs,
     afterTagAdded: function (event, ui) {
@@ -1691,9 +1689,9 @@ initModel().then(() => {
   });
 
   const freqInput = {
-    "1": "一天<input name='freq' type='text' class='small-input'/>次",
-    "2": "每<input name='freq' type='text' class='small-input'/>小时/次",
-    "3": "<input name='freq' type='text' class='small-input'/>天/贴",
+    "1": "一天<input name='freq' type='number' class='small-input'/>次",
+    "2": "每<input name='freq' type='number' class='small-input'/>小时/次",
+    "3": "<input name='freq' type='number' class='small-input'/>天/贴",
     "4": "prn（必要时）",
     "5": "每晚",
   };
@@ -1763,7 +1761,7 @@ initModel().then(() => {
       console.log(unit);
       $("div[name='dose-div']", dialog).html(
         // "<input/>"
-        `<label name='unit'><input name='dose' type='text' class='small-input' />${unit}</label>`
+        `<label name='unit'><input name='dose' type='number' class='small-input' />${unit}</label>`
       );
     }
   }
