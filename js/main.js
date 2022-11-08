@@ -559,7 +559,7 @@ function showResult(decisionType, decisionId, drugIssueInfo = []) {
       }
 
       $("#drug-issue-text").text("无");
-      if (drugIssueInfo.length > 0)  {
+      if (drugIssueInfo.length > 0) {
         $("#drug-issue-text").text(
           drugIssueInfo.join("、")
         );
@@ -690,22 +690,242 @@ function drugHighFreqCheck(allDrugs) {
   return res;
 }
 
-function genDrugIssueInfo(drugHighFreqList, drugOverdoseList) {
-  const ret = [];
+function isDrugProp3(durgClassStr) {
+  return /C|D|E|F|I|G/u.test("durgClassStr");
+}
 
-  for (const drug of drugHighFreqList) {
-    ret.push(
-      `${drug}(${previousIssueText["C3.4"]})`
+function drugC1_1Check(allDrugs) {
+  const prop3List = [];
+  for (const drug of allDrugs) {
+    const drugName = drug.name.val;
+    const index = availableDrugs.indexOf(drugName);
+    if (index !== -1) {
+      const drugInfo = PCNEData[index];
+      if (isDrugProp3(drugInfo.class)) {
+        prop3List.push(drugName);
+      }
+    }
+  }
+
+  if (prop3List.length === 1 &&
+    availableDrugs.indexOf(prop3List[0]) === 3) {
+    return true;
+  }
+
+  return false;
+}
+
+
+
+
+function getDrugClassCount(allDrugs) {
+  const res = {
+    "A1": 0, "A2": 0, "A3": 0, "A4": 0, "A5": 0, "A6": 0, "A7": 0, "A8": 0, "A9": 0, "A10": 0,
+    "B1": 0, "B2": 0, "B3": 0, "B4": 0, "B5": 0,
+    "C": 0,
+    "D": 0,
+    "E1": 0, "E2": 0,
+    "F1": 0, "F2": 0,
+    "G1": 0, "G2": 0,
+    "H1": 0, "H2": 0,
+    "I1": 0, "I2": 0,
+    "J": 0,
+    "K": 0,
+    "L1": 0, "L2": 0, "L3": 0, "L4": 0, "L5": 0, "L6": 0, "L7": 0, "L8": 0, "L9": 0,
+  };
+
+  for (const drug of allDrugs) {
+    const drugName = drug.name.val;
+    const index = availableDrugs.indexOf(drugName);
+    if (index !== -1) {
+      const drugInfo = PCNEData[index];
+      const drugClassList = drugInfo.class.split("/");
+      for (const drugClass of drugClassList) {
+        if (res[drugClass] !== undefined) {
+          res[drugClass] += 1;
+        }
+      }
+    }
+  }
+
+  return res;
+}
+
+function drugC1_4Check(drugClassCount) {
+
+  //  药物种类C、D、E1、F1中任一药 + 药物种类K中任一药
+  if ((drugClassCount.C > 0 || drugClassCount.D > 0 || drugClassCount.E1 > 0 || drugClassCount.F1 > 0) &&
+    drugClassCount.K > 0) {
+    return true;
+  }
+  // 药物种类J中任一药 + 药物种类B2中任一药
+  // 药物种类J中任一药 + 药物种类B3中任一药
+  // 药物种类J中任一药 + 药物种类B4中任一药
+  // 药物种类J中任一药 + 药物种类B5中任一药
+  if (drugClassCount.J > 0 &&
+    (drugClassCount.B2 > 0 || drugClassCount.B3 > 0 || drugClassCount.B4 > 0 || drugClassCount.B5 > 0)) {
+    return true;
+  }
+
+  // 药物种类C中任一药 + 药物种类C中另一药
+  if (drugClassCount.C > 1) {
+    return true;
+  }
+  // 药物种类C中任一药 + 药物种类D中另一药
+  if (drugClassCount.C > 0 && drugClassCount.D > 0) {
+    return true;
+  }
+
+  // 药物种类F1中任一药 + 药物种类F1中另一药
+  if (drugClassCount.F1 > 1) {
+    return true;
+  }
+  // 药物种类E1中任一药 + 药物种类F1中任一药
+  if (drugClassCount.E1 > 0 && drugClassCount.F1 > 0) {
+    return true;
+  }
+
+  // 药物种类E1中任一药 + 药物种类E1中另一药
+  if (drugClassCount.E1 > 1) {
+    return true;
+  }
+  // 药物种类A1中任一药 + 药物种类A1中另一药
+  if (drugClassCount.A1 > 1) {
+    return true;
+  }
+  // 药物种类A2中任一药 + 药物种类A2中另一药
+  if (drugClassCount.A2 > 1) {
+    return true;
+  }
+  // 药物种类G1中任一药 + 药物种类G1中另一药
+  if (drugClassCount.G1 > 1) {
+    return true;
+  }
+  // 药物种类H1中任一药 + 药物种类H1中另一药
+  if (drugClassCount.H1 > 1) {
+    return true;
+  }
+  // 药物种类I1中任一药 + 药物种类I1中另一药
+  if (drugClassCount.I1 > 1) {
+    return true;
+  }
+  // 药物种类J中任一药 + 药物种类J中另一药
+  if (drugClassCount.J > 1) {
+    return true;
+  }
+  // 药物种类A5中任一药 + 药物种类A5中另一药
+  if (drugClassCount.A5 > 1) {
+    return true;
+  }
+  // 药物种类A8中任一药 + 药物种类A8中另一药
+  if (drugClassCount.A8 > 1) {
+    return true;
+  }
+  // 药物种类A6中任一药 + 药物种类A6中另一药
+  if (drugClassCount.A6 > 1) {
+    return true;
+  }
+  // 药物种类A9中任一药 + 药物种类A9中另一药
+  if (drugClassCount.A9 > 1) {
+    return true;
+  }
+
+  return false;
+}
+
+function drugC1_5Check(drugClassCount) {
+  // 药物种类G1中任一药 + 药物种类G1中另一药
+  // 药物种类H1中任一药 + 药物种类H1中另一药
+  // 药物种类I1中任一药 + 药物种类I1中另一药
+  // 药物种类J中任一药 + 药物种类J中另一药
+  // 药物种类A5中任一药 + 药物种类A5中另一药
+  // 药物种类A8中任一药 + 药物种类A8中另一药
+  // 药物种类A6中任一药 + 药物种类A6中另一药
+  // 药物种类A9中任一药 + 药物种类A9中另一药
+  if (drugClassCount.G1 > 1 || drugClassCount.H1 > 1 ||
+    drugClassCount.I1 > 1 || drugClassCount.J > 1 ||
+    drugClassCount.A5 > 1 || drugClassCount.A8 > 1 ||
+    drugClassCount.A6 > 1 || drugClassCount.A9 > 1) {
+    return true;
+  }
+
+  return false;
+}
+
+function getAdverseReactionTag() {
+  return "0";
+}
+
+
+function drugC1_6Check(drugClassCount, adverseReactionTag) {
+  // 存在不良反应便秘，但未使用药物种类L1
+  // 存在不良反应恶心呕吐，但未使用药物种类L2
+  // 存在不良反应谵妄，但未使用药物种类L3
+  // 存在不良反应镇静，但未使用药物种类L4
+  // 存在不良反应皮肤瘙痒，但未使用药物种类L5
+  // 存在不良反应呼吸抑制，但未使用药物种类L6
+  // 存在不良反应止汗，但未使用药物种类L7
+  // 存在不良反应利尿，但未使用药物种类L8
+  // 存在不良反应胃痉挛，但未使用药物种类L9
+
+  if (adverseReactionTag === "1" && drugClassCount.L1 === 0 ||
+    adverseReactionTag === "2" && drugClassCount.L2 === 0 ||
+    adverseReactionTag === "3" && drugClassCount.L3 === 0 ||
+    adverseReactionTag === "4" && drugClassCount.L4 === 0 ||
+    adverseReactionTag === "5" && drugClassCount.L5 === 0 ||
+    adverseReactionTag === "6" && drugClassCount.L6 === 0 ||
+    adverseReactionTag === "7" && drugClassCount.L7 === 0 ||
+    adverseReactionTag === "8" && drugClassCount.L8 === 0 ||
+    adverseReactionTag === "9" && drugClassCount.L9 === 0) {
+    return true;
+  }
+
+  return false;
+}
+
+
+
+function genDrugIssue(allDrugs) {
+  const res = {};
+  const drugClassCount = getDrugClassCount(allDrugs);
+  if (drugC1_1Check(allDrugs)) {
+    res.C1_1 = true;
+  }
+  if (drugC1_4Check(drugClassCount)) {
+    res.C1_4 = true;
+  }
+  if (drugC1_5Check(drugClassCount)) {
+    res.C1_5 = true;
+  }
+
+  if (drugC1_6Check(drugClassCount, getAdverseReactionTag())) {
+    res.C1_6 = true;
+  }
+
+  res.C3_4 = drugHighFreqCheck(allDrugs);
+  res.C3_2 = drugOverdoseCheck(allDrugs);
+
+
+  return res;
+}
+
+
+function genDrugIssueInfo(drugIssue) {
+  const res = [];
+
+  for (const drug of drugIssue.C3_4) {
+    res.push(
+      `${drug}（${previousIssueText["P2.1"]}，${previousIssueText["C3.4"]}）`
     );
   }
 
-  for (const drug of drugOverdoseList) {
-    ret.push(
-      `${drug}(${previousIssueText["C3.2"]})`
+  for (const drug of drugIssue.C3_2) {
+    res.push(
+      `${drug}（${previousIssueText["P2.1"]}，${previousIssueText["C3.2"]}）`
     );
   }
 
-  return ret;
+  return res;
 }
 
 function usedDrugInputCheck(allDrugs) {
@@ -721,7 +941,6 @@ function usedDrugInputCheck(allDrugs) {
   }
 
   return true;
-
 }
 
 
@@ -738,11 +957,12 @@ function processS2() {
   const allUsedDrugsID = allUsedDrugs.map((v) => v.name.id);
   console.log("allUsedDrugsID: " + allUsedDrugsID);
 
-  const drugHighFreqList = drugHighFreqCheck(allUsedDrugs);
-  const drugOverdoseList = drugOverdoseCheck(allUsedDrugs);
-  console.log("drugHighFreqList: " + drugHighFreqList);
-  console.log("drugOverdoseList: " + drugOverdoseList);
-  const drugIssueInfo = genDrugIssueInfo(drugHighFreqList, drugOverdoseList);
+  // const drugHighFreqList = drugHighFreqCheck(allUsedDrugs);
+  // const drugOverdoseList = drugOverdoseCheck(allUsedDrugs);
+  // console.log("drugHighFreqList: " + drugHighFreqList);
+  // console.log("drugOverdoseList: " + drugOverdoseList);
+  const drugIssue = genDrugIssue(allUsedDrugs);
+  const drugIssueInfo = genDrugIssueInfo(drugIssue);
   const counter = genTypeCounter(allUsedDrugsID);
   const decDrugType = getDecDrugTypeFromCounter(counter);
   if (decDrugType === undefined) {
@@ -1687,6 +1907,9 @@ initModel().then(() => {
     "过度镇静",
     "皮肤瘙痒",
     "呼吸抑制",
+    "止汗",
+    "利尿",
+    "胃痉挛",
     "其他",
   ];
   const userAdverseReactionTag = "user_adverse_reaction";
