@@ -768,7 +768,7 @@ function getDrugClassCount(allDrugs) {
   return res;
 }
 
-function drugC1_4Check(drugClassCount) {
+function drugC1_3Check(drugClassCount) {
 
   //  药物种类C、D、E1、F1中任一药 + 药物种类K中任一药
   if ((drugClassCount.C > 0 || drugClassCount.D > 0 || drugClassCount.E1 > 0 || drugClassCount.F1 > 0) &&
@@ -850,7 +850,7 @@ function drugC1_4Check(drugClassCount) {
   return false;
 }
 
-function drugC1_5Check(drugClassCount) {
+function drugC1_4Check(drugClassCount) {
   // 药物种类G1中任一药 + 药物种类G1中另一药
   // 药物种类H1中任一药 + 药物种类H1中另一药
   // 药物种类I1中任一药 + 药物种类I1中另一药
@@ -872,7 +872,7 @@ function drugC1_5Check(drugClassCount) {
 
 
 
-function drugC1_6Check(adverseReactionDrugList, adverseReactionTag) {
+function drugC1_5Check(adverseReactionDrugList, adverseReactionTag) {
   // 存在不良反应便秘，但未使用药物种类L1
   // 存在不良反应恶心呕吐，但未使用药物种类L2
   // 存在不良反应谵妄，但未使用药物种类L3
@@ -922,15 +922,15 @@ function genDrugIssue(allDrugs) {
   if (drugC1_1Check(allDrugs)) {
     res.C1_1 = true;
   }
+  if (drugC1_3Check(drugClassCount)) {
+    res.C1_3 = true;
+  }
   if (drugC1_4Check(drugClassCount)) {
     res.C1_4 = true;
   }
-  if (drugC1_5Check(drugClassCount)) {
-    res.C1_5 = true;
-  }
   // 不良反应
-  if (drugC1_6Check(getAdverseReactionDrugList(), getAdverseReactionTag())) {
-    res.C1_6 = true;
+  if (drugC1_5Check(getAdverseReactionDrugList(), getAdverseReactionTag())) {
+    res.C1_5 = true;
   }
 
   res.C3_4 = drugHighFreqCheck(allDrugs);
@@ -943,9 +943,21 @@ function genDrugIssue(allDrugs) {
 
 function genDrugIssueInfo(drugIssue) {
   const res = [];
-  if (drugIssue.C1_6) {
+  if (drugIssue.C1_3) {
     res.push(
-      `${previousIssueText["P1.3"]}，${previousIssueText["C1.6"]}`
+      `${previousIssueText["P2.1"]}，${previousIssueText["C1.3"]}`
+    );
+  }
+
+  if (drugIssue.C1_4) {
+    res.push(
+      `${previousIssueText["P2.1"]}，${previousIssueText["C1.4"]}`
+    );
+  }
+
+  if (drugIssue.C1_5) {
+    res.push(
+      `${previousIssueText["P1.3"]}，${previousIssueText["C1.5"]}`
     );
   }
 
