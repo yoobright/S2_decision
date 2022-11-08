@@ -581,6 +581,23 @@ function getBodyList() {
   return bodyList;
 }
 
+function getAdverseReactionTag() {
+  const checkedTag = $("input[name='user_adverse_reaction']:checked").map(
+    function () {
+      return $(this).val();
+    }
+  );
+
+  console.log(checkedTag);
+  return checkedTag;
+}
+
+function getAdverseReactionDrugList() {
+  const drugList = $("#user_adverse_reaction_drug").tagit("assignedTags");
+  console.log(drugList);
+  return drugList;
+}
+
 function processS1() {
   const bodyList = getBodyList();
   const chList = getChList();
@@ -852,12 +869,10 @@ function drugC1_5Check(drugClassCount) {
   return false;
 }
 
-function getAdverseReactionTag() {
-  return "0";
-}
 
 
-function drugC1_6Check(drugClassCount, adverseReactionTag) {
+
+function drugC1_6Check(adverseReactionDrugList, adverseReactionTag) {
   // 存在不良反应便秘，但未使用药物种类L1
   // 存在不良反应恶心呕吐，但未使用药物种类L2
   // 存在不良反应谵妄，但未使用药物种类L3
@@ -868,16 +883,32 @@ function drugC1_6Check(drugClassCount, adverseReactionTag) {
   // 存在不良反应利尿，但未使用药物种类L8
   // 存在不良反应胃痉挛，但未使用药物种类L9
 
-  if (adverseReactionTag === "1" && drugClassCount.L1 === 0 ||
-    adverseReactionTag === "2" && drugClassCount.L2 === 0 ||
-    adverseReactionTag === "3" && drugClassCount.L3 === 0 ||
-    adverseReactionTag === "4" && drugClassCount.L4 === 0 ||
-    adverseReactionTag === "5" && drugClassCount.L5 === 0 ||
-    adverseReactionTag === "6" && drugClassCount.L6 === 0 ||
-    adverseReactionTag === "7" && drugClassCount.L7 === 0 ||
-    adverseReactionTag === "8" && drugClassCount.L8 === 0 ||
-    adverseReactionTag === "9" && drugClassCount.L9 === 0) {
-    return true;
+  const drugClassList = [];
+
+  for (const drugName of adverseReactionDrugList) {
+    const index = availableDrugs.indexOf(drugName);
+    if (index !== -1) {
+      const drugInfo = PCNEData[index];
+      const classList = drugInfo.class.split("/");
+      for (const cls of classList) {
+        drugClassList.push(cls);
+      }
+    }
+  }
+
+  for (const tag of adverseReactionTag) {
+    if (tag === "1" && !drugClassList.includes("L1") ||
+      tag === "2" && !drugClassList.includes("L2") ||
+      tag === "3" && !drugClassList.includes("L3") ||
+      tag === "4" && !drugClassList.includes("L4") ||
+      tag === "5" && !drugClassList.includes("L5") ||
+      tag === "6" && !drugClassList.includes("L6") ||
+      tag === "7" && !drugClassList.includes("L7") ||
+      tag === "8" && !drugClassList.includes("L8") ||
+      tag === "9" && !drugClassList.includes("L9")
+    ) {
+      return true;
+    }
   }
 
   return false;
@@ -897,8 +928,8 @@ function genDrugIssue(allDrugs) {
   if (drugC1_5Check(drugClassCount)) {
     res.C1_5 = true;
   }
-
-  if (drugC1_6Check(drugClassCount, getAdverseReactionTag())) {
+  // 不良反应
+  if (drugC1_6Check(getAdverseReactionDrugList(), getAdverseReactionTag())) {
     res.C1_6 = true;
   }
 
@@ -912,6 +943,11 @@ function genDrugIssue(allDrugs) {
 
 function genDrugIssueInfo(drugIssue) {
   const res = [];
+  if (drugIssue.C1_6) {
+    res.push(
+      `${previousIssueText["P1.3"]}，${previousIssueText["C1.6"]}`
+    );
+  }
 
   for (const drug of drugIssue.C3_4) {
     res.push(
@@ -1900,17 +1936,17 @@ initModel().then(() => {
 
   // userAdverseReaction
   const userAdverseReactionList = [
-    "无",
-    "便秘",
-    "恶心呕吐",
-    "谵妄",
-    "过度镇静",
-    "皮肤瘙痒",
-    "呼吸抑制",
-    "止汗",
-    "利尿",
-    "胃痉挛",
-    "其他",
+    ["无", 0],
+    ["便秘", 1],
+    ["恶心呕吐", 2],
+    ["谵妄", 3],
+    ["过度镇静", 4],
+    ["皮肤瘙痒", 5],
+    ["呼吸抑制", 6],
+    ["止汗", 7],
+    ["利尿", 8],
+    ["胃痉挛", 9],
+    ["其他", -1],
   ];
   const userAdverseReactionTag = "user_adverse_reaction";
 
