@@ -514,6 +514,11 @@ function processS1() {
     // const strOut =
     //   "most level: {0}\nbody list: {1}\nch list: {2}\ndecision: {3}\n";
     // alert(strOut.format(mostLevel, bodyList, chList, res[0]));
+
+    const decisionTag = `s1#${res[0]}`;
+    const basicDecision = getBasicDecision(decisionTag);
+    console.log(basicDecision);
+    getHello();
     showResult("s1", res[0]);
 
   });
@@ -580,7 +585,7 @@ function drugOverdoseCheck(allDrugs) {
       }
       const dosePreDay = parseFloat(drug.dose.val) * freqTimesPreDay;
       if (dosePreDay > highDosePreDay) {
-        res.push(drugName);
+        res.push(drugInfo.id);
       }
     }
   }
@@ -604,7 +609,7 @@ function drugHighFreqCheck(allDrugs) {
       }
 
       if (freqTimesPreDay > highFreqTimesPreDay) {
-        res.push(drugName);
+        res.push(drugInfo.id);
       }
     }
   }
@@ -841,7 +846,6 @@ function genDrugIssue(allDrugs) {
   res.C3_4 = drugHighFreqCheck(allDrugs);
   res.C3_2 = drugOverdoseCheck(allDrugs);
 
-
   return res;
 }
 
@@ -866,16 +870,27 @@ function genDrugIssueInfo(drugIssue) {
     );
   }
 
-  for (const drug of drugIssue.C3_4) {
-    res.push(
-      `${drug}（${previousIssueText["P2.1"]}，${previousIssueText["C3.4"]}）`
-    );
+
+  for (const drugId of drugIssue.C3_4) {
+    for (const drug of PCNEData) {
+      if (drug.id === drugId) {
+        res.push(
+          `${drug.name}（${previousIssueText["P2.1"]}，${previousIssueText["C3.4"]}）`
+        );
+        break;
+      }
+    }
   }
 
-  for (const drug of drugIssue.C3_2) {
-    res.push(
-      `${drug}（${previousIssueText["P2.1"]}，${previousIssueText["C3.2"]}）`
-    );
+  for (const drugId of drugIssue.C3_2) {
+    for (const drug of PCNEData) {
+      if (drug.id === drugId) {
+        res.push(
+          `${drug.name}（${previousIssueText["P2.1"]}，${previousIssueText["C3.2"]}）`
+        );
+        break;
+      }
+    }
   }
 
   return res;
@@ -947,7 +962,10 @@ function processS2() {
     //   compliance,
     //   res[0])
     // );
-
+    const decisionTag = `s2#${res[0]}`;
+    const basicDecision = getBasicDecision(decisionTag, drugIssue);
+    console.log(basicDecision);
+    getHello();
     showResult("s2", res[0], drugIssueInfo);
   });
 }
@@ -1017,6 +1035,8 @@ function getBasicInfo() {
 }
 
 
+
+
 function checkedToStr(id) {
   return $(`#${id}:checked`).map(function () {
     return $(this).val();
@@ -1041,41 +1061,7 @@ function getPainAssessmentInfo() {
   return res;
 }
 
-/* 
 
-    "prev_medication_info": {
-        "id": 1,
-        "uuid": "cf51ad1f-831b-4704-963d-7556c23d82a3",
-        "diagnostic_uuid": "test_uuid",
-        "forget": "1",
-        "carelessly": "2",
-        "withdrawal": "1",
-        "bad_withdrawal": "2",
-        "adverse_reaction": "1,2",
-        "adverse_reaction_drugs": "通便灵胶囊",
-        "drug_table_id": null,
-        "drug_table": [
-            {
-                "drug_name": "盐酸阿米替林片",
-                "spec": "25mg",
-                "dose": 10,
-                "dose_unit": "mg",
-                "freq": "1",
-                "freq_unit": "2",
-                "duration": "2"
-            },
-            {
-                "drug_name": "盐酸曲马多缓释片",
-                "spec": "100mg",
-                "dose": 10,
-                "dose_unit": "mg",
-                "freq": "1",
-                "freq_unit": "2",
-                "duration": "1"
-            }
-        ]
-    },
-*/
 function getPrevMedicationInfo() {
   const res = {};
   res.forget = $("#user_compliance_q1:checked").val();
@@ -1104,6 +1090,16 @@ function getPrevMedicationInfo() {
   }
   res.drug_table = tableData;
   // console.log(res);
+  return res;
+}
+
+function getBasicDecision(decisionTag, drugIssue=null) {
+  const res = {};
+  res.recmd = decisionTag;
+  if (drugIssue !== null) {
+    res.previous_medication_issue = JSON.stringify(drugIssue);
+  }
+
   return res;
 }
 
