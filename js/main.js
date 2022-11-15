@@ -138,42 +138,7 @@ function getShortPinyin(wordStr) {
   return res;
 }
 
-// return wordSplit.map((c) => {
-//   if (/[^\u4e00-\u9fa5]/u.test(c)) {
-//     return c;
-//   }
-//   for (var i = 0; i < boundaryChar.length; i++) {
-//     if (boundaryChar[i].localeCompare(c, "zh-CN-u-co-pinyin") >= 0) {
-//       idx = i;
-//       break;
-//     }
-//   }
-//   return MAP[idx];
-// }).value().join("");
-// }
 
-// const col2_template =
-//   "<label><input name='dose' type='text' \
-// class='middle-input' />{0}</label>";
-
-// function changeDose(node) {
-//   const value = $(node).val();
-//   const index = availableDrugs.indexOf(value);
-
-//   if (index !== -1) {
-//     const table = $(usedDrugTableID).DataTable();
-//     const thisTr = node.parentElement.parentElement;
-//     const thisRowIdx = table.row(thisTr).index();
-//     const colIdx = table.column("drug_dose:name").index();
-
-//     table
-//       .cell(thisRowIdx, colIdx)
-//       .data(col2_template.format(PCNEData[index].unit));
-//     // console.log(table.row(thisTr));
-//     table.columns.adjust().responsive.recalc();
-//     table.responsive.redisplay();
-//   }
-// }
 
 const ch1_set = new Set([1, 3, 6, 8, 9, 12, 23, 24, 25]);
 const ch2_set = new Set([4, 5, 7, 10, 11, 17]);
@@ -358,67 +323,6 @@ function getDecDrugTypeFromCounter(counter) {
   return undefined;
 }
 
-// function getFreqFromTd(td) {
-//   const checked = $(td).find("input[type=radio]:checked");
-//   const checkedLabel = checked.parent();
-//   const res = {};
-//   const inputV = checkedLabel.find("input.small-input");
-//   // console.log(inputV);
-//   if (checked.length === 0) {
-//     return "";
-//   }
-
-//   if (inputV.length > 0) {
-//     // console.log("!!!!!");
-//     res.val = inputV.val().trim();
-//     if (res.val === "") {
-//       return "";
-//     }
-//   }
-//   res.id = checked.val();
-//   // console.log(res);
-//   return res;
-// }
-
-// function getDoseFromTd(td) {
-//   const doseVal = $(td).find("input").val().trim();
-//   const doseUnit = $(td).find("label").text();
-//   const res = {};
-
-//   if (doseVal === "") {
-//     return "";
-//   }
-
-//   res.val = doseVal;
-//   res.unit = doseUnit;
-//   // console.log(res);
-//   return res;
-// }
-
-// function getdurationFromTd(td) {
-//   const checked = $(td).find("input[type=radio]:checked");
-//   if (checked.length === 0) {
-//     return "";
-//   }
-//   const val = checked.parent().text();
-//   const id = checked.val();
-
-//   return {
-//     val: val,
-//     id: id,
-//   };
-// }
-
-// function getNameFromTd(td) {
-//   const nameDiv =  $(td).children("div");
-//   const val = nameDiv.val().trim();
-//   const id = nameDiv.attr("data");
-
-//   return {
-//     val: val,
-//     id: id,
-//   };
-// }
 
 function genDataFromRowData(tableData) {
   // console.log(tableData);
@@ -426,19 +330,19 @@ function genDataFromRowData(tableData) {
     { id: $(tableData.drug_name).attr("data"), val: $(tableData.drug_name).text() };
   const dose = tableData.drug_dose === "" ? "" :
     {
-      val: $(tableData.drug_dose).attr("data").split("#")[0],
-      unit: $(tableData.drug_dose).attr("data").split("#")[1]
+      val: $(tableData.drug_dose).attr("data").split("#")[0].trim(),
+      unit: $(tableData.drug_dose).attr("data").split("#")[1].trim()
     };
   const freq = tableData.drug_freq === "" ? "" :
     {
-      id: $(tableData.drug_freq).attr("data").split("#")[0],
-      val: $(tableData.drug_freq).attr("data").split("#")[1]
+      id: $(tableData.drug_freq).attr("data").split("#")[0].trim(),
+      val: $(tableData.drug_freq).attr("data").split("#")[1].trim()
     };
 
   const duration = tableData.drug_duration === "" ? "" :
     {
-      id: $(tableData.drug_duration).attr("data").split("#")[0],
-      val: $(tableData.drug_duration).attr("data").split("#")[1]
+      id: $(tableData.drug_duration).attr("data").split("#")[0].trim(),
+      val: $(tableData.drug_duration).attr("data").split("#")[1].trim()
     };
 
   const data = {
@@ -605,6 +509,7 @@ function processS1() {
   const feat = extractS1Feat(mostLevel, bodyList, chList);
   console.log(feat);
 
+  // eslint-disable-next-line no-undef
   inferS1(feat).then((res) => {
     // const strOut =
     //   "most level: {0}\nbody list: {1}\nch list: {2}\ndecision: {3}\n";
@@ -1026,6 +931,7 @@ function processS2() {
     compliance,
   ];
 
+  // eslint-disable-next-line no-undef
   inferS2(feat).then((res) => {
     // const strOut = "most level: {0}\nbreak out type: {1}\n" +
     //   "break out times: {2}\nall used Drugs id: {3}\n" +
@@ -1077,6 +983,128 @@ function openFeedbackDialog() {
     }
   });
 
+}
+
+function getBasicInfo() {
+  const res = {};
+  res.user_name = $("#user_name").val();
+  res.uid = $("#user_id").val();
+  res.gender = $("#user_gender").val();
+  res.age = $("#user_age").val();
+  res.height = $("#user_height").val();
+  res.weight = $("#user_weight").val();
+  res.job = $("#user_job").val();
+  res.edu = $("#user_edu").val() || "";
+  res.special = $("#user_special").val();
+  res.tel = $("#user_id").val();
+  res.tumor = $("#user_tumor").val();
+  res.tumor_metastasis = $("#user_tumor_metastasis").val();
+  res.tumor_treatment =  $("#user_tumor_treatment").val() || "";
+  res.illness = $("#user_illness").val();
+  res.liver_function = $("#user_liver_function").val();
+  res.kidney_function = $("#user_kidney_function").val();
+  res.cardiac_function = $("#user_cardiac_function").val();
+  res.allergy = $("#user_allergy").val();
+  res.physical_q1 = $("#user_physical_q1").val();
+  res.physical_q2 = $("#user_physical_q2").val();
+  res.physical_q3 = $("#user_physical_q3").val();
+  res.physical_q4 = $("#user_physical_q4").val();
+  res.physical_q5 = $("#user_physical_q5").val();
+  res.physical_score = $("#user_physical_score").val();
+
+  // console.log(res);
+  return res;
+}
+
+
+function checkedToStr(id) {
+  return $(`#${id}:checked`).map(function () {
+    return $(this).val();
+  }).get().join(",");
+}
+
+function getPainAssessmentInfo() {
+  const res = {};
+  // #user_pain_reason checked
+  res.causes = checkedToStr("user_pain_reason");
+  res.body_parts = getBodyList().join(",");
+  // #user_pain_character
+  res.character = checkedToStr("user_pain_character");
+  res.level = getMostLevel();
+  res.pain_extra = $("#user_pain_extra").val();
+  res.aggravating_factors = checkedToStr("user_pain_aggr_factor");
+  res.relief_factors = checkedToStr("user_pain_reli_factor");
+  res.breakout_type = $("#user_pain_breakout_type").val();
+  res.breakout_freq = $("#user_pain_breakout_freq").val();
+
+  // console.log(res);
+  return res;
+}
+
+/* 
+
+    "prev_medication_info": {
+        "id": 1,
+        "uuid": "cf51ad1f-831b-4704-963d-7556c23d82a3",
+        "diagnostic_uuid": "test_uuid",
+        "forget": "1",
+        "carelessly": "2",
+        "withdrawal": "1",
+        "bad_withdrawal": "2",
+        "adverse_reaction": "1,2",
+        "adverse_reaction_drugs": "通便灵胶囊",
+        "drug_table_id": null,
+        "drug_table": [
+            {
+                "drug_name": "盐酸阿米替林片",
+                "spec": "25mg",
+                "dose": 10,
+                "dose_unit": "mg",
+                "freq": "1",
+                "freq_unit": "2",
+                "duration": "2"
+            },
+            {
+                "drug_name": "盐酸曲马多缓释片",
+                "spec": "100mg",
+                "dose": 10,
+                "dose_unit": "mg",
+                "freq": "1",
+                "freq_unit": "2",
+                "duration": "1"
+            }
+        ]
+    },
+*/
+function getPrevMedicationInfo() {
+  const res = {};
+  res.forget = $("#user_compliance_q1:checked").val();
+  res.carelessly = $("#user_compliance_q2:checked").val();
+  res.withdrawal = $("#user_compliance_q3:checked").val();
+  res.bad_withdrawal = $("#user_compliance_q4:checked").val();
+  res.adverse_reaction = checkedToStr("user_adverse_reaction");
+  res.adverse_reaction_drugs = getAdverseReactionDrugList().join(",");
+  const allDrugs = getAllUsedDrugs();
+  const tableData = [];
+
+  for (const drug of allDrugs) {
+    const index = availableDrugs.indexOf(drug.name.val);
+    if (index !== -1) {
+      const drugInfo = PCNEData[index];
+      const row = {};
+      row.drug_name = drugInfo.name;
+      row.spec = drugInfo.spec;
+      row.dose = drug.dose.val;
+      row.dose_unit = drug.dose.unit;
+      row.freq = drug.freq.val;
+      row.freq_unit = drug.freq.id;
+      row.duration = drug.duration.id;
+      tableData.push(row);
+    }
+  }
+  res.drug_table = tableData;
+  // console.log(res);
+  return res;
 }
 
 // --------------------------------------------------------------------------
@@ -1137,75 +1165,9 @@ const usedDrugTableID = "#used-drug-table";
 
 // --------------------------------------------------------------------------
 
-const model = {};
-model.done = false;
+// const model = {};
+// model.done = false;
 
-async function initModel() {
-  // create a session
-  console.log("init onnx");
-  model.S1Session = await ort.InferenceSession.create("./assets/S1_model.onnx");
-  console.log("init S1 done");
-  const response = await axios({
-    method: "get",
-    url: "./assets/S2_model.zip",
-    responseType: "arraybuffer"
-  });
-
-  // jszip extract file S2_model.onnx from response.data
-  const zipFile = await JSZip.loadAsync(response.data);
-  const onnxFile = await zipFile.file("S2_model.onnx").async("arraybuffer");
-
-  model.S2Session = await ort.InferenceSession.create(onnxFile);
-  // model.S2Session = await ort.InferenceSession.create("./assets/S2_model.onnx");
-  console.log("init S2 done");
-}
-
-async function inferS1(feat) {
-  if (model.done === false) {
-    return;
-  }
-  const inputDim = [1, 19];
-  // generate model input
-  const input0 = new ort.Tensor(
-    new Float32Array(feat) /* data */,
-    inputDim /* dims */
-  );
-
-  // execute the model
-  console.log("run S1");
-  const outputs = await model.S1Session.run({ input0: input0 });
-
-  // consume the output
-  const outputTensor = outputs.label;
-  console.log(`model output tensor: ${outputTensor.data}`);
-  return outputTensor.data;
-}
-
-async function inferS2(feat) {
-  if (model.done === false) {
-    return;
-  }
-
-  const inputDim = [1, 5];
-  // generate model input
-  const input0 = new ort.Tensor(
-    new Float32Array(feat) /* data */,
-    inputDim /* dims */
-  );
-
-  // execute the model
-  console.log("run S2");
-  const outputs = await model.S2Session.run({ input0: input0 });
-
-  // consume the output
-  const outputTensor = outputs.label;
-  console.log(`model output tensor: ${outputTensor.data}`);
-  return outputTensor.data;
-}
-
-initModel().then(() => {
-  model.done = true;
-});
 
 // document ready
 (($) => {
@@ -2041,7 +2003,7 @@ initModel().then(() => {
     const doseInput = $("input[name='dose']", dialog);
     const dose = doseInput.length > 0 && doseInput.val().trim() ? {
       val: doseInput.val().trim(),
-      unit: $("label[name='unit']", dialog).text(),
+      unit: $("label[name='unit']", dialog).text().trim(),
     } : "";
 
 
@@ -2056,7 +2018,7 @@ initModel().then(() => {
     const checked = $("input[name='duration']:checked", dialog);
     const duration = checked.length === 0 ? "" : {
       id: checked.val(),
-      val: checked.parent().text()
+      val: checked.parent().text().trim()
     };
 
     const data = {
