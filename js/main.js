@@ -518,7 +518,7 @@ function processS1() {
     const decisionTag = `s1#${res[0]}`;
     const basicDecision = getBasicDecision(decisionTag);
     console.log(basicDecision);
-    getHello();
+    pdsApi.getHello();
     showResult("s1", res[0]);
 
   });
@@ -935,6 +935,7 @@ function processS2() {
   const decDrugType = getDecDrugTypeFromCounter(counter);
   if (decDrugType === undefined) {
     console.log("decDrugType undefined!!!");
+    alert("请填写完整用药信息, 且至少选择一种镇痛药物");
     return;
   }
   const compliance = getCompliance();
@@ -965,7 +966,7 @@ function processS2() {
     const decisionTag = `s2#${res[0]}`;
     const basicDecision = getBasicDecision(decisionTag, drugIssue);
     console.log(basicDecision);
-    getHello();
+    pdsApi.getHello();
     showResult("s2", res[0], drugIssueInfo);
   });
 }
@@ -1000,7 +1001,12 @@ function openFeedbackDialog() {
       $("#feedback-rating").barrating("set", 3);
     }
   });
+}
 
+function trimInput(inputVal) {
+  const inputTrim = inputVal.trim();
+  const res = inputTrim !== "" ? inputTrim : null;
+  return res;
 }
 
 function getBasicInfo() {
@@ -1009,8 +1015,8 @@ function getBasicInfo() {
   res.uid = $("#user_id").val();
   res.gender = $("#user_gender").val();
   res.age = $("#user_age").val();
-  res.height = $("#user_height").val();
-  res.weight = $("#user_weight").val();
+  res.height = trimInput($("#user_height").val());
+  res.weight = trimInput($("#user_weight").val());
   res.job = $("#user_job").val();
   res.edu = $("#user_edu").val() || "";
   res.special = $("#user_special").val();
@@ -1028,7 +1034,7 @@ function getBasicInfo() {
   res.physical_q3 = $("#user_physical_q3").val();
   res.physical_q4 = $("#user_physical_q4").val();
   res.physical_q5 = $("#user_physical_q5").val();
-  res.physical_score = $("#user_physical_score").val();
+  res.physical_score = $("#user_physical_score").text();
 
   // console.log(res);
   return res;

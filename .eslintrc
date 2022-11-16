@@ -10,7 +10,8 @@
     "validator_msg": "readonly",
     "ort": "readonly",
     "axios": "readonly",
-    "JSZip": "readonly"
+    "JSZip": "readonly",
+    "pdsApi": "readonly"
   },
   "env": {
     "browser": true,
