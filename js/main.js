@@ -140,40 +140,6 @@ function getShortPinyin(wordStr) {
 
 
 
-const ch1_set = new Set([1, 3, 6, 8, 9, 12, 23, 24, 25]);
-const ch2_set = new Set([4, 5, 7, 10, 11, 17]);
-const ch3_set = new Set([2, 13, 14, 15, 16, 18, 19, 20, 21, 22]);
-
-const pp11_set = new Set([1, 2, 13, 14, 16, 18, 35]);
-const pp12_set = new Set([
-  1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34,
-  35,
-]);
-function extractS1Feat(mostLevel, bodyList, chList) {
-  var t;
-  var feat = [];
-
-  feat.push(mostLevel);
-
-  for (const set_n of [ch1_set, ch2_set, ch3_set]) {
-    t = (() => new Set(chList.filter((x) => set_n.has(x))))();
-    feat.push(t.size >= 1 ? 1 : 0);
-    feat.push(t.size === 1 ? 1 : 0);
-    feat.push(t.size >= 2 ? 1 : 0);
-    feat.push(t.size === 2 ? 1 : 0);
-    feat.push(t.size >= 3 ? 1 : 0);
-  }
-
-  t = (() => new Set(bodyList.filter((x) => pp11_set.has(x))))();
-  feat.push(t.size >= 1 ? 1 : 0);
-  t = (() => new Set(bodyList.filter((x) => pp12_set.has(x))))();
-  feat.push(t.size >= 1 ? 1 : 0);
-
-  feat.push(chList.includes(6) ? 1 : 0);
-
-  return feat;
-}
-
 function getDrugClassList(drugID) {
   const drugInfo = PCNEData.find((v) => {
     return v.id === drugID;
@@ -365,33 +331,6 @@ function getAllUsedDrugs() {
 
   tableData.each((value, index) => {
     const drugData = genDataFromRowData(value);
-    // const td = $(value).children("td");
-
-    // console.log(td);
-    // const name = getNameFromTd(td[1]);
-    // if (name === "") {
-    //   return;
-    // }
-    // console.log(name);
-
-    // const dose = getDoseFromTd(td[2]);
-    // if (dose === "") {
-    //   return;
-    // }
-    // console.log(dose);
-
-    // const freq = getFreqFromTd(td[3]);
-    // if (freq === "") {
-    //   return;
-    // }
-
-    // console.log(freq);
-
-    // const duration = getdurationFromTd(td[4]);
-    // if (duration === "") {
-    //   return;
-    // }
-    // console.log(duration);
     res.push(drugData);
     // console.log(res);
   });
@@ -400,7 +339,13 @@ function getAllUsedDrugs() {
 
 function getCompliance() {
   const inputs = $("input[id^='user_compliance_q']:checked").get();
-  const scoreList = inputs.map((v) => parseInt($(v).val()));
+  const scoreList = inputs.map((v) => {
+    const val = parseInt($(v).val());
+    if (val === 0) {
+      return 1;
+    }
+    return 0;
+  });
   const scoreSum = scoreList.reduce(
     (previousVal, currentVal) => previousVal + currentVal,
     0
@@ -435,9 +380,10 @@ function getChList() {
     .get();
 }
 
-function showResult(decisionType, decisionId, drugIssueInfo = []) {
+function showResult(decisionTag, drugIssueInfo = []) {
   const dialogId = "#result-dialog";
   const dialog = $(dialogId);
+  const [decisionType, decisionId] = decisionTag.split("#");
 
   dialog.dialog({
     modal: true,
@@ -502,10 +448,29 @@ function getAdverseReactionDrugList() {
   return drugList;
 }
 
+async function saveS1(decisionTag) {
+  if (pdsApi.getHello() !== null) {
+    const data1 = getBasicInfo();
+    const data2 = getPainAssessmentInfo();
+    const data3 = getBasicDecision(decisionTag);
+    const res = await pdsApi.createDiagnostic(data1, data2, data3);
+    if (res) {
+      alert("提交成功");
+      showResult(decisionTag);
+    } else {
+      alert("提交失败");
+    }
+  } else {
+    console.log("pds api is not ready");
+    showResult(decisionTag);
+  }
+}
+
 function processS1() {
   const bodyList = getBodyList();
   const chList = getChList();
   const mostLevel = getMostLevel();
+  // eslint-disable-next-line no-undef
   const feat = extractS1Feat(mostLevel, bodyList, chList);
   console.log(feat);
 
@@ -516,17 +481,12 @@ function processS1() {
     // alert(strOut.format(mostLevel, bodyList, chList, res[0]));
 
     const decisionTag = `s1#${res[0]}`;
-    const basicDecision = getBasicDecision(decisionTag);
-    console.log(basicDecision);
-    pdsApi.getHello();
-    showResult("s1", res[0]);
+    saveS1(decisionTag);
 
   });
 }
 
-
 function getFreqTimesPreDay(freq) {
-
   if (freq.id === "" || freq.val === "") {
     return null;
   }
@@ -911,6 +871,25 @@ function usedDrugInputCheck(allDrugs) {
   return true;
 }
 
+async function saveS2(decisionTag, drugIssue) {
+  const drugIssueInfo = genDrugIssueInfo(drugIssue);
+  if (pdsApi.getHello() !== null) {
+    const data1 = getBasicInfo();
+    const data2 = getPainAssessmentInfo();
+    const data3 = getBasicDecision(decisionTag, drugIssue);
+    const data4 = getPrevMedicationInfo();
+    const res = await pdsApi.createDiagnostic(data1, data2, data3, data4);
+    if (res) {
+      alert("提交成功");
+      showResult(decisionTag, drugIssueInfo);
+    } else{
+      alert("提交失败");
+    }
+  } else {
+    console.log("pds api is not ready");
+    showResult(decisionTag, drugIssueInfo);
+  }
+}
 
 function processS2() {
   const mostLevel = getMostLevel();
@@ -930,7 +909,6 @@ function processS2() {
   // console.log("drugHighFreqList: " + drugHighFreqList);
   // console.log("drugOverdoseList: " + drugOverdoseList);
   const drugIssue = genDrugIssue(allUsedDrugs);
-  const drugIssueInfo = genDrugIssueInfo(drugIssue);
   const counter = genTypeCounter(allUsedDrugsID);
   const decDrugType = getDecDrugTypeFromCounter(counter);
   if (decDrugType === undefined) {
@@ -964,10 +942,8 @@ function processS2() {
     //   res[0])
     // );
     const decisionTag = `s2#${res[0]}`;
-    const basicDecision = getBasicDecision(decisionTag, drugIssue);
-    console.log(basicDecision);
-    pdsApi.getHello();
-    showResult("s2", res[0], drugIssueInfo);
+    saveS2(decisionTag, drugIssue);
+
   });
 }
 
@@ -1041,8 +1017,6 @@ function getBasicInfo() {
 }
 
 
-
-
 function checkedToStr(id) {
   return $(`#${id}:checked`).map(function () {
     return $(this).val();
@@ -1070,10 +1044,10 @@ function getPainAssessmentInfo() {
 
 function getPrevMedicationInfo() {
   const res = {};
-  res.forget = $("#user_compliance_q1:checked").val();
-  res.carelessly = $("#user_compliance_q2:checked").val();
-  res.withdrawal = $("#user_compliance_q3:checked").val();
-  res.bad_withdrawal = $("#user_compliance_q4:checked").val();
+  res.compliance_q1 = $("#user_compliance_q1:checked").val();
+  res.compliance_q2 = $("#user_compliance_q2:checked").val();
+  res.compliance_q3 = $("#user_compliance_q3:checked").val();
+  res.compliance_q4 = $("#user_compliance_q4:checked").val();
   res.adverse_reaction = checkedToStr("user_adverse_reaction");
   res.adverse_reaction_drugs = getAdverseReactionDrugList().join(",");
   const allDrugs = getAllUsedDrugs();
@@ -1086,7 +1060,7 @@ function getPrevMedicationInfo() {
       const row = {};
       row.drug_name = drugInfo.name;
       row.spec = drugInfo.spec;
-      row.dose = drug.dose.val;
+      row.dose = parseFloat(drug.dose.val);
       row.dose_unit = drug.dose.unit;
       row.freq = drug.freq.val;
       row.freq_unit = drug.freq.id;
@@ -1104,6 +1078,8 @@ function getBasicDecision(decisionTag, drugIssue=null) {
   res.recmd = decisionTag;
   if (drugIssue !== null) {
     res.previous_medication_issue = JSON.stringify(drugIssue);
+  } else {
+    res.previous_medication_issue = "";
   }
 
   return res;
@@ -1365,7 +1341,7 @@ const usedDrugTableID = "#used-drug-table";
       return parseInt($(this).val());
     }).get().filter((v) => v > 0);
 
-    console.log(values);
+    // console.log(values);
 
     if (values.length === 5) {
 
