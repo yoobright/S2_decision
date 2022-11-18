@@ -8,11 +8,11 @@ const pdsApi = class {
     try {
       const response = await axios.get(`${pds_server}/`);
       console.log(response);
+      return response.data;
     } catch (error) {
       console.error(error);
-    } finally {
-      console.log("done!");
     }
+    return null;
   }
 
   // axios create diagnostic

@@ -449,7 +449,8 @@ function getAdverseReactionDrugList() {
 }
 
 async function saveS1(decisionTag) {
-  if (pdsApi.getHello() !== null) {
+  const hello = await pdsApi.getHello();
+  if (hello !== null) {
     const data1 = getBasicInfo();
     const data2 = getPainAssessmentInfo();
     const data3 = getBasicDecision(decisionTag);
@@ -873,7 +874,8 @@ function usedDrugInputCheck(allDrugs) {
 
 async function saveS2(decisionTag, drugIssue) {
   const drugIssueInfo = genDrugIssueInfo(drugIssue);
-  if (pdsApi.getHello() !== null) {
+  const hello = await pdsApi.getHello();
+  if (hello !== null) {
     const data1 = getBasicInfo();
     const data2 = getPainAssessmentInfo();
     const data3 = getBasicDecision(decisionTag, drugIssue);
