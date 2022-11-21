@@ -991,7 +991,7 @@ function getBasicInfo() {
   const res = {};
   res.user_name = $("#user_name").val();
   res.uid = $("#user_id").val();
-  res.gender = $("#user_gender").val();
+  res.gender = $("#user_gender:checked").val();
   res.age = $("#user_age").val();
   res.height = trimInput($("#user_height").val());
   res.weight = trimInput($("#user_weight").val());
@@ -1036,8 +1036,8 @@ function getPainAssessmentInfo() {
   res.pain_extra = $("#user_pain_extra").val();
   res.aggravating_factors = checkedToStr("user_pain_aggr_factor");
   res.relief_factors = checkedToStr("user_pain_reli_factor");
-  res.breakout_type = $("#user_pain_breakout_type").val();
-  res.breakout_freq = $("#user_pain_breakout_freq").val();
+  res.breakout_type = $("#user_pain_breakout_type:checked").val();
+  res.breakout_freq = $("#user_pain_breakout_freq:checked").val();
 
   // console.log(res);
   return res;
@@ -1479,7 +1479,7 @@ const usedDrugTableID = "#used-drug-table";
   addRadio(userPainBreakoutTypeTag, userPainBreakoutTypeList);
 
   // userPainBreakoutFreq
-  const userPainBreakoutFreqList = [" ＜3", "≥3"];
+  const userPainBreakoutFreqList = [" ＜3", "≥3", "无"];
   const userPainBreakoutFreqTag = "user_pain_breakout_freq";
 
   addRadio(userPainBreakoutFreqTag, userPainBreakoutFreqList);

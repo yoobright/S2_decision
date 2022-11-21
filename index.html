@@ -86,12 +86,13 @@
                 </div> -->
 
                 <div class="form-group">
-                  <label for="user_id" class="form-label">ID</label>
+                  <label for="user_id" class="form-label">电话号码<span style="color: crimson">*</span></label>
                   <input
                     type="text"
                     name="user_id"
                     id="user_id"
                     placeholder="请填入手机号"
+                    class="required"
                   />
                   <span class="text-input"></span>
                 </div>
@@ -383,7 +384,7 @@
                 <div class="form-group">
                   <label for="user_physical" class="form-label"
                     >身体状况<span style="color: crimson">*</span>
-                    （评分）</label
+                    （EQ-5D-3L量表）</label
                   >
                   <label
                     for="user_physical_q1"
@@ -537,7 +538,7 @@
                   </select> -->
                   <span class="text-input"></span>
                   <div class="question-label">
-                    身体评分：
+                    效用值：
                     <div id="user_physical_score" style="display: inline"></div>
                   </div>
                 </div>
