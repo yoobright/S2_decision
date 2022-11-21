@@ -645,7 +645,7 @@ div.input-textarea textarea {
 
 @media screen and (min-width: 1200px) {
   label.error {
-    right: 400px;
+    right: 360px;
   }
   #body-view-image {
     display: inline;

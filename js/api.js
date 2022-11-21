@@ -1,5 +1,6 @@
 /* eslint-disable no-unused-vars */
 const pds_server = "http://localhost:8089";
+let serverOnline = false;
 
 // eslint-disable-next-line no-redeclare
 const pdsApi = class {
@@ -8,11 +9,18 @@ const pdsApi = class {
     try {
       const response = await axios.get(`${pds_server}/`);
       console.log(response);
-      return response.data;
+      if (response.status === 200) {
+        serverOnline = true;
+        return response.data;
+      }
     } catch (error) {
       console.error(error);
     }
     return null;
+  }
+
+  static getOnlineTag() {
+    return serverOnline;
   }
 
   // axios create diagnostic
