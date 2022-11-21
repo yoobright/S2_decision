@@ -563,14 +563,24 @@ function getHighFreqTimesPreDay(strData) {
 }
 
 function getHighDosePreDay(strData) {
-  const regexp = /([0-9]*)mg\/d/ug;
-  const matches = strData.matchAll(regexp);
-  console.log(matches);
-  for (const match of matches) {
+  const regexpMG = /([0-9]*)mg\/d/ug;
+  const matchesMG = strData.matchAll(regexpMG);
+  // console.log(matchesMG);
+  for (const match of matchesMG) {
     if (match[1] !== "") {
       return parseInt(match[1]);
     }
   }
+
+  const regexpPiece = /([0-9]*)片\/d/ug;
+  const matchesPiece = strData.matchAll(regexpPiece);
+  // console.log(matchesPiece);
+  for (const match of matchesPiece) {
+    if (match[1] !== "") {
+      return parseInt(match[1]);
+    }
+  }
+
   return null;
 }
 
@@ -1353,7 +1363,10 @@ const usedDrugTableID = "#used-drug-table";
     },
     autocomplete: {
       source: function (req, responseFn) {
-        const re = $.ui.autocomplete.escapeRegex(req.term);
+        const re = $.ui.autocomplete.escapeRegex(req.term.trim());
+        if (re === "") {
+          return;
+        }
         const matcher = new RegExp(re, "iu");
         const a = $.grep(availableIllenss, (item, index) => {
           const matchVal = matcher.test(item);
@@ -1959,7 +1972,10 @@ const usedDrugTableID = "#used-drug-table";
     },
     autocomplete: {
       source: function (req, responseFn) {
-        const re = $.ui.autocomplete.escapeRegex(req.term);
+        const re = $.ui.autocomplete.escapeRegex(req.term.trim());
+        if (re === "") {
+          return;
+        }
         const matcher = new RegExp(re, "iu");
         const a = $.grep(availableAdverseReactionDrugs, (item, index) => {
           const matchVal = matcher.test(item);
@@ -2136,7 +2152,10 @@ const usedDrugTableID = "#used-drug-table";
       // source: availableDrugs,
       appendTo: dialogId,
       source: function (req, responseFn) {
-        const re = $.ui.autocomplete.escapeRegex(req.term);
+        const re = $.ui.autocomplete.escapeRegex(req.term.trim());
+        if (re === "") {
+          return;
+        }
         const matcher = new RegExp(re, "iu");
         const a = $.grep(availableDrugs, (item, index) => {
           const matchVal = matcher.test(item);
