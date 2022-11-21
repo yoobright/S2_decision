@@ -364,13 +364,55 @@ function getMostLevel() {
   );
 }
 
+function getMostLevelFeat() {
+  const level = getMostLevel();
+  if (level > 0 && level <= 3) {
+    return 1;
+  }
+  if (level > 3 && level <= 6) {
+    return 2;
+  }
+  if (level > 6 && level <= 10) {
+    return 3;
+  }
+  return 0;
+}
+
 function getBreakOutType() {
   return parseInt($("input#user_pain_breakout_type:checked").val());
+}
+
+function getBreakOutTypeFeat() {
+  const type = getBreakOutType();
+  const times = getBreakOutTimes();
+  if (type === 2 && times === 3) {
+    return 1;
+  }
+
+  return type;
 }
 
 function getBreakOutTimes() {
   return parseInt($("input#user_pain_breakout_freq:checked").val());
 }
+
+function getBreakOutTimesFeat() {
+  const times = getBreakOutTimes();
+  const type = getBreakOutType();
+  if (type === 1) {
+    return 2;
+  }
+  if (type === 3) {
+    return 3;
+  }
+  if (type === 2 && times === 3) {
+    return 1;
+  }
+
+  return times;
+
+}
+
 
 function getChList() {
   return $("input[type=checkbox][name=user_pain_character]:checked")
@@ -470,7 +512,7 @@ async function saveS1(decisionTag) {
 function processS1() {
   const bodyList = getBodyList();
   const chList = getChList();
-  const mostLevel = getMostLevel();
+  const mostLevel = getMostLevelFeat();
   // eslint-disable-next-line no-undef
   const feat = extractS1Feat(mostLevel, bodyList, chList);
   console.log(feat);
@@ -894,9 +936,9 @@ async function saveS2(decisionTag, drugIssue) {
 }
 
 function processS2() {
-  const mostLevel = getMostLevel();
-  const breakOutType = getBreakOutType();
-  const breakOutTimes = getBreakOutTimes();
+  const mostLevel = getMostLevelFeat();
+  const breakOutType = getBreakOutTypeFeat();
+  const breakOutTimes = getBreakOutTimesFeat();
   const allUsedDrugs = getAllUsedDrugs();
 
   if (!usedDrugInputCheck(allUsedDrugs)) {
@@ -1479,7 +1521,7 @@ const usedDrugTableID = "#used-drug-table";
   addRadio(userPainBreakoutTypeTag, userPainBreakoutTypeList);
 
   // userPainBreakoutFreq
-  const userPainBreakoutFreqList = [" ＜3", "≥3", "无"];
+  const userPainBreakoutFreqList = ["≥3", "<3", "无"];
   const userPainBreakoutFreqTag = "user_pain_breakout_freq";
 
   addRadio(userPainBreakoutFreqTag, userPainBreakoutFreqList);
