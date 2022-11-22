@@ -81,7 +81,7 @@ function updateBodySelected(bodyId, currentSelect, bodyPloygon) {
 
     // console.log(selectIDList);
     const selectNameList = selectIDList.map((id) => {
-      return bodyKV[id];
+      return utils.G.bodyKV[id];
     });
 
     const currentNameList = $("#user_pain_part")
@@ -112,36 +112,11 @@ function updateBodySelected(bodyId, currentSelect, bodyPloygon) {
   }
 }
 
-function getShortPinyin(wordStr) {
-  var idx = -1;
-  var MAP = "ABCDEFGHJKLMNOPQRSTWXYZ";
-  var boundaryChar = "驁簿錯鵽樲鰒餜靃攟鬠纙鞪黁漚曝裠鶸蜶籜鶩鑂韻糳";
-
-  if (!String.prototype.localeCompare) {
-    throw Error("String.prototype.localeCompare not supported.");
-  }
-
-  var wordSplit = [...wordStr];
-  let res = "";
-  for (const w of wordSplit) {
-    if (/[\u4e00-\u9fa5]/u.test(w)) {
-      for (var i = 0; i < boundaryChar.length; i++) {
-        if (boundaryChar[i].localeCompare(w, "zh-CN-u-co-pinyin") >= 0) {
-          idx = i;
-          break;
-        }
-      }
-      res += MAP[idx];
-    }
-  }
-
-  return res;
-}
 
 
 
 function getDrugClassList(drugID) {
-  const drugInfo = PCNEData.find((v) => {
+  const drugInfo = utils.G.PCNEData.find((v) => {
     return v.id === drugID;
   });
   if (drugInfo) {
@@ -289,23 +264,25 @@ function getDecDrugTypeFromCounter(counter) {
   return undefined;
 }
 
+function isNotDefined(obj) {
+  return obj === undefined || obj === "";
+}
 
 function genDataFromRowData(tableData) {
   // console.log(tableData);
-  const name = tableData.drug_name === "" ? "" :
+  const name = isNotDefined(tableData.drug_name) ? "" :
     { id: $(tableData.drug_name).attr("data"), val: $(tableData.drug_name).text() };
-  const dose = tableData.drug_dose === "" ? "" :
+  const dose = isNotDefined(tableData.drug_dose) ? "" :
     {
       val: $(tableData.drug_dose).attr("data").split("#")[0].trim(),
       unit: $(tableData.drug_dose).attr("data").split("#")[1].trim()
     };
-  const freq = tableData.drug_freq === "" ? "" :
+  const freq = isNotDefined(tableData.drug_freq) ? "" :
     {
       id: $(tableData.drug_freq).attr("data").split("#")[0].trim(),
       val: $(tableData.drug_freq).attr("data").split("#")[1].trim()
     };
-
-  const duration = tableData.drug_duration === "" ? "" :
+  const duration = isNotDefined(tableData.drug_duration) ? "" :
     {
       id: $(tableData.drug_duration).attr("data").split("#")[0].trim(),
       val: $(tableData.drug_duration).attr("data").split("#")[1].trim()
@@ -325,6 +302,20 @@ function genDataFromRowData(tableData) {
 
 function getAllUsedDrugs() {
   const table = $(usedDrugTableID).DataTable();
+  const tableData = table.data();
+  // console.log(data);
+  const res = [];
+
+  tableData.each((value, index) => {
+    const drugData = genDataFromRowData(value);
+    res.push(drugData);
+    // console.log(res);
+  });
+  return res;
+}
+
+function getAllRecipeDrugs() {
+  const table = $(recipeDrugTableID).DataTable();
   const tableData = table.data();
   // console.log(data);
   const res = [];
@@ -478,6 +469,7 @@ function getBodyList() {
   return bodyList;
 }
 
+// eslint-disable-next-line no-unused-vars
 function getAdverseReactionTag() {
   const checkedTag = $("input[name='user_adverse_reaction']:checked").map(
     function () {
@@ -534,403 +526,8 @@ function processS1() {
   });
 }
 
-function getFreqTimesPreDay(freq) {
-  if (freq.id === "" || freq.val === "") {
-    return null;
-  }
-
-  if (freq.id === "1") {
-    return parseFloat(freq.val);
-  }
-  if (freq.id === "2") {
-    return 24. / parseFloat(freq.val);
-  }
-  if (freq.id === "3") {
-    return 1. / parseFloat(freq.val);
-  }
-  if (freq.id === "5") {
-    return 1.;
-  }
-
-  return null;
-}
-
-function getHighFreqTimesPreDay(strData) {
-  const regexp = /([0-9]*)次\/d/ug;
-  const matches = strData.matchAll(regexp);
-  console.log(matches);
-  for (const match of matches) {
-    if (match[1] !== "") {
-      return parseInt(match[1]);
-    }
-  }
-  return null;
-}
-
-function getHighDosePreDay(strData) {
-  const regexpMG = /([0-9]*)mg\/d/ug;
-  const matchesMG = strData.matchAll(regexpMG);
-  // console.log(matchesMG);
-  for (const match of matchesMG) {
-    if (match[1] !== "") {
-      return parseInt(match[1]);
-    }
-  }
-
-  const regexpPiece = /([0-9]*)片\/d/ug;
-  const matchesPiece = strData.matchAll(regexpPiece);
-  // console.log(matchesPiece);
-  for (const match of matchesPiece) {
-    if (match[1] !== "") {
-      return parseInt(match[1]);
-    }
-  }
-
-  return null;
-}
-
-function drugOverdoseCheck(allDrugs) {
-  const res = [];
-  for (const drug of allDrugs) {
-    const drugName = drug.name.val;
-    const index = availableDrugs.indexOf(drugName);
-    if (index !== -1) {
-      const drugInfo = PCNEData[index];
-      const highDosePreDay = getHighDosePreDay(drugInfo.high_dose);
-      const freqTimesPreDay = getFreqTimesPreDay(drug.freq);
-      if (freqTimesPreDay === null || highDosePreDay === null) {
-        continue;
-      }
-      const dosePreDay = parseFloat(drug.dose.val) * freqTimesPreDay;
-      if (dosePreDay > highDosePreDay) {
-        res.push(drugInfo.id);
-      }
-    }
-  }
-
-  return res;
-
-}
-
-
-function drugHighFreqCheck(allDrugs) {
-  const res = [];
-  for (const drug of allDrugs) {
-    const drugName = drug.name.val;
-    const index = availableDrugs.indexOf(drugName);
-    if (index !== -1) {
-      const drugInfo = PCNEData[index];
-      const highFreqTimesPreDay = getHighFreqTimesPreDay(drugInfo.exce_freq);
-      const freqTimesPreDay = getFreqTimesPreDay(drug.freq);
-      if (freqTimesPreDay === null || highFreqTimesPreDay === null) {
-        continue;
-      }
-
-      if (freqTimesPreDay > highFreqTimesPreDay) {
-        res.push(drugInfo.id);
-      }
-    }
-  }
-
-  return res;
-}
-
-function isDrugProp3(durgClassStr) {
-  return /C|D|E|F|I|G/u.test("durgClassStr");
-}
-
-function drugC1_1Check(allDrugs) {
-  const prop3List = [];
-  for (const drug of allDrugs) {
-    const drugName = drug.name.val;
-    const index = availableDrugs.indexOf(drugName);
-    if (index !== -1) {
-      const drugInfo = PCNEData[index];
-      if (isDrugProp3(drugInfo.class)) {
-        prop3List.push(drugName);
-      }
-    }
-  }
-
-  if (prop3List.length === 1 &&
-    availableDrugs.indexOf(prop3List[0]) === 3) {
-    return true;
-  }
-
-  return false;
-}
-
-
-
-
-function getDrugClassCount(allDrugs) {
-  const res = {
-    "A1": 0, "A2": 0, "A3": 0, "A4": 0, "A5": 0, "A6": 0, "A7": 0, "A8": 0, "A9": 0, "A10": 0,
-    "B1": 0, "B2": 0, "B3": 0, "B4": 0, "B5": 0,
-    "C": 0,
-    "D": 0,
-    "E1": 0, "E2": 0,
-    "F1": 0, "F2": 0,
-    "G1": 0, "G2": 0,
-    "H1": 0, "H2": 0,
-    "I1": 0, "I2": 0,
-    "J": 0,
-    "K": 0,
-    "L1": 0, "L2": 0, "L3": 0, "L4": 0, "L5": 0, "L6": 0, "L7": 0, "L8": 0, "L9": 0,
-  };
-
-  for (const drug of allDrugs) {
-    const drugName = drug.name.val;
-    const index = availableDrugs.indexOf(drugName);
-    if (index !== -1) {
-      const drugInfo = PCNEData[index];
-      const drugClassList = drugInfo.class.split("/");
-      for (const drugClass of drugClassList) {
-        if (res[drugClass] !== undefined) {
-          res[drugClass] += 1;
-        }
-      }
-    }
-  }
-
-  return res;
-}
-
-function drugC1_3Check(drugClassCount) {
-
-  //  药物种类C、D、E1、F1中任一药 + 药物种类K中任一药
-  if ((drugClassCount.C > 0 || drugClassCount.D > 0 || drugClassCount.E1 > 0 || drugClassCount.F1 > 0) &&
-    drugClassCount.K > 0) {
-    return true;
-  }
-  // 药物种类J中任一药 + 药物种类B2中任一药
-  // 药物种类J中任一药 + 药物种类B3中任一药
-  // 药物种类J中任一药 + 药物种类B4中任一药
-  // 药物种类J中任一药 + 药物种类B5中任一药
-  if (drugClassCount.J > 0 &&
-    (drugClassCount.B2 > 0 || drugClassCount.B3 > 0 || drugClassCount.B4 > 0 || drugClassCount.B5 > 0)) {
-    return true;
-  }
-
-  // 药物种类C中任一药 + 药物种类C中另一药
-  if (drugClassCount.C > 1) {
-    return true;
-  }
-  // 药物种类C中任一药 + 药物种类D中另一药
-  if (drugClassCount.C > 0 && drugClassCount.D > 0) {
-    return true;
-  }
-
-  // 药物种类F1中任一药 + 药物种类F1中另一药
-  if (drugClassCount.F1 > 1) {
-    return true;
-  }
-  // 药物种类E1中任一药 + 药物种类F1中任一药
-  if (drugClassCount.E1 > 0 && drugClassCount.F1 > 0) {
-    return true;
-  }
-
-  // 药物种类E1中任一药 + 药物种类E1中另一药
-  if (drugClassCount.E1 > 1) {
-    return true;
-  }
-  // 药物种类A1中任一药 + 药物种类A1中另一药
-  if (drugClassCount.A1 > 1) {
-    return true;
-  }
-  // 药物种类A2中任一药 + 药物种类A2中另一药
-  if (drugClassCount.A2 > 1) {
-    return true;
-  }
-  // 药物种类G1中任一药 + 药物种类G1中另一药
-  if (drugClassCount.G1 > 1) {
-    return true;
-  }
-  // 药物种类H1中任一药 + 药物种类H1中另一药
-  if (drugClassCount.H1 > 1) {
-    return true;
-  }
-  // 药物种类I1中任一药 + 药物种类I1中另一药
-  if (drugClassCount.I1 > 1) {
-    return true;
-  }
-  // 药物种类J中任一药 + 药物种类J中另一药
-  if (drugClassCount.J > 1) {
-    return true;
-  }
-  // 药物种类A5中任一药 + 药物种类A5中另一药
-  if (drugClassCount.A5 > 1) {
-    return true;
-  }
-  // 药物种类A8中任一药 + 药物种类A8中另一药
-  if (drugClassCount.A8 > 1) {
-    return true;
-  }
-  // 药物种类A6中任一药 + 药物种类A6中另一药
-  if (drugClassCount.A6 > 1) {
-    return true;
-  }
-  // 药物种类A9中任一药 + 药物种类A9中另一药
-  if (drugClassCount.A9 > 1) {
-    return true;
-  }
-
-  return false;
-}
-
-function drugC1_4Check(drugClassCount) {
-  // 药物种类G1中任一药 + 药物种类G1中另一药
-  // 药物种类H1中任一药 + 药物种类H1中另一药
-  // 药物种类I1中任一药 + 药物种类I1中另一药
-  // 药物种类J中任一药 + 药物种类J中另一药
-  // 药物种类A5中任一药 + 药物种类A5中另一药
-  // 药物种类A8中任一药 + 药物种类A8中另一药
-  // 药物种类A6中任一药 + 药物种类A6中另一药
-  // 药物种类A9中任一药 + 药物种类A9中另一药
-  if (drugClassCount.G1 > 1 || drugClassCount.H1 > 1 ||
-    drugClassCount.I1 > 1 || drugClassCount.J > 1 ||
-    drugClassCount.A5 > 1 || drugClassCount.A8 > 1 ||
-    drugClassCount.A6 > 1 || drugClassCount.A9 > 1) {
-    return true;
-  }
-
-  return false;
-}
-
-
-
-
-function drugC1_5Check(adverseReactionDrugList, adverseReactionTag) {
-  // 存在不良反应便秘，但未使用药物种类L1
-  // 存在不良反应恶心呕吐，但未使用药物种类L2
-  // 存在不良反应谵妄，但未使用药物种类L3
-  // 存在不良反应镇静，但未使用药物种类L4
-  // 存在不良反应皮肤瘙痒，但未使用药物种类L5
-  // 存在不良反应呼吸抑制，但未使用药物种类L6
-  // 存在不良反应止汗，但未使用药物种类L7
-  // 存在不良反应利尿，但未使用药物种类L8
-  // 存在不良反应胃痉挛，但未使用药物种类L9
-
-  const drugClassList = [];
-
-  for (const drugName of adverseReactionDrugList) {
-    const index = availableDrugs.indexOf(drugName);
-    if (index !== -1) {
-      const drugInfo = PCNEData[index];
-      const classList = drugInfo.class.split("/");
-      for (const cls of classList) {
-        drugClassList.push(cls);
-      }
-    }
-  }
-
-  for (const tag of adverseReactionTag) {
-    if (tag === "1" && !drugClassList.includes("L1") ||
-      tag === "2" && !drugClassList.includes("L2") ||
-      tag === "3" && !drugClassList.includes("L3") ||
-      tag === "4" && !drugClassList.includes("L4") ||
-      tag === "5" && !drugClassList.includes("L5") ||
-      tag === "6" && !drugClassList.includes("L6") ||
-      tag === "7" && !drugClassList.includes("L7") ||
-      tag === "8" && !drugClassList.includes("L8") ||
-      tag === "9" && !drugClassList.includes("L9")
-    ) {
-      return true;
-    }
-  }
-
-  return false;
-}
-
-
-
-function genDrugIssue(allDrugs) {
-  const res = {};
-  const drugClassCount = getDrugClassCount(allDrugs);
-  if (drugC1_1Check(allDrugs)) {
-    res.C1_1 = true;
-  }
-  if (drugC1_3Check(drugClassCount)) {
-    res.C1_3 = true;
-  }
-  if (drugC1_4Check(drugClassCount)) {
-    res.C1_4 = true;
-  }
-  // 不良反应
-  if (drugC1_5Check(getAdverseReactionDrugList(), getAdverseReactionTag())) {
-    res.C1_5 = true;
-  }
-
-  res.C3_4 = drugHighFreqCheck(allDrugs);
-  res.C3_2 = drugOverdoseCheck(allDrugs);
-
-  return res;
-}
-
-
-function genDrugIssueInfo(drugIssue) {
-  const res = [];
-  if (drugIssue.C1_3) {
-    res.push(
-      `${previousIssueText["P2.1"]}，${previousIssueText["C1.3"]}`
-    );
-  }
-
-  if (drugIssue.C1_4) {
-    res.push(
-      `${previousIssueText["P2.1"]}，${previousIssueText["C1.4"]}`
-    );
-  }
-
-  if (drugIssue.C1_5) {
-    res.push(
-      `${previousIssueText["P1.3"]}，${previousIssueText["C1.5"]}`
-    );
-  }
-
-
-  for (const drugId of drugIssue.C3_4) {
-    for (const drug of PCNEData) {
-      if (drug.id === drugId) {
-        res.push(
-          `${drug.name}（${previousIssueText["P2.1"]}，${previousIssueText["C3.4"]}）`
-        );
-        break;
-      }
-    }
-  }
-
-  for (const drugId of drugIssue.C3_2) {
-    for (const drug of PCNEData) {
-      if (drug.id === drugId) {
-        res.push(
-          `${drug.name}（${previousIssueText["P2.1"]}，${previousIssueText["C3.2"]}）`
-        );
-        break;
-      }
-    }
-  }
-
-  return res;
-}
-
-function usedDrugInputCheck(allDrugs) {
-  for (const drug of allDrugs) {
-    const drugName = drug.name;
-    const drugDose = drug.dose;
-    const drugFreq = drug.freq;
-    const drugDuration = drug.duration;
-    if (drugName === "" || drugDose === "" || drugFreq === "" ||
-      drugDuration === "" || drugFreq.val === "") {
-      return false;
-    }
-  }
-
-  return true;
-}
-
 async function saveS2(decisionTag, drugIssue) {
-  const drugIssueInfo = genDrugIssueInfo(drugIssue);
+  const drugIssueInfo = utils.drugCheck.genDrugIssueInfo(drugIssue);
   const tag = pdsApi.getOnlineTag();
   if (tag) {
     const data1 = getBasicInfo();
@@ -956,7 +553,7 @@ function processS2() {
   const breakOutTimes = getBreakOutTimesFeat();
   const allUsedDrugs = getAllUsedDrugs();
 
-  if (!usedDrugInputCheck(allUsedDrugs)) {
+  if (!utils.drugCheck.usedDrugInputCheck(allUsedDrugs)) {
     alert("请填写完整用药信息");
     return;
   }
@@ -967,7 +564,7 @@ function processS2() {
   // const drugOverdoseList = drugOverdoseCheck(allUsedDrugs);
   // console.log("drugHighFreqList: " + drugHighFreqList);
   // console.log("drugOverdoseList: " + drugOverdoseList);
-  const drugIssue = genDrugIssue(allUsedDrugs);
+  const drugIssue = utils.drugCheck.genDrugIssue(allUsedDrugs);
   const counter = genTypeCounter(allUsedDrugsID);
   const decDrugType = getDecDrugTypeFromCounter(counter);
   if (decDrugType === undefined) {
@@ -1100,6 +697,25 @@ function getPainAssessmentInfo() {
   return res;
 }
 
+function genDrugTableData(allDrugs, type = "used") {
+  const tableData = [];
+  for (const drug of allDrugs) {
+    const index = utils.G.availableDrugs.indexOf(drug.name.val);
+    if (index !== -1) {
+      const drugInfo = utils.G.PCNEData[index];
+      const row = {};
+      row.drug_name = drugInfo.name;
+      row.spec = drugInfo.spec;
+      row.dose = parseFloat(drug.dose.val);
+      row.dose_unit = drug.dose.unit;
+      row.freq = drug.freq.val;
+      row.freq_unit = drug.freq.id;
+      row.duration = type === "used" ? drug.duration.id : "";
+      tableData.push(row);
+    }
+  }
+  return tableData;
+}
 
 function getPrevMedicationInfo() {
   const res = {};
@@ -1110,23 +726,7 @@ function getPrevMedicationInfo() {
   res.adverse_reaction = checkedToStr("user_adverse_reaction");
   res.adverse_reaction_drugs = getAdverseReactionDrugList().join(",");
   const allDrugs = getAllUsedDrugs();
-  const tableData = [];
-
-  for (const drug of allDrugs) {
-    const index = availableDrugs.indexOf(drug.name.val);
-    if (index !== -1) {
-      const drugInfo = PCNEData[index];
-      const row = {};
-      row.drug_name = drugInfo.name;
-      row.spec = drugInfo.spec;
-      row.dose = parseFloat(drug.dose.val);
-      row.dose_unit = drug.dose.unit;
-      row.freq = drug.freq.val;
-      row.freq_unit = drug.freq.id;
-      row.duration = drug.duration.id;
-      tableData.push(row);
-    }
-  }
+  const tableData = genDrugTableData(allDrugs, "used");
   res.drug_table = tableData;
   // console.log(res);
   return res;
@@ -1144,29 +744,18 @@ function getBasicDecision(decisionTag, drugIssue = null) {
   return res;
 }
 
+function getDecisionInfo(decisionTag, drugIssue = null) {
+  const res = getBasicDecision(decisionTag, drugIssue);
+
+  const allDrugs = getAllRecipeDrugs();
+  const tableData = genDrugTableData(allDrugs, "recipe");
+  res.drug_table = tableData;
+
+  return res;
+}
+
 // --------------------------------------------------------------------------
 // Global Constant
-
-const bodyKV = getJsonSync("./assets/body_kv.json");
-const PCNEData = getJsonSync("./assets/PCNE_data.json");
-const availableDrugs = PCNEData.map((v) => v.name + v.spec);
-const availableDrugsPinYin = PCNEData.map((v) => getShortPinyin(v.name));
-const availableDrugsDict = {};
-PCNEData.forEach((v) => {
-  availableDrugsDict[v.name + v.spec] = v.id;
-});
-const adverseReactionRegex = /^(L).*/u;
-
-const availableAdverseReactionDrugsData = PCNEData.filter(
-  (v) =>
-    v.class.split("/").filter((v) => adverseReactionRegex.test(v)).length >= 1
-);
-const availableAdverseReactionDrugs = availableAdverseReactionDrugsData
-  .map((v) => v.name + v.spec);
-
-const availableAdverseReactionDrugsPinYin = availableAdverseReactionDrugsData
-  .map((v) => getShortPinyin(v.name));
-
 
 const availableIllenss = [
   "糖尿病",
@@ -1177,6 +766,7 @@ const availableIllenss = [
 ];
 
 const availableIllenssPinYin = availableIllenss
+  // eslint-disable-next-line no-undef
   .map((v) => getShortPinyin(v));
 
 
@@ -1185,7 +775,7 @@ const painDrugTypeList = ["A", "B", "C", "D", "E", "F"];
 const drugTypeSetDict = {};
 for (const t of painDrugTypeList) {
   const typeRegex = new RegExp("^({0}).*".format(t), "u");
-  const typeDrugID = PCNEData.filter(
+  const typeDrugID = utils.G.PCNEData.filter(
     (v) => v.class.split("/").filter((v) => typeRegex.test(v)).length >= 1
   )
     .map((v) => v.id)
@@ -1198,6 +788,7 @@ for (const t of painDrugTypeList) {
 // console.log(drugTypeSetDict);
 
 const usedDrugTableID = "#used-drug-table";
+const recipeDrugTableID = "#recipe-table";
 // console.log("availableAdverseReactionDrugs: " + availableAdverseReactionDrugs)
 
 // --------------------------------------------------------------------------
@@ -1674,7 +1265,7 @@ const usedDrugTableID = "#used-drug-table";
     return "";
   }
 
-  function genRowData(data, type="used") {
+  function genRowData(data, type = "used") {
     if (type === "used") {
       return {
         "foo": "",
@@ -1713,7 +1304,7 @@ const usedDrugTableID = "#used-drug-table";
   }
 
 
-  function addRowFromData(table, data, type="used") {
+  function addRowFromData(table, data, type = "used") {
     table.row.add(genRowData(data, type)).draw(false);
   }
 
@@ -1968,7 +1559,7 @@ const usedDrugTableID = "#used-drug-table";
   });
 
   $("input.drug-input").autocomplete({
-    source: availableDrugs,
+    source: utils.G.availableDrugs,
   });
 
   // userAdverseReaction
@@ -1991,9 +1582,9 @@ const usedDrugTableID = "#used-drug-table";
 
   // userAdverseReactionDrug input
   $("#user_adverse_reaction_drug").tagit({
-    availableTags: availableAdverseReactionDrugs,
+    availableTags: utils.G.availableAdverseReactionDrugs,
     afterTagAdded: function (event, ui) {
-      if (!availableAdverseReactionDrugs.includes(ui.tagLabel)) {
+      if (!utils.G.availableAdverseReactionDrugs.includes(ui.tagLabel)) {
         console.log(ui.tagLabel);
         $(this).tagit("removeTagByLabel", ui.tagLabel);
       }
@@ -2005,13 +1596,14 @@ const usedDrugTableID = "#used-drug-table";
           return;
         }
         const matcher = new RegExp(re, "iu");
-        const a = $.grep(availableAdverseReactionDrugs, (item, index) => {
-          const matchVal = matcher.test(item);
-          const itemPinYin = availableAdverseReactionDrugsPinYin[index];
-          const matchPY = itemPinYin === "" ? false :
-            matcher.test(itemPinYin);
-          return matchVal || matchPY;
-        });
+        const a = $.grep(utils.G.availableAdverseReactionDrugs,
+          (item, index) => {
+            const matchVal = matcher.test(item);
+            const itemPinYin = utils.G.availableAdverseReactionDrugsPinYin[index];
+            const matchPY = itemPinYin === "" ? false :
+              matcher.test(itemPinYin);
+            return matchVal || matchPY;
+          });
         responseFn(a);
       }
     }
@@ -2062,7 +1654,7 @@ const usedDrugTableID = "#used-drug-table";
 
     const nameVal = $("input[name='name']", dialog).val().trim();
     const name = nameVal === "" ? "" : {
-      id: availableDrugsDict[nameVal],
+      id: utils.G.availableDrugsDict[nameVal],
       val: nameVal,
     };
 
@@ -2099,10 +1691,10 @@ const usedDrugTableID = "#used-drug-table";
 
   function changeDoseInDialog(node, dialog) {
     const value = $(node).val();
-    const index = availableDrugs.indexOf(value);
+    const index = utils.G.availableDrugs.indexOf(value);
     // console.log(value, index);
     if (index !== -1) {
-      const unit = PCNEData[index].unit;
+      const unit = utils.G.PCNEData[index].unit;
       console.log(unit);
       $("div[name='dose-div']", dialog).html(
         // "<input/>"
@@ -2185,9 +1777,9 @@ const usedDrugTableID = "#used-drug-table";
           return;
         }
         const matcher = new RegExp(re, "iu");
-        const a = $.grep(availableDrugs, (item, index) => {
+        const a = $.grep(utils.G.availableDrugs, (item, index) => {
           const matchVal = matcher.test(item);
-          const itemPinYin = availableDrugsPinYin[index];
+          const itemPinYin = utils.G.availableDrugsPinYin[index];
           const matchPY = itemPinYin === "" ? false :
             matcher.test(itemPinYin);
           return matchVal || matchPY;
@@ -2212,7 +1804,7 @@ const usedDrugTableID = "#used-drug-table";
   }
 
 
-  function addDrugRow(table, callback, type="used") {
+  function addDrugRow(table, callback, type = "used") {
     const dialogId = "#used-drug-add-dialog";
     const dialog = $(dialogId);
 
@@ -2255,7 +1847,7 @@ const usedDrugTableID = "#used-drug-table";
 
   }
 
-  const recipeTable = $("#recipe-table").DataTable({
+  const recipeTable = $(recipeDrugTableID).DataTable({
     language: table_language,
     paging: false,
     responsive: {
@@ -2275,18 +1867,21 @@ const usedDrugTableID = "#used-drug-table";
       {
         name: "drug_name",
         data: "drug_name",
+        className: "dt-head-left",
         orderable: true,
         targets: 1,
       },
       {
         name: "drug_dose",
         data: "drug_dose",
+        className: "dt-head-left",
         orderable: false,
         targets: 2,
       },
       {
         name: "drug_freq",
         data: "drug_freq",
+        className: "dt-head-left",
         orderable: false,
         targets: 3,
       },
@@ -2317,7 +1912,7 @@ const usedDrugTableID = "#used-drug-table";
     ],
   });
 
-  tableAddSelected("#recipe-table tbody");
+  tableAddSelected(`${recipeDrugTableID} tbody`);
 
   // --------------------------------------------------------------------------
   pdsApi.getHello();

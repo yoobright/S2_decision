@@ -11,7 +11,8 @@
     "ort": "readonly",
     "axios": "readonly",
     "JSZip": "readonly",
-    "pdsApi": "readonly"
+    "pdsApi": "readonly",
+    "utils": "readonly"
   },
   "env": {
     "browser": true,
