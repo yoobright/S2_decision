@@ -865,7 +865,7 @@
 
     <div
       class="m-dialog"
-      id="used-durg-add-dialog"
+      id="used-drug-add-dialog"
       title="增加用药"
       style="display: none"
     >
@@ -899,7 +899,7 @@
           </div>
         </div>
       </div>
-      <div class="m-dialog-gp">
+      <div class="m-dialog-gp duration-gp">
         <label class="m-dialog-label">用药起止时长</label>
         <div class="m-dialog-div">
           <label style="margin-right: 16px"
@@ -981,6 +981,42 @@
         id="drug-recommend-text"
         style="color: crimson"
       ></div>
+
+      <label class="m-dialog-label"
+      >用药选择列表</label>
+      <div class="tab-content" style="max-width: 1000px">
+        <table
+          id="recipe-table"
+          class="display nowrap"
+          style="width: 100%;"
+        >
+          <thead>
+            <tr>
+              <th></th>
+              <th>用药名称</th>
+              <th>单次用药剂量</th>
+              <th>用药频次</th>                 
+            </tr>
+          </thead>
+          <tbody>
+            <!-- <tr>
+              <td></td>
+              <td>~</td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr> -->
+          </tbody>
+          <tfoot>
+            <tr>
+              <th></th>
+              <th>用药名称</th>
+              <th>单次用药剂量</th>
+              <th>用药频次</th>
+            </tr>
+          </tfoot>
+        </table>
+      </div>
     </div>
 
     <div

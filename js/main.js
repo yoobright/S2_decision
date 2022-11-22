@@ -422,14 +422,18 @@ function getChList() {
     .get();
 }
 
-function showResult(decisionTag, drugIssueInfo = []) {
+function showResult(decisionTag = "#", drugIssueInfo = []) {
   const dialogId = "#result-dialog";
   const dialog = $(dialogId);
   const [decisionType, decisionId] = decisionTag.split("#");
+  const windowWidth = $(window).width();
+  const windowHeight = $(window).height();
+  const minWidth = windowWidth > 768 ? windowWidth - 200 : windowWidth - 20;
 
   dialog.dialog({
     modal: true,
-    maxWidth: $(window).width(),
+    minWidth: minWidth,
+    maxHeight: windowHeight,
     autoOpen: false,
     buttons: {
       "确定": function () {
@@ -456,6 +460,7 @@ function showResult(decisionTag, drugIssueInfo = []) {
           drugIssueInfo.join("、")
         );
       }
+
     }
   });
 
@@ -936,7 +941,7 @@ async function saveS2(decisionTag, drugIssue) {
     if (res) {
       alert("提交成功");
       showResult(decisionTag, drugIssueInfo);
-    } else{
+    } else {
       alert("提交失败");
     }
   } else {
@@ -1053,7 +1058,7 @@ function getBasicInfo() {
   res.tel = $("#user_id").val();
   res.tumor = $("#user_tumor").val();
   res.tumor_metastasis = $("#user_tumor_metastasis").val();
-  res.tumor_treatment =  $("#user_tumor_treatment").val() || "";
+  res.tumor_treatment = $("#user_tumor_treatment").val() || "";
   res.illness = $("#user_illness").val();
   res.liver_function = $("#user_liver_function").val();
   res.kidney_function = $("#user_kidney_function").val();
@@ -1127,7 +1132,7 @@ function getPrevMedicationInfo() {
   return res;
 }
 
-function getBasicDecision(decisionTag, drugIssue=null) {
+function getBasicDecision(decisionTag, drugIssue = null) {
   const res = {};
   res.recmd = decisionTag;
   if (drugIssue !== null) {
@@ -1669,18 +1674,32 @@ const usedDrugTableID = "#used-drug-table";
     return "";
   }
 
-  function genRowData(data) {
-    return {
-      "foo": "",
-      "drug_name": data.name === "" ? "" : `<div class='row-name' data='${data.name.id}'>${data.name.val}<div>`,
+  function genRowData(data, type="used") {
+    if (type === "used") {
+      return {
+        "foo": "",
+        "drug_name": data.name === "" ? "" : `<div class='row-name' data='${data.name.id}'>${data.name.val}<div>`,
 
-      "drug_dose": data.dose === "" ? "" : `<div data='${data.dose.val}#${data.dose.unit}'>
-        ${data.dose.val + data.dose.unit}<div>`,
-      "drug_freq": genFreqCol(data.freq),
-      "drug_duration": data.duration === "" ? "" : `<div data='${data.duration.id}#${data.duration.val}'>
-        ${data.duration.val}<div>`,
-      "ops": null,
-    };
+        "drug_dose": data.dose === "" ? "" : `<div data='${data.dose.val}#${data.dose.unit}'>
+          ${data.dose.val + data.dose.unit}<div>`,
+        "drug_freq": genFreqCol(data.freq),
+        "drug_duration": data.duration === "" ? "" : `<div data='${data.duration.id}#${data.duration.val}'>
+          ${data.duration.val}<div>`,
+        "ops": null,
+      };
+    } else if (type === "recipe") {
+      return {
+        "foo": "",
+        "drug_name": data.name === "" ? "" : `<div class='row-name' data='${data.name.id}'>${data.name.val}<div>`,
+
+        "drug_dose": data.dose === "" ? "" : `<div data='${data.dose.val}#${data.dose.unit}'>
+          ${data.dose.val + data.dose.unit}<div>`,
+        "drug_freq": genFreqCol(data.freq),
+        // "drug_duration": data.duration === "" ? "" : `<div data='${data.duration.id}#${data.duration.val}'>
+        //   ${data.duration.val}<div>`,
+        // "ops": null,
+      };
+    }
     //   "",
     //   data.name === "" ? "" : `<div class='row-name' data='${data.name.id}'>${data.name.val}<div>`,
     //   data.dose === "" ? "" : `<div data='${data.dose.val}#${data.dose.unit}'>
@@ -1693,8 +1712,27 @@ const usedDrugTableID = "#used-drug-table";
     // ];
   }
 
-  function addRowFromData(table, data) {
-    table.row.add(genRowData(data)).draw(false);
+
+  function addRowFromData(table, data, type="used") {
+    table.row.add(genRowData(data, type)).draw(false);
+  }
+
+  function addRowFromDataRecipe(table, data) {
+    addRowFromData(table, data, "recipe");
+  }
+
+  function tableAddSelected(elem) {
+    $(elem).on("click", "tr", function (event) {
+      const flag = $(event.target).hasClass("row-name");
+      if (flag) {
+        if ($(this).hasClass("selected")) {
+          $(this).removeClass("selected");
+        } else {
+          table.$("tr.selected").removeClass("selected");
+          $(this).addClass("selected");
+        }
+      }
+    });
   }
 
   const table = $(usedDrugTableID).DataTable({
@@ -1807,17 +1845,7 @@ const usedDrugTableID = "#used-drug-table";
     ],
   });
 
-  $("{0} tbody".format(usedDrugTableID)).on("click", "tr", function (event) {
-    const flag = $(event.target).hasClass("row-name");
-    if (flag) {
-      if ($(this).hasClass("selected")) {
-        $(this).removeClass("selected");
-      } else {
-        table.$("tr.selected").removeClass("selected");
-        $(this).addClass("selected");
-      }
-    }
-  });
+  tableAddSelected("{0} tbody".format(usedDrugTableID));
 
 
   // update row data
@@ -2027,7 +2055,7 @@ const usedDrugTableID = "#used-drug-table";
   // dialog
 
   // on class table btn click
-  const dialog = $("#used-durg-add-dialog");
+  const dialog = $("#used-drug-add-dialog");
   console.log("ready", dialog);
 
   function getDataFromDialog(dialog) {
@@ -2184,15 +2212,15 @@ const usedDrugTableID = "#used-drug-table";
   }
 
 
-
-  function addDrugRow(table, callback) {
-    const dialogId = "#used-durg-add-dialog";
+  function addDrugRow(table, callback, type="used") {
+    const dialogId = "#used-drug-add-dialog";
     const dialog = $(dialogId);
 
     // add dialog
     dialog.dialog({
       modal: true,
       maxWidth: $(window).width(),
+      minHeight: 480,
       buttons: {
         "确定": function () {
           // console.log($(this));
@@ -2213,6 +2241,13 @@ const usedDrugTableID = "#used-drug-table";
         const dialog = $(this);
         setDialogAutoComplete(dialogId);
         setDialogData("", dialog);
+        // disable show
+        if (type === "used") {
+          $("div.duration-gp", dialog).show();
+        }
+        else {
+          $("div.duration-gp", dialog).hide();
+        }
         dialog.parent().find("button:nth-child(2)").focus();
 
       }
@@ -2220,6 +2255,69 @@ const usedDrugTableID = "#used-drug-table";
 
   }
 
+  const recipeTable = $("#recipe-table").DataTable({
+    language: table_language,
+    paging: false,
+    responsive: {
+      details: {
+        display: $.fn.dataTable.Responsive.display.childRowImmediate,
+        type: "inline",
+      },
+    },
+    columnDefs: [
+      {
+        name: "foo",
+        data: "foo",
+        className: "dtr-control",
+        orderable: false,
+        targets: 0,
+      },
+      {
+        name: "drug_name",
+        data: "drug_name",
+        orderable: true,
+        targets: 1,
+      },
+      {
+        name: "drug_dose",
+        data: "drug_dose",
+        orderable: false,
+        targets: 2,
+      },
+      {
+        name: "drug_freq",
+        data: "drug_freq",
+        orderable: false,
+        targets: 3,
+      },
+    ],
+
+    order: [[1, "asc"]],
+    info: true,
+
+    dom: "Bfrtip",
+    buttons: [
+      {
+        text: "增加项",
+        titleAttr: "增加用药",
+        action: function (e, dt, node, config) {
+          console.log("add!!!");
+          addDrugRow(this, addRowFromDataRecipe, "recipe");
+        },
+      },
+
+      {
+        text: "删除项",
+        titleAttr: "删除选中用药",
+        action: function (e, dt, node, config) {
+          this.row(".selected").remove().draw(false);
+          console.log("del!!!");
+        },
+      },
+    ],
+  });
+
+  tableAddSelected("#recipe-table tbody");
 
   // --------------------------------------------------------------------------
   pdsApi.getHello();
