@@ -1,6 +1,7 @@
 /* eslint-disable no-unused-vars */
 const pds_server = "http://localhost:8089";
 let serverOnline = false;
+let diagnosticUUID = null;
 
 // eslint-disable-next-line no-redeclare
 const pdsApi = class {
@@ -23,6 +24,10 @@ const pdsApi = class {
     return serverOnline;
   }
 
+  static getDiagnosticUUID() {
+    return diagnosticUUID;
+  }
+
   // axios create diagnostic
   static async createDiagnostic(
     basicInfoData=null,
@@ -42,7 +47,7 @@ const pdsApi = class {
     const diagnosticPostData = {
       patient_basic_info_id: patientId
     };
-    const diagnosticUUID = await this.postDiagnostic(
+    diagnosticUUID = await this.postDiagnostic(
       diagnosticPostData);
     if (diagnosticUUID === null) {
       return;
@@ -148,6 +153,20 @@ const pdsApi = class {
       }
     }
     catch (error) {
+      console.error(error);
+    }
+    return null;
+  }
+
+  // axios post decision info
+  static async postDecisionInfo(data) {
+    try {
+      const response = await axios.post(
+        `${pds_server}/decisions`, data);
+      if (response.status === 201) {
+        return response.data.id;
+      }
+    } catch (error) {
       console.error(error);
     }
     return null;

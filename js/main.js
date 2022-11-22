@@ -413,8 +413,21 @@ function getChList() {
     .get();
 }
 
-function showResult(decisionTag = "#", drugIssueInfo = []) {
+async function submitDecision(decisionTag, drugIssue) {
+  const uuid = pdsApi.getDiagnosticUUID();
+  if (uuid) {
+    const data = getDecisionInfo(decisionTag, drugIssue);
+    data.diagnostic_uuid = uuid;
+    const res = await pdsApi.postDecisionInfo(data);
+    if (res) {
+      alert("提交成功");
+    }
+  }
+}
+
+function showResult(decisionTag = "#", drugIssue = null) {
   const dialogId = "#result-dialog";
+  const drugIssueInfo = utils.drugCheck.genDrugIssueInfo(drugIssue);
   const dialog = $(dialogId);
   const [decisionType, decisionId] = decisionTag.split("#");
   const windowWidth = $(window).width();
@@ -429,9 +442,14 @@ function showResult(decisionTag = "#", drugIssueInfo = []) {
     buttons: {
       "确定": function () {
         // console.log($(this));
+        const allDrugs = getAllRecipeDrugs();
+        if (!utils.drugCheck.recipeDrugInputCheck(allDrugs)) {
+          alert("请检查药品输入");
+          return false;
+        }
+        submitDecision(decisionTag, drugIssue);
         dialog.dialog("close");
         openFeedbackDialog();
-
       },
       "取消": function () {
         $(this).dialog("close");
@@ -527,7 +545,6 @@ function processS1() {
 }
 
 async function saveS2(decisionTag, drugIssue) {
-  const drugIssueInfo = utils.drugCheck.genDrugIssueInfo(drugIssue);
   const tag = pdsApi.getOnlineTag();
   if (tag) {
     const data1 = getBasicInfo();
@@ -537,13 +554,13 @@ async function saveS2(decisionTag, drugIssue) {
     const res = await pdsApi.createDiagnostic(data1, data2, data3, data4);
     if (res) {
       alert("提交成功");
-      showResult(decisionTag, drugIssueInfo);
+      showResult(decisionTag, drugIssue);
     } else {
       alert("提交失败");
     }
   } else {
     console.log("pds api is not ready");
-    showResult(decisionTag, drugIssueInfo);
+    showResult(decisionTag, drugIssue);
   }
 }
 

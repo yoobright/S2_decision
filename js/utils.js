@@ -207,6 +207,20 @@ utils.drugCheck = class {
     return true;
   }
 
+  static recipeDrugInputCheck(allDrugs) {
+    for (const drug of allDrugs) {
+      const drugName = drug.name;
+      const drugDose = drug.dose;
+      const drugFreq = drug.freq;
+      if (drugName === "" || drugDose === "" || drugFreq === "" ||
+        drugFreq.val === "") {
+        return false;
+      }
+    }
+
+    return true;
+  }
+
   static getFreqTimesPreDay(freq) {
     if (freq.id === "" || freq.val === "") {
       return null;
@@ -537,6 +551,10 @@ utils.drugCheck = class {
 
   static genDrugIssueInfo(drugIssue) {
     const res = [];
+    if (drugIssue === null) {
+      return res;
+    }
+
     if (drugIssue.C1_3) {
       res.push(
         `${previousIssueText["P2.1"]}，${previousIssueText["C1.3"]}`
