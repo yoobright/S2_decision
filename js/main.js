@@ -1660,6 +1660,31 @@ const recipeDrugTableID = "#recipe-table";
     $(elem).html(freqInput[value]);
   });
 
+  $("input[type=checkbox]").change(function () {
+    const currentVal = $(this).val();
+    const id = $(this).attr("id");
+    const checkboxes = $("input[type=checkbox][id={0}]".format(id));
+    if (currentVal === "-1" || currentVal === "0") {
+      const text = $(this).parent().text().trim();
+      if (this.checked && text === "无") {
+        checkboxes.prop("checked", false);
+        $(this).prop("checked", true);
+      }
+    } else {
+      if (this.checked) {
+        const checkedNo = $(checkboxes).filter(
+          $("input[value='0'], input[value='-1']")
+        );
+        for (const cNo of checkedNo) {
+          const checkedNoText = $(cNo).parent().text().trim();
+          if (checkedNoText === "无") {
+            $(cNo).prop("checked", false);
+          }
+        }
+      }
+    }
+  });
+
   // --------------------------------------------------------------------------
   // dialog
 
