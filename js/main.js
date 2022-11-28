@@ -107,7 +107,7 @@ function updateBodySelected(bodyId, currentSelect, bodyPloygon) {
     })(currentNameList, selectNameList);
 
     console.log(updateNameList);
-    $("#user_pain_part").text(updateNameList.join(", "));
+    $("#user_pain_part").text(updateNameList.join(", ")).trigger("change");
     // console.log(list);
   }
 }
@@ -1240,6 +1240,61 @@ const recipeDrugTableID = "#recipe-table";
       // }
     });
   }
+
+  const painScoreDict = {
+    "-1": "基本排除神经病理性疼痛",
+    "0": "基本排除神经病理性疼痛",
+    "1": "不完全排除神经病理性疼痛",
+    "2": "考虑患神经病理性疼痛",
+    "3": "考虑患神经病理性疼痛",
+    "4": "高度考虑患神经病理性疼痛",
+    "5": "高度考虑患神经病理性疼痛"
+  };
+
+  function genPainScoreText(score) {
+    if (score in painScoreDict) {
+      return `${score}分（${painScoreDict[score]}）`;
+    } else {
+      return "未知";
+    }
+  }
+
+
+
+  // jquery checkbox input  user_pain_character change event
+  $("textarea#user_pain_part,input#user_pain_character").change(() => {
+    console.log("change!!!");
+    const bodyList = getBodyList();
+    const character = $("input#user_pain_character:checked").map(function () {
+      return parseInt($(this).val());
+    }).get();
+
+    $("#pain_score").text("");
+
+    if (bodyList.length > 0 && character.length > 0) {
+      const testChracter = [2, 15, 16, 13, 19,];
+      const testBodySet = new Set([1, 2, 3, 4, 5, 6, 7, 8, 9, 10,
+        11, 12, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35]);
+      let score = 0;
+      for (const t of testChracter) {
+        if (character.includes(t)) {
+          score += 1;
+        }
+      }
+
+      const joints = (() => new Set(bodyList.filter((x) => testBodySet.has(x))))();
+      if (joints.size === 0) {
+        score -= 1;
+      }
+
+      const scoreText = genPainScoreText(score);
+
+      $("#pain_score").text(scoreText);
+    }
+  });
+
+
+
 
   // --------------------------------------------------------------------------
   // step 3
