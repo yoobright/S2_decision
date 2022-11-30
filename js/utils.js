@@ -324,7 +324,7 @@ utils.drugCheck = class {
 
 
   static isDrugProp3(durgClassStr) {
-    return /C|D|E|F|I|G/u.test("durgClassStr");
+    return /C|D|E|F|I|G/u.test(durgClassStr);
   }
 
   static drugC1_1Check(allDrugs) {
