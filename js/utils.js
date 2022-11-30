@@ -276,6 +276,30 @@ utils.drugCheck = class {
     return null;
   }
 
+
+  static getLowFreqTimesPreDay(strData) {
+    const regexpQnh = /Qnh\(n≤([0-9]*)\)/ug;
+    const matchesQnh = strData.matchAll(regexpQnh);
+
+    for (const match of matchesQnh) {
+      if (match[1] !== "") {
+        const n = parseInt(match[1]);
+        return 24 / n;
+      }
+    }
+
+    const regexpTimes = /次\/n天\(n<([0-9]*)\)/ug;
+    const matchesTimes = strData.matchAll(regexpTimes);
+    for (const match of matchesTimes) {
+      if (match[1] !== "") {
+        const n = parseInt(match[1]);
+        return 1. / n;
+      }
+    }
+
+    return null;
+  }
+
   static drugOverdoseCheck(allDrugs) {
     const res = [];
     for (const drug of allDrugs) {
@@ -529,6 +553,29 @@ utils.drugCheck = class {
     return false;
   }
 
+
+  static drugLowFreqCheck(allDrugs) {
+    const res = [];
+    for (const drug of allDrugs) {
+      const drugName = drug.name.val;
+      const index = utils.G.availableDrugs.indexOf(drugName);
+      if (index !== -1) {
+        const drugInfo = utils.G.PCNEData[index];
+        const lowFreqTimesPreDay = this.getLowFreqTimesPreDay(drugInfo.exce_freq);
+        const freqTimesPreDay = this.getFreqTimesPreDay(drug.freq);
+        if (freqTimesPreDay === null || lowFreqTimesPreDay === null) {
+          continue;
+        }
+
+        if (freqTimesPreDay < lowFreqTimesPreDay) {
+          res.push(drugInfo.id);
+        }
+      }
+    }
+
+    return res;
+  }
+
   static genDrugIssue(allDrugs) {
     const res = {};
     const drugClassCount = this.getDrugClassCount(allDrugs);
@@ -549,6 +596,7 @@ utils.drugCheck = class {
 
     res.C3_4 = this.drugHighFreqCheck(allDrugs);
     res.C3_2 = this.drugOverdoseCheck(allDrugs);
+    res.C3_3 = this.drugLowFreqCheck(allDrugs);
 
     return res;
   }
@@ -590,6 +638,17 @@ utils.drugCheck = class {
         if (drug.id === drugId) {
           res.push(
             `${drug.name}（${previousIssueText["P2.1"]}，${previousIssueText["C3.4"]}）`
+          );
+          break;
+        }
+      }
+    }
+
+    for (const drugId of drugIssue.C3_3) {
+      for (const drug of utils.G.PCNEData) {
+        if (drug.id === drugId) {
+          res.push(
+            `${drug.name}（${previousIssueText["P1.2"]}，${previousIssueText["C3.3"]}）`
           );
           break;
         }
