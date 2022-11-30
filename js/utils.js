@@ -339,10 +339,15 @@ utils.drugCheck = class {
         }
       }
     }
-
-    if (prop3List.length === 1 &&
-      utils.G.availableDrugs.indexOf(prop3List[0]) === 3) {
-      return true;
+    
+    if (prop3List.length === 1) {
+      const idx0 = utils.G.availableDrugs.indexOf(prop3List[0]);
+      if (idx0 !== -1) {
+        const info = utils.G.PCNEData[idx0];
+        if (info.id === "3") {
+          return true;
+        }
+      }
     }
 
     return false;
@@ -553,6 +558,12 @@ utils.drugCheck = class {
     const res = [];
     if (drugIssue === null) {
       return res;
+    }
+
+    if (drugIssue.C1_1) {
+      res.push(
+        `${previousIssueText["P2.1"]}，${previousIssueText["C1.1"]}`
+      );
     }
 
     if (drugIssue.C1_3) {
