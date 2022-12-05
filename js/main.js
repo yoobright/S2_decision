@@ -632,9 +632,11 @@ function openFeedbackDialog() {
     buttons: {
       "确定": function () {
         dialog.dialog("close");
+        openRefreshDialog();
       },
       "取消": function () {
         $(this).dialog("close");
+        openRefreshDialog();
       },
     },
     open: function () {
@@ -649,6 +651,26 @@ function openFeedbackDialog() {
       });
       $("#feedback-rating").barrating("set", 3);
     }
+  });
+}
+
+function openRefreshDialog() {
+  const dialogId = "#refresh-dialog";
+  const dialog = $(dialogId);
+
+  // add dialog
+  dialog.dialog({
+    modal: true,
+    maxWidth: $(window).width(),
+    buttons: {
+      "确定": function () {
+        dialog.dialog("close");
+        window.location.reload();
+      },
+      "取消": function () {
+        $(this).dialog("close");
+      },
+    },
   });
 }
 
