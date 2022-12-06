@@ -425,6 +425,22 @@ async function submitDecision(decisionTag, drugIssue) {
   }
 }
 
+function genDecisionRef(decisionType, decisionId) {
+  const decisionRef = $("#ref-sources");
+  decisionRef.html("");
+  if (decisionType === "s1") {
+    const refData = s1RefText[decisionId];
+    let htmlText = ""
+    for (let i = 0; i < refData.length; i++) {
+      const data = refData[i];
+      const num = i + 1;
+      htmlText += `<div>${num}.${data.ref}</div><li>${data.content}</li>`
+    }
+    // console.log(htmlText);
+    decisionRef.html(htmlText);
+  }
+}
+
 function showResult(decisionTag = "#", drugIssue = null) {
   const dialogId = "#result-dialog";
   const drugIssueInfo = utils.drugCheck.genDrugIssueInfo(drugIssue);
@@ -433,6 +449,8 @@ function showResult(decisionTag = "#", drugIssue = null) {
   const windowWidth = $(window).width();
   const windowHeight = $(window).height();
   const minWidth = windowWidth > 768 ? windowWidth - 200 : windowWidth - 20;
+
+  genDecisionRef(decisionType, decisionId);
 
   dialog.dialog({
     modal: true,
@@ -527,7 +545,8 @@ async function saveS1(decisionTag) {
 function processS1() {
   const bodyList = getBodyList();
   const chList = getChList();
-  const mostLevel = getMostLevelFeat();
+  //S1 不处理
+  const mostLevel = getMostLevel();
   // eslint-disable-next-line no-undef
   const feat = extractS1Feat(mostLevel, bodyList, chList);
   console.log(feat);
