@@ -270,14 +270,29 @@ utils.G.availableAdverseReactionDrugsPinYin = utils.G.availableAdverseReactionDr
   .map((v) => getShortPinyin(v.name));
 
 utils.drugCheck = class {
-  static usedDrugInputCheck(allDrugs) {
-    for (const drug of allDrugs) {
-      const drugName = drug.name;
-      const drugDose = drug.dose;
-      const drugFreq = drug.freq;
-      const drugDuration = drug.duration;
+
+  static singleDrugInputCheck(drug, type="used") {
+    const drugName = drug.name;
+    const drugDose = drug.dose;
+    const drugFreq = drug.freq;
+    const drugDuration = drug.duration;
+    if (type === "used") {
       if (drugName === "" || drugDose === "" || drugFreq === "" ||
         drugDuration === "" || drugFreq.val === "") {
+        return false;
+      }
+    } else {
+      if (drugName === "" || drugDose === "" || drugFreq === "" ||
+        drugFreq.val === "") {
+        return false;
+      }
+    }
+    return true;
+  }
+
+  static usedDrugInputCheck(allDrugs) {
+    for (const drug of allDrugs) {
+      if(!this.singleDrugInputCheck(drug)) {
         return false;
       }
     }

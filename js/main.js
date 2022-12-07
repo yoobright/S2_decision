@@ -451,6 +451,20 @@ function showResult(decisionTag = "#", drugIssue = null) {
   const minWidth = windowWidth > 768 ? windowWidth - 200 : windowWidth - 20;
 
   genDecisionRef(decisionType, decisionId);
+  const drugRecommendText = $("#drug-recommend-text")
+  drugRecommendText.text("");
+  if (decisionId) {
+    console.log(decsionText[decisionType][decisionId]);
+    drugRecommendText.text(decsionText[decisionType][decisionId]);
+  }
+
+  const drugIssueText = $("#drug-issue-text")
+  drugIssueText.text("无");
+  if (drugIssueInfo.length > 0) {
+    drugIssueText.text(
+      drugIssueInfo.join("、")
+    );
+  }
 
   dialog.dialog({
     modal: true,
@@ -474,21 +488,8 @@ function showResult(decisionTag = "#", drugIssue = null) {
         openFeedbackDialog();
       },
     },
-    open: function () {
-      $("#drug-recommend-text").text("");
-      if (decisionId) {
-        console.log(decsionText[decisionType][decisionId]);
-        $("#drug-recommend-text").text(decsionText[decisionType][decisionId]);
-      }
-
-      $("#drug-issue-text").text("无");
-      if (drugIssueInfo.length > 0) {
-        $("#drug-issue-text").text(
-          drugIssueInfo.join("、")
-        );
-      }
-
-    }
+    // open: function () {
+    // }
   });
 
   dialog.dialog("open");
@@ -1785,8 +1786,8 @@ const recipeDrugTableID = "#recipe-table";
   // dialog
 
   // on class table btn click
-  const dialog = $("#used-drug-add-dialog");
-  console.log("ready", dialog);
+  // const dialog = $("#used-drug-add-dialog");
+  // console.log("ready", dialog);
 
   function getDataFromDialog(dialog) {
 
@@ -1955,12 +1956,15 @@ const recipeDrugTableID = "#recipe-table";
         "确定": function () {
           // console.log($(this));
           const dialog = $(this);
-          dialog.dialog("close");
-
           const data = getDataFromDialog(dialog);
-          console.log("add", data);
-          callback(table, data);
-
+          if (utils.drugCheck.singleDrugInputCheck(data, type)) {
+            dialog.dialog("close");
+            console.log("add", data);
+            callback(table, data);    
+          } else {
+            alert("输入不全，请检查");
+            return false;
+          }
         },
         "取消": function () {
           $(this).dialog("close");
