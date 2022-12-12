@@ -33,7 +33,7 @@ jobs:
       - name: Replace Action
         uses: datamonsters/replace-action@v2
         with:
-          files: S2_decision/js/api.js
+          files: ${{ github.workspace }}/js/api.js
           replacements: localhost=116.62.146.131
       - name: Setup Pages
         uses: actions/configure-pages@v2
