@@ -420,7 +420,17 @@ async function submitDecision(decisionTag, drugIssue) {
     data.diagnostic_uuid = uuid;
     const res = await pdsApi.postDecisionInfo(data);
     if (res) {
-      alert("提交成功");
+      alert("决策提交成功");
+    }
+  }
+}
+
+async function submitFeedback(data) {
+  const uuid = pdsApi.getDiagnosticUUID();
+  if (uuid) {
+    const res = await pdsApi.updateDiagnosticByUUID(uuid, data);
+    if (res) {
+      alert("反馈提交成功");
     }
   }
 }
@@ -640,7 +650,6 @@ function processS2() {
   });
 }
 
-
 function openFeedbackDialog() {
   const dialogId = "#feedback-dialog";
   const dialog = $(dialogId);
@@ -652,6 +661,13 @@ function openFeedbackDialog() {
     buttons: {
       "确定": function () {
         dialog.dialog("close");
+        // get barrating value
+        const rating = parseInt($("#feedback-rating").next()
+          .find("div.br-current-rating").text())
+        
+        console.log(rating);
+        const data = {"feedback_score": rating};
+        submitFeedback(data);
         openRefreshDialog();
       },
       "取消": function () {
@@ -670,6 +686,10 @@ function openFeedbackDialog() {
         }
       });
       $("#feedback-rating").barrating("set", 3);
+      $("[id^='feedback-tag']").on("click", function () {
+        const value = parseInt($(this).attr("value"));
+        $("#feedback-rating").barrating("set", value);
+      });
     }
   });
 }
