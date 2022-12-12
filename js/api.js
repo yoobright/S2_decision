@@ -1,5 +1,5 @@
 /* eslint-disable no-unused-vars */
-const pds_server = "http://localhost:8089";
+const pds_server = "https://localhost:8089";
 let serverOnline = false;
 let diagnosticUUID = null;
 
