@@ -1,3 +1,20 @@
+
+function addOptions(template, for_type, element_list, required = "") {
+  const labelElement = $("label[for='{0}']".format(for_type));
+  const UElement = labelElement.next();
+
+  if (UElement.is("div")) {
+    const element_data = Array.isArray(element_list[0]) ? element_list :
+      element_list.map((v, i) => [v, (i + 1).toString()]);
+    const items = element_data.map((v) =>
+      template.format(for_type, v[1].toString(), required, v[0])
+    );
+
+    UElement.append(items);
+  }
+}
+
+
 function addCheckBox(for_type, element_list, required = "") {
   const template =
     "<label type='checkbox-label' > \
@@ -8,22 +25,7 @@ function addCheckBox(for_type, element_list, required = "") {
     class='{2}'/> \
     {3}</label>";
 
-  const labelElement = $("label[for='{0}']".format(for_type));
-  const UElement = labelElement.next();
-
-  if (UElement.is("div")) {
-    if (Array.isArray(element_list[0])) {
-      const items = element_list.map((v) =>
-        template.format(for_type, v[1].toString(), required, v[0])
-      );
-      UElement.append(items);
-    } else {
-      const items = element_list.map((v, i) =>
-        template.format(for_type, (i + 1).toString(), required, v)
-      );
-      UElement.append(items);
-    }
-  }
+  addOptions(template, for_type, element_list, required);
 }
 
 function addRadio(for_type, element_list, required = "") {
@@ -36,22 +38,7 @@ function addRadio(for_type, element_list, required = "") {
       class='{2}'/> \
       {3}</label>";
 
-  const labelElement = $("label[for='{0}']".format(for_type));
-  const UElement = labelElement.next();
-
-  if (UElement.is("div")) {
-    if (Array.isArray(element_list[0])) {
-      const items = element_list.map((v) =>
-        template.format(for_type, v[1].toString(), required, v[0])
-      );
-      UElement.append(items);
-    } else {
-      const items = element_list.map((v, i) =>
-        template.format(for_type, (i + 1).toString(), required, v)
-      );
-      UElement.append(items);
-    }
-  }
+  addOptions(template, for_type, element_list, required);
 }
 
 function togglePartView(p) {
@@ -594,32 +581,25 @@ async function saveS2(decisionTag, drugIssue) {
   }
 }
 
-function processS2() {
+function getDecDrugType(allUsedDrugsID) {
+  const counter = genTypeCounter(allUsedDrugsID);
+  const decDrugType = getDecDrugTypeFromCounter(counter);
+  return decDrugType;
+}
+
+function genS2Feat(allUsedDrugs) {
   const mostLevel = getMostLevelFeat();
   const breakOutType = getBreakOutTypeFeat();
   const breakOutTimes = getBreakOutTimesFeat();
-  const allUsedDrugs = getAllUsedDrugs();
-
-  if (!utils.drugCheck.usedDrugInputCheck(allUsedDrugs)) {
-    alert("请填写完整用药信息");
-    return;
-  }
   const allUsedDrugsID = allUsedDrugs.map((v) => v.name.id);
-  console.log("allUsedDrugsID: " + allUsedDrugsID);
-
-  // const drugHighFreqList = drugHighFreqCheck(allUsedDrugs);
-  // const drugOverdoseList = drugOverdoseCheck(allUsedDrugs);
-  // console.log("drugHighFreqList: " + drugHighFreqList);
-  // console.log("drugOverdoseList: " + drugOverdoseList);
-  const drugIssue = utils.drugCheck.genDrugIssue(allUsedDrugs);
-  const counter = genTypeCounter(allUsedDrugsID);
-  const decDrugType = getDecDrugTypeFromCounter(counter);
+  const decDrugType = getDecDrugType(allUsedDrugsID);
   if (decDrugType === undefined) {
     console.log("decDrugType undefined!!!");
     alert("请填写完整用药信息, 且至少选择一种镇痛药物");
-    return;
+    return null;
   }
   const compliance = getCompliance();
+
   const feat = [
     mostLevel,
     breakOutType,
@@ -627,6 +607,34 @@ function processS2() {
     decDrugType,
     compliance,
   ];
+
+  return feat;
+}
+
+function processS2() {
+  // const mostLevel = getMostLevelFeat();
+  // const breakOutType = getBreakOutTypeFeat();
+  // const breakOutTimes = getBreakOutTimesFeat();
+  const allUsedDrugs = getAllUsedDrugs();
+  if (!utils.drugCheck.usedDrugInputCheck(allUsedDrugs)) {
+    alert("请填写完整用药信息");
+    return;
+  }
+  // const allUsedDrugsID = allUsedDrugs.map((v) => v.name.id);
+  const drugIssue = utils.drugCheck.genDrugIssue(allUsedDrugs);
+  // const decDrugType = getDecDrugType(allUsedDrugsID);
+
+  // if (decDrugType === undefined) {
+  //   console.log("decDrugType undefined!!!");
+  //   alert("请填写完整用药信息, 且至少选择一种镇痛药物");
+  //   return;
+  // }
+
+  // const compliance = getCompliance();
+  const feat = genS2Feat(allUsedDrugs);
+  if (feat === null) {
+    return;
+  }
 
   // eslint-disable-next-line no-undef
   inferS2(feat).then((res) => {
@@ -664,9 +672,9 @@ function openFeedbackDialog() {
         // get barrating value
         const rating = parseInt($("#feedback-rating").next()
           .find("div.br-current-rating").text())
-        
+
         console.log(rating);
-        const data = {"feedback_score": rating};
+        const data = { "feedback_score": rating };
         submitFeedback(data);
         openRefreshDialog();
       },
@@ -1980,7 +1988,7 @@ const recipeDrugTableID = "#recipe-table";
           if (utils.drugCheck.singleDrugInputCheck(data, type)) {
             dialog.dialog("close");
             console.log("add", data);
-            callback(table, data);    
+            callback(table, data);
           } else {
             alert("输入不全，请检查");
             return false;
