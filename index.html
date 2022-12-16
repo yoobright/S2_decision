@@ -991,6 +991,18 @@
       ></div>
 
       <label class="m-dialog-label">用药选择列表</label>
+      <div class="result-text">
+        <label type="radio-label">
+          <input
+            type="checkbox"
+            name="disable_pcne_check"
+            id="disable_pcne_check"
+            value="1"
+          />
+          取消PCNE检查
+        </label>
+      </div>
+      <hr color=#e9e9e9 style="max-width: 1000px; margin-left: 0; margin-bottom: 10px;">
       <div class="tab-content" style="max-width: 1000px">
         <table id="recipe-table" class="display nowrap" style="width: 100%">
           <thead>
@@ -1022,10 +1034,7 @@
       </div>
       <p></p>
       <label class="m-dialog-label">证据来源：</label>
-      <div id="ref-sources">
-      </div>
-
-  
+      <div id="ref-sources"></div>
     </div>
 
     <div
@@ -1075,7 +1084,7 @@
     <script src="vendor/jquery-bar-rating/jquery.barrating.min.js"></script>
     <script src="vendor/d3.v5.min.js"></script>
     <script src="vendor/jsrender.min.js"></script>
-    
+
     <!-- use jquery.dataTables dataTables.buttons dataTables.responsive.js dataTables.select dataTables.fixedHeader-->
     <!-- <script
       type="text/javascript"

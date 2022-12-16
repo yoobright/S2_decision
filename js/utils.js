@@ -338,7 +338,7 @@ utils.drugCheck = class {
   static getHighFreqTimesPreDay(strData) {
     const regexp = /([0-9]*)次\/d/ug;
     const matches = strData.matchAll(regexp);
-    console.log(matches);
+    // console.log(matches);
     for (const match of matches) {
       if (match[1] !== "") {
         return parseInt(match[1]);
@@ -669,7 +669,7 @@ utils.drugCheck = class {
     return res;
   }
 
-  static genDrugIssue(allDrugs) {
+  static genDrugIssue(allDrugs, adverseCheck=true) {
     const res = {};
     const drugClassCount = this.getDrugClassCount(allDrugs);
     if (this.drugC1_1Check(allDrugs)) {
@@ -683,7 +683,8 @@ utils.drugCheck = class {
     }
     // 不良反应
     // eslint-disable-next-line no-undef
-    if (this.drugC1_5Check(getAdverseReactionDrugList(), getAdverseReactionTag())) {
+    if (adverseCheck &&
+      this.drugC1_5Check(getAdverseReactionDrugList(), getAdverseReactionTag())) {
       res.C1_5 = true;
     }
 

@@ -400,6 +400,15 @@ function getChList() {
     .get();
 }
 
+function getPCNETag() {
+  const val = $("#disable_pcne_check:checked").val()
+  if (val === "1") {
+    return true;
+  }
+
+  return false;
+}
+
 async function submitDecision(decisionTag, drugIssue) {
   const uuid = pdsApi.getDiagnosticUUID();
   if (uuid) {
@@ -476,6 +485,19 @@ function showResult(decisionTag = "#", drugIssue = null) {
           alert("请检查药品输入");
           return false;
         }
+
+        if (getPCNETag() === false) {
+          const recipeDrugIssue =
+            utils.drugCheck.genDrugIssue(allDrugs, false);
+          const recipeDrugIssueInfo =
+            utils.drugCheck.genDrugIssueInfo(recipeDrugIssue);
+
+          if (recipeDrugIssueInfo.length > 0) {
+            alert(recipeDrugIssueInfo.join("、"))
+            return false
+          }
+        }
+
         submitDecision(decisionTag, drugIssue);
         dialog.dialog("close");
         openFeedbackDialog();
