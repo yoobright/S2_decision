@@ -110,7 +110,7 @@ const decsionText = {
     11.1: "增加原有缓释弱阿片剂量或停用缓释弱阿片，换用缓释强阿片",
     11.2: "停用缓释弱阿片，增加强阿片",
     11.3: "停用缓释弱阿片，增加缓释强阿片",
-    12: "停用即释弱阿片，增加即释强阿片",
+    12: "停用即释或即释弱阿片，增加即释强阿片或其剂量",
     13: "停用即释强阿片，增加（原有缓释强阿片+即释强阿片）剂量的50%~100%",
     14: "增加原有缓释强阿片剂量的同时，增加即释强阿片剂量",
     15: "停用原有即释弱阿片，换用强阿片",
@@ -276,14 +276,18 @@ utils.drugCheck = class {
     const drugDose = drug.dose;
     const drugFreq = drug.freq;
     const drugDuration = drug.duration;
+    const freqCheckIDList = ["1", "2", "3"]
+
+    const freqCheckFlag = freqCheckIDList.includes(drugFreq.id) && drugFreq.val === ""
+
     if (type === "used") {
       if (drugName === "" || drugDose === "" || drugFreq === "" ||
-        drugDuration === "" || drugFreq.val === "") {
+        drugDuration === "" || freqCheckFlag) {
         return false;
       }
     } else {
       if (drugName === "" || drugDose === "" || drugFreq === "" ||
-        drugFreq.val === "") {
+        freqCheckFlag === "") {
         return false;
       }
     }
