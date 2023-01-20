@@ -8,7 +8,7 @@ const pdsApi = class {
   // axios get hello
   static async getHello() {
     try {
-      const response = await axios.get(`${pds_server}/`);
+      const response = await axios.get(`${pds_server}/api`);
       console.log(response);
       if (response.status === 200) {
         serverOnline = true;
