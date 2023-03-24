@@ -319,10 +319,11 @@ function getCompliance() {
   const inputs = $("input[id^='user_compliance_q']:checked").get();
   const scoreList = inputs.map((v) => {
     const val = parseInt($(v).val());
-    if (val === 0) {
-      return 1;
-    }
-    return 0;
+    // if (val === 0) {
+    //   return 1;
+    // }
+    // return 0;
+    return val;
   });
   const scoreSum = scoreList.reduce(
     (previousVal, currentVal) => previousVal + currentVal,
