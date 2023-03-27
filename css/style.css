@@ -105,13 +105,13 @@ body {
 }
 
 .main {
-  padding: 40px 0;
+  padding: 28px 0;
   position: relative;
   z-index: 99;
 }
 
 .container {
-  width: calc(100% - 80px);
+  width: calc(100% - 56px);
   margin: 0 auto;
   background: #fff;
 }
@@ -595,12 +595,17 @@ div.fieldset-content {
 
 @media screen and (min-width: 1024px) {
   .vertical .content {
-    height: calc(100vh - 160px);;
+    height: calc(100vh - 140px);;
   }
   .vertical .content,
   .vertical .actions {
     width: calc(100% - 200px);
   }
+
+  div.fieldset-content {
+    max-height: calc(100vh - 300px);
+  }
+
 }
 
 @media screen and (min-width: 1400px) {
@@ -610,9 +615,9 @@ div.fieldset-content {
   fieldset {
     padding-bottom: 0px;
   }
-  div.fieldset-content {
+  /* div.fieldset-content {
     max-height: 440px;
-  }
+  } */
 }
 
 @media screen and (min-width: 1600px) {
@@ -624,9 +629,9 @@ div.fieldset-content {
     width: 1200px;
   }
 
-  div.fieldset-content {
+  /* div.fieldset-content {
     max-height: 640px;
-  }
+  } */
 }
 
 div.input-textarea {
@@ -667,7 +672,7 @@ div.input-textarea textarea {
 
 @media screen and (max-width: 1024px) {
   .container {
-    width: calc(100% - 40px);
+    width: calc(100% - 56px);
     max-width: 100%;
   }
 
