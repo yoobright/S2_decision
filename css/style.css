@@ -585,17 +585,15 @@ input.error {
   font-weight: bold;
 }
 
-
 div.fieldset-content {
   padding-left: 30px;
   padding-right: 30px;
   max-height: 420px;
 }
 
-
 @media screen and (min-width: 1024px) {
   .vertical .content {
-    height: calc(100vh - 140px);;
+    height: calc(100vh - 140px);
   }
   .vertical .content,
   .vertical .actions {
@@ -605,7 +603,6 @@ div.fieldset-content {
   div.fieldset-content {
     max-height: calc(100vh - 300px);
   }
-
 }
 
 @media screen and (min-width: 1400px) {
@@ -668,7 +665,6 @@ div.input-textarea textarea {
     margin-left: 40px;
   }
 }
-
 
 @media screen and (max-width: 1024px) {
   .container {
@@ -748,7 +744,10 @@ div.input-textarea textarea {
   }
 
   .content {
-    height: 600px;
+    height: calc(100vh - 165px);
+  }
+  .actions {
+    padding-bottom: 80px;
   }
 
   #find_bank {
@@ -772,7 +771,6 @@ div.input-textarea textarea {
     height: 61px;
   }
 }
-
 
 input[type="radio"] {
   width: unset;
@@ -913,7 +911,7 @@ select {
   div.fieldset-content {
     padding-left: 5px;
     padding-right: 5px;
-    max-height: 460px;
+    max-height: calc(100vh - 260px);
     max-width: 100%;
   }
 
@@ -970,7 +968,6 @@ td input {
   margin: 2px 5px;
 }
 
-
 td input.small-input {
   max-width: 40px;
   /* height: 20px; */
@@ -995,7 +992,10 @@ div.input-group {
 
 /* Dropdown Button */
 .dropbtn {
-  background: linear-gradient(rgba(230, 230, 230, 0.1) 0%, rgba(0, 0, 0, 0.1) 100%);
+  background: linear-gradient(
+    rgba(230, 230, 230, 0.1) 0%,
+    rgba(0, 0, 0, 0.1) 100%
+  );
   /* padding: 4px 6px; */
   font-size: 14px;
   border: 1px solid rgba(0, 0, 0, 0.3);
@@ -1016,7 +1016,7 @@ div.input-group {
   position: absolute;
   background-color: #f1f1f1;
   min-width: 120px;
-  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+  box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
   z-index: 1;
 }
 
@@ -1030,23 +1030,38 @@ div.input-group {
 }
 
 /* Change color of dropdown links on hover */
-.dropdown-content a:hover {background-color: #ddd;}
+.dropdown-content a:hover {
+  background-color: #ddd;
+}
 
 /* Show the dropdown menu on hover */
-.dropdown:hover .dropdown-content {display: block;}
+.dropdown:hover .dropdown-content {
+  display: block;
+}
 
 /* Change the background color of the dropdown button when the dropdown content is shown */
 .dropdown:hover .dropbtn {
   border: 1px solid #666;
   background-color: rgba(0, 0, 0, 0.1);
-  background: linear-gradient(to bottom, rgba(153, 153, 153, 0.1) 0%, rgba(0, 0, 0, 0.1) 100%);
+  background: linear-gradient(
+    to bottom,
+    rgba(153, 153, 153, 0.1) 0%,
+    rgba(0, 0, 0, 0.1) 100%
+  );
 }
 
-.dropbtn .ui-icon{background-image:url("images/ui-icons_777777_256x240.png")}
-.dropdown:hover .dropbtn .ui-icon{background-image:url("images/ui-icons_444444_256x240.png")}
+.dropbtn .ui-icon {
+  background-image: url("images/ui-icons_777777_256x240.png");
+}
+.dropdown:hover .dropbtn .ui-icon {
+  background-image: url("images/ui-icons_444444_256x240.png");
+}
 
 .tablebtn {
-  background: linear-gradient(rgba(230, 230, 230, 0.1) 0%, rgba(0, 0, 0, 0.1) 100%);
+  background: linear-gradient(
+    rgba(230, 230, 230, 0.1) 0%,
+    rgba(0, 0, 0, 0.1) 100%
+  );
   padding: 4px 4px;
   margin: 0 8px;
   font-size: 14px;
@@ -1065,7 +1080,11 @@ div.input-group {
 .tablebtn:hover {
   border: 1px solid #666;
   background-color: rgba(0, 0, 0, 0.1);
-  background: linear-gradient(to bottom, rgba(153, 153, 153, 0.1) 0%, rgba(0, 0, 0, 0.1) 100%);
+  background: linear-gradient(
+    to bottom,
+    rgba(153, 153, 153, 0.1) 0%,
+    rgba(0, 0, 0, 0.1) 100%
+  );
   cursor: pointer;
 }
 
@@ -1075,15 +1094,21 @@ div.input-group {
   line-height: 40px;
   padding: 0 20px;
   background-color: rgba(0, 0, 0, 0.1);
-  background: linear-gradient(rgba(230, 230, 230, 0.1) 0%, rgba(0, 0, 0, 0.1) 100%);
+  background: linear-gradient(
+    rgba(230, 230, 230, 0.1) 0%,
+    rgba(0, 0, 0, 0.1) 100%
+  );
   border: 1px solid rgba(0, 0, 0, 0.3);
 
   cursor: default;
 }
 
 .m-dialog a.dig-btn:hover {
-
-  background: linear-gradient(to bottom, rgba(153, 153, 153, 0.1) 0%, rgba(0, 0, 0, 0.1) 100%);
+  background: linear-gradient(
+    to bottom,
+    rgba(153, 153, 153, 0.1) 0%,
+    rgba(0, 0, 0, 0.1) 100%
+  );
   font-weight: bold;
 }
 label.m-dialog-label {
@@ -1096,8 +1121,8 @@ label.m-dialog-label {
 .m-dialog-div {
   min-height: 40px;
   line-height: 40px;
-  display: block; 
-  padding-left: 10px
+  display: block;
+  padding-left: 10px;
 }
 
 div.m-dialog input.small-input {
@@ -1121,7 +1146,7 @@ div.m-dialog input.small-input {
 
 .ui-dialog-content .ui-autocomplete {
   max-height: 200px;
-  overflow-y: auto;   /* prevent horizontal scrollbar */
+  overflow-y: auto; /* prevent horizontal scrollbar */
   overflow-x: hidden; /* add padding to account for vertical scrollbar */
 }
 
@@ -1139,4 +1164,3 @@ div.m-dialog input.small-input {
   /* font-weight: bold; */
   font-size: 16px;
 }
-
