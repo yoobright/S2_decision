@@ -605,6 +605,27 @@ div.fieldset-content {
   }
 }
 
+@media screen and (min-width: 1200px) {
+  label.error {
+    right: 360px;
+  }
+  #body-view-image {
+    display: inline;
+  }
+
+  div.input-textarea {
+    display: inline;
+  }
+
+  div.input-textarea textarea {
+    width: 360px;
+    max-width: 360px;
+    max-height: 200px;
+    margin-bottom: 40px;
+    margin-left: 40px;
+  }
+}
+
 @media screen and (min-width: 1400px) {
   .actions {
     padding-bottom: 30px;
@@ -645,26 +666,7 @@ div.input-textarea textarea {
   padding: 5px 10px;
 }
 
-@media screen and (min-width: 1200px) {
-  label.error {
-    right: 360px;
-  }
-  #body-view-image {
-    display: inline;
-  }
 
-  div.input-textarea {
-    display: inline;
-  }
-
-  div.input-textarea textarea {
-    width: 360px;
-    max-width: 360px;
-    max-height: 200px;
-    margin-bottom: 40px;
-    margin-left: 40px;
-  }
-}
 
 @media screen and (max-width: 1024px) {
   .container {
@@ -731,44 +733,6 @@ div.input-textarea textarea {
 
   #slider-margin .noUi-pips {
     width: 94%;
-  }
-}
-@media screen and (max-width: 480px) {
-  .form-date-group,
-  .form-find {
-    flex-direction: column;
-    -moz-flex-direction: column;
-    -webkit-flex-direction: column;
-    -o-flex-direction: column;
-    -ms-flex-direction: column;
-  }
-
-  .content {
-    height: calc(100vh - 165px);
-  }
-  .actions {
-    padding-bottom: 80px;
-  }
-
-  #find_bank {
-    margin-bottom: 20px;
-  }
-
-  .actions ul li a {
-    width: 100px;
-  }
-
-  .form-radio-flex {
-    margin: 0 -5px;
-  }
-
-  .form-radio-flex .form-radio-item {
-    padding: 0 5px;
-  }
-
-  .form-radio-flex input + label {
-    width: 90px;
-    height: 61px;
   }
 }
 
@@ -858,6 +822,14 @@ select {
     width: calc(100% - 16px);
     max-width: 100%;
   }
+  .steps ul {
+    padding-left: 40px;
+    padding-top: 30px;
+}
+
+  .steps ul li {
+    padding-bottom: 24px;
+  }
 
   fieldset {
     padding-left: 8px;
@@ -865,6 +837,15 @@ select {
     width: calc(100% - 16px);
     max-width: 100%;
   }
+
+  div.fieldset-content {
+    max-height: calc(100vh - 580px);
+
+  }
+  .content {
+    height: calc(100vh - 400px);
+  }
+
 }
 
 @media screen and (max-width: 768px) {
@@ -878,6 +859,7 @@ select {
     width: calc(100% - 16px);
     max-width: 100%;
   }
+  
 
   div.tab-content {
     width: calc(100% - 16px);
@@ -886,6 +868,43 @@ select {
 }
 
 @media screen and (max-width: 480px) {
+  .form-date-group,
+  .form-find {
+    flex-direction: column;
+    -moz-flex-direction: column;
+    -webkit-flex-direction: column;
+    -o-flex-direction: column;
+    -ms-flex-direction: column;
+  }
+
+  .content {
+    height: calc(100vh - 165px);
+  }
+  .actions {
+    padding-bottom: 80px;
+  }
+
+  #find_bank {
+    margin-bottom: 20px;
+  }
+
+  .actions ul li a {
+    width: 100px;
+  }
+
+  .form-radio-flex {
+    margin: 0 -5px;
+  }
+
+  .form-radio-flex .form-radio-item {
+    padding: 0 5px;
+  }
+
+  .form-radio-flex input + label {
+    width: 90px;
+    height: 61px;
+  }
+
   .main {
     padding: 8px 0;
   }
