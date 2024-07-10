@@ -1233,7 +1233,7 @@ const recipeDrugTableID = "#recipe-table";
     ["与特定活动或事件相关联", 1],
     ["发生在按时给予镇痛药物的剂量间隔结束时", 2],
     ["控制不佳的持续性疼痛", 2],
-    ["无", -1],
+    ["无", 3],
   ];
   const userPainBreakoutTypeTag = "user_pain_breakout_type";
 
